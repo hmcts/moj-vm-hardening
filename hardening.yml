@@ -1,0 +1,14 @@
+---
+- name: Harden all systems
+  hosts: all
+  become: yes
+  vars:
+    security_enable_firewalld: no
+    security_rhel7_initialize_aide: no
+    security_ntp_servers:
+      - 0.uk.pool.ntp.org
+      - 1.uk.pool.ntp.org
+      - 2.uk.pool.ntp.org
+      - 3.uk.pool.ntp.org
+  roles:
+    - ansible-hardening
