@@ -52,7 +52,7 @@
     "azure_client_id": "null",
     "azure_client_secret": "null",
     "azure_location": "uksouth",
-    "ssh_user": "centos",
-    "ssh_password": "I@mTh3L@w!"
+    "ssh_user": "null",
+    "ssh_password": "null"
   }
 }

@@ -27,8 +27,8 @@ It applies the hardening standards as described here: (https://docs.openstack.or
 | `azure_client_id`| null | Azure client ID | yes |
 | `azure_client_secret`| null | Azure cleint secret | yes |
 | `azure_location`| uksouth | Azure location | yes |
-| `ssh_user`| centos | SSH username | yes |
-| `ssh_password`| I@mTh3L@w! | SSH password | yes |
+| `ssh_user`| null | SSH username | yes |
+| `ssh_password`| null | SSH password | yes |
 
 ## Example Usage
 
@@ -45,6 +45,8 @@ packer build -var 'azure_client_id=<client-id>' \
              -var 'azure_subscription_id=<subscription-id>' \
              -var 'azure_resource_group_name=<resource-name>' \
              -var 'azure_storage_account=<storage-account>' \
+             -var 'ssh_user=<ssh_user>' \
+             -var 'ssh_password=<ssh_password>' \
              os-centos-7.4-x86_64.json
 ```
 
