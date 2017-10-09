@@ -29,8 +29,10 @@ Return the subscription_id:
 ``az account show --query "{ subscription_id: id }"``
 
 Optionally, the storage account name and key can be exported so that you don't have to specify it.
-```export AZURE_STORAGE_ACCOUNT=<storage_account_name>
-export AZURE_STORAGE_ACCESS_KEY=<storage_account_key>```
+```
+export AZURE_STORAGE_ACCOUNT=<storage_account_name>
+export AZURE_STORAGE_ACCESS_KEY=<storage_account_key>
+```
 
 
 ## Variables
