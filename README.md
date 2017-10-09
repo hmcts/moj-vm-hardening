@@ -70,8 +70,6 @@ packer build -var 'azure_client_id=<client-id>' \
              -var 'azure_subscription_id=<subscription-id>' \
              -var 'azure_resource_group_name=<resource-name>' \
              -var 'azure_storage_account=<storage-account>' \
-             -var 'ssh_user=<ssh_user>' \
-             -var 'ssh_password=<ssh_password>' \
              os-centos-7.4-x86_64.json
 ```
 
