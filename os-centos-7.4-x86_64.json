@@ -35,7 +35,7 @@
         "yum install -y cloud-init",
         "cd /tmp/CentOS74 && ./install.sh",
         "cp /etc/chrony.conf{,.orig}",
-        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
         "cd && rm -rf /tmp/CentOS74"
       ],
       "inline_shebang": "/bin/bash -x",
