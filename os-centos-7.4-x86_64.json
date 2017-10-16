@@ -32,7 +32,7 @@
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
         "yum --releasever=7.4 update -y",
-        "yum install -y cloud-init epel-release",
+        "yum install -y cloud-init epel-release libselinux-python",
         "pip install --upgrade pip",
         "cd /tmp/CentOS74 && ./install.sh",
         "cp /etc/chrony.conf{,.orig}",
