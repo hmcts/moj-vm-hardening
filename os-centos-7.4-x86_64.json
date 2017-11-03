@@ -31,6 +31,7 @@
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
+        "yum --releasever=7.4.1708 update -y",
         "yum install -y cloud-init epel-release libselinux-python",
         "yum install -y python2-pip",
         "pip install --upgrade pip",
@@ -45,13 +46,6 @@
     {
       "type": "ansible",
       "playbook_file": "./hardening.yml"
-    },
-    {
-      "type": "shell",
-      "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
-      "inline": [
-        "yum --releasever=7.4.1708 update -y"
-      ]
     }
   ],
 
