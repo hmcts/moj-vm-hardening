@@ -20,6 +20,7 @@
       "ssh_username": "{{user `ssh_user`}}",
       "ssh_pty": "true",
       "ssh_wait_timeout": "10000s",
+      "skip_clean": "true"
     }
   ],
   "provisioners": [
