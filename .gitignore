@@ -1,0 +1,10 @@
+# Compiled files
+*.tfstate
+*.tfstate.backup
+
+# Module directory
+.terraform/
+*.swp
+
+# 3rd party ansible roles
+ansible-hardening/
