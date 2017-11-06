@@ -20,7 +20,6 @@
       "ssh_username": "{{user `ssh_user`}}",
       "ssh_pty": "true",
       "ssh_wait_timeout": "10000s",
-      "skip_clean": "true"
     }
   ],
   "provisioners": [
@@ -63,7 +62,7 @@
         "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
       ],
       "inline_shebang": "/bin/sh -x",
-      "pause_before": "30s"
+      "skip_clean": true
     }
   ],
 
