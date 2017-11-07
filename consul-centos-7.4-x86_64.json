@@ -79,6 +79,7 @@
     "azure_client_secret": "null",
     "azure_location": "uksouth",
     "ssh_user": "null",
-    "github_token": "{{ env `GITHUB_TOKEN` }}"
+    "github_token": "{{ env `GITHUB_TOKEN` }}",
+    "consul_version": "0.9.2"
   }
 }
