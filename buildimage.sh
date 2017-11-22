@@ -78,6 +78,12 @@ if [ ! -d ansible-hardening ]; then
 else
 	cd ansible-hardening && git pull >> /dev/null 2>&1 && cd - >>/dev/null 2>&1
 fi
+# Check to see if the ClamAV repo exists and update if it does
+if [ ! -d ansible-role-clamav ]; then
+        git clone https://github.com/geerlingguy/ansible-role-clamav.git >> /dev/null 2>&1
+else
+        cd ansible-role-clamav && git pull >> /dev/null 2>&1 && cd - >>/dev/null 2>&1
+fi
 
 # Get the required creds for the build process
 read client_id client_secret tenant_id <<< $(az ad sp create-for-rbac --query [appId,password,tenant] -o tsv)
@@ -102,11 +108,11 @@ rm -f $temp_file
 
 # Create the image, only if the packer command was successful
 if [ "$CREATE_IMAGE" = true ] && [ "$RETVAL" -eq "0" ]; then
-	#unused, but handy bit of code...
-	#AZURE_STORAGE_KEY=$(az storage account keys list -g $AZURE_RESOURCE_GROUP -n $AZURE_STORAGE_ACCOUNT --query "[?keyName=='key1'] | [0].value" -o tsv)
+    #unused, but handy bit of code...
+    #AZURE_STORAGE_KEY=$(az storage account keys list -g $AZURE_RESOURCE_GROUP -n $AZURE_STORAGE_ACCOUNT --query "[?keyName=='key1'] | [0].value" -o tsv)
     az image create --name $img_name --resource-group $AZURE_RESOURCE_GROUP --source $vhd_url --os-type Linux
     if [ "$?" -eq "0" ]; then
-    	echo "Image \"$IMG_NAME\" successfully created"
+        echo "Image \"$IMG_NAME\" successfully created"
     fi
 fi
 

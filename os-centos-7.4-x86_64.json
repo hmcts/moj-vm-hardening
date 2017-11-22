@@ -24,8 +24,8 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "./CentOS74",
-      "destination": "/tmp"
+      "source": "openlogic.repo",
+      "destination": "/etc/yum.repos.d/"
     },
     {
       "type": "shell",
@@ -35,10 +35,9 @@
         "yum install -y cloud-init epel-release libselinux-python",
         "yum install -y python2-pip",
         "pip install --upgrade pip",
-        "cd /tmp/CentOS74 && ./install.sh",
+        "yum install -y kmod-microsoft-hyper-v",
         "cp /etc/chrony.conf{,.orig}",
-        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
-        "cd && rm -rf /tmp/CentOS74"
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
       ],
       "inline_shebang": "/bin/bash -x",
       "skip_clean": true

@@ -8,3 +8,4 @@
 
 # 3rd party ansible roles
 ansible-hardening/
+ansible-role-clamav/
