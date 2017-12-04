@@ -18,7 +18,10 @@
       "image_sku": "7.4",
       "location": "{{user `azure_location`}}",
       "ssh_username": "{{user `ssh_user`}}",
-      "ssh_pty": "true"
+      "ssh_pty": "true",
+      "azure_tags": {
+        "timestamp": "{{timestamp}}"
+      }
     }
   ],
   "provisioners": [
