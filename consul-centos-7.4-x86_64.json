@@ -14,7 +14,7 @@
       "image_sku": "7.4",
       "location": "{{user `azure_location`}}",
       "ssh_username": "{{user `ssh_user`}}",
-      "ssh_pty": "true"
+      "ssh_pty": "true",
       "managed_image_name": "moj-centos-consul-{{isotime \"25-11-2016-150405\"}}",
       "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
       "azure_tags": {
