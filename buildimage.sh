@@ -80,9 +80,15 @@ else
 fi
 # Check to see if the ClamAV repo exists and update if it does
 if [ ! -d ansible-role-clamav ]; then
-        git clone https://github.com/geerlingguy/ansible-role-clamav.git >> /dev/null 2>&1
+        git clone https://github.com/contino/ansible-role-clamav .git >> /dev/null 2>&1
 else
         cd ansible-role-clamav && git pull >> /dev/null 2>&1 && cd - >>/dev/null 2>&1
+fi
+
+if [ ! -d moj-hardening-ansible ]; then
+        git clone https://github.com/contino/moj-hardening-ansible.git >> /dev/null 2>&1
+else
+        cd moj-hardening-ansible && git pull >> /dev/null 2>&1 && cd - >>/dev/null 2>&1
 fi
 
 # Get the required creds for the build process
