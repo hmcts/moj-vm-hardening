@@ -12,5 +12,5 @@
       - 3.uk.pool.ntp.org
   roles:
     - ansible-hardening
-#    - ansible-role-clamav
+    - ansible-role-clamav
 #    - moj-hardening-ansible
