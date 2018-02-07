@@ -13,3 +13,4 @@
   roles:
     - ansible-hardening
     - ansible-role-clamav
+    - moj-hardening-ansible
