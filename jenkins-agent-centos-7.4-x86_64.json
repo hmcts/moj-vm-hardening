@@ -38,7 +38,8 @@
         "yum install -y cloud-init epel-release libselinux-python",
         "yum install -y python2-pip",
         "pip install --upgrade pip",
-        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk docker maven git yarn curl libselinux-python initscripts which nodejs rpmdevtools gettext python-jenkins azure-cli",
+        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk docker maven git yarn curl libselinux-python initscripts which nodejs rpmdevtools gettext python-jenkins azure-cli dnsmasq",
+        "curl https://releases.hashicorp.com/terraform/0.11.3/terraform_0.11.3_linux_amd64.zip -o /tmp/terraform_0.11.3_linux_amd64.zip && unzip -d /usr/bin /tmp/terraform_0.11.3_linux_amd64.zip && rm -f /tmp/terraform_0.11.3_linux_amd64.zip"
         "cp /etc/chrony.conf{,.orig}",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
       ],
