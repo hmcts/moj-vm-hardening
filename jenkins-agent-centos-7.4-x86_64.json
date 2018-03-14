@@ -41,7 +41,10 @@
         "yum install -y cloud-init epel-release libselinux-python",
         "yum install -y python2-pip",
         "pip install --upgrade pip",
-        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk docker maven git yarn curl libselinux-python initscripts which nodejs rpmdevtools gettext python-jenkins azure-cli dnsmasq",
+        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk maven git yarn curl libselinux-python initscripts which nodejs rpmdevtools gettext python-jenkins azure-cli dnsmasq yum-utils docker-ce docker-compose",
+        "mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker",
+        "cat > /etc/docker/daemon.json<<EOF\n{\n    \"live-restore\": true,\n    \"group\": \"docker\"\n}\nEOF && chown root:root /etc/docker/daemon.json && chmod 0644 /etc/docker/daemon.json",
+        "systemctl enable docker",
         "curl https://releases.hashicorp.com/terraform/0.11.3/terraform_0.11.3_linux_amd64.zip -o /tmp/terraform_0.11.3_linux_amd64.zip && unzip -d /usr/bin /tmp/terraform_0.11.3_linux_amd64.zip && rm -f /tmp/terraform_0.11.3_linux_amd64.zip",
         "cp /etc/chrony.conf{,.orig}",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
