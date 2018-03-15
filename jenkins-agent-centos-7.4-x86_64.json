@@ -34,6 +34,7 @@
         "echo '-----BEGIN RSA PRIVATE KEY-----' | tee /tmp/jenkinsssh_id_rsa",
         "echo {{user `jenkins_ssh_key`}} | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /tmp/jenkinsssh_id_rsa",
         "echo '-----END RSA PRIVATE KEY-----' | tee -a /tmp/jenkinsssh_id_rsa",
+        "echo {{user `hashicorp_vault_token`}} | tee -a /tmp/vault-token",
         "mv /tmp/*.repo /etc/yum.repos.d/",
         "yum install -y kmod-microsoft-hyper-v",
         "yum install -y microsoft-hyper-v",
@@ -77,6 +78,7 @@
     "azure_client_secret": "null",
     "azure_location": "uksouth",
     "ssh_user": "null",
-    "jenkins_ssh_key": "null"
+    "jenkins_ssh_key": "null",
+    "hashicorp_vault_token": "null"
   }
 }
