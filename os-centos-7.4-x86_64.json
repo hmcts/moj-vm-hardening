@@ -6,19 +6,21 @@
       "os_type": "Linux",
       "client_id": "{{user `azure_client_id`}}",
       "client_secret": "{{user `azure_client_secret`}}",
-      "resource_group_name": "{{user `azure_resource_group_name`}}",
-      "storage_account": "{{user `azure_storage_account`}}",
       "subscription_id": "{{user `azure_subscription_id`}}",
       "tenant_id": "{{user `azure_tenant_id`}}",
       "object_id": "{{user `azure_object_id`}}",
-      "capture_container_name": "{{user `basename`}}-{{user `version`}}-{{user `revision`}}",
-      "capture_name_prefix": "moj",
       "image_publisher": "openlogic",
       "image_offer": "CentOS",
-      "image_sku": "7.4",
+      "image_sku": "7-CI",
       "location": "{{user `azure_location`}}",
       "ssh_username": "{{user `ssh_user`}}",
-      "ssh_pty": "true"
+      "ssh_pty": "true",
+      "managed_image_name": "moj-centos-base-{{isotime \"20060102150405\"}}",
+      "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
+      "azure_tags": {
+        "timestamp": "{{isotime \"20060102150405\"}}",
+        "imagetype": "base"
+      }
     }
   ],
   "provisioners": [
@@ -32,8 +34,7 @@
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
         "mv /tmp/openlogic.repo /etc/yum.repos.d/",
-        "yum --releasever=7.4.1708 update -y",
-        "yum install -y cloud-init epel-release libselinux-python",
+        "yum install -y epel-release libselinux-python",
         "yum install -y python2-pip",
         "pip install --upgrade pip",
         "yum install -y kmod-microsoft-hyper-v",
@@ -51,10 +52,6 @@
   ],
 
   "variables": {
-    "basename": "centos-7-4-x86-64",
-    "version": "{{isotime \"2006-01-02\"}}",
-    "revision": "1",
-    "size": "8",
     "azure_subscription_id": "null",
     "azure_tenant_id": "null",
     "azure_object_id": "null",
