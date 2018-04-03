@@ -39,6 +39,7 @@
         "pip install --upgrade pip",
         "yum install -y kmod-microsoft-hyper-v",
         "yum install -y microsoft-hyper-v",
+        "yum --releasever=7.4.1708 update -y",
         "cp /etc/chrony.conf{,.orig}",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
       ],
