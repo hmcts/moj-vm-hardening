@@ -48,7 +48,7 @@
         "npm install npm@latest minimatch@latest graceful-fs@latest -g",
         "npm install --global gulp",
         "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk maven git yarn rpmdevtools python-jenkins azure-cli dnsmasq docker-ce docker-compose",
-        "yum install -y rh-ruby24",
+        "yum install -y rh-ruby24 rh-ruby24-ruby-devel",
         "mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker",
         "echo -e \"{\n    \"live-restore\": true,\n    \"group\": \"docker\"\n}\" > /etc/docker/daemon.json && chown root:root /etc/docker/daemon.json && chmod 0644 /etc/docker/daemon.json",
         "systemctl enable docker",
