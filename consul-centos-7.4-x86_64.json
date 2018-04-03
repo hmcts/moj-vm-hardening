@@ -33,13 +33,14 @@
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
-        "mv /tmp/openlogic.repo /etc/yum.repos.d/",
+        "yum install -y deltarpm",
+        "yum install -y kmod-microsoft-hyper-v-4.2.3.4-20180104.x86_64",
+        "yum install -y microsoft-hyper-v-4.2.3.4-20180104.x86_64",
+        "yum-config-manager --disable openlogic",
         "yum --releasever=7.4.1708 update -y",
         "yum install -y cloud-init epel-release libselinux-python",
         "yum install -y python2-pip",
         "pip install --upgrade pip",
-        "yum install -y kmod-microsoft-hyper-v",
-        "yum install -y microsoft-hyper-v",
         "cp /etc/chrony.conf{,.orig}",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
       ],
