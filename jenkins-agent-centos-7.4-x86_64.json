@@ -62,7 +62,11 @@
     },
     {
       "type": "ansible",
-      "playbook_file": "./hardening.yml"
+      "playbook_file": "./hardening.yml",
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes"
+      ]
     }
   ],
 
