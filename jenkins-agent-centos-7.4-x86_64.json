@@ -51,7 +51,7 @@
         "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk maven git yarn rpmdevtools python-jenkins azure-cli dnsmasq docker-ce docker-compose make gcc-c++",
         "yum install -y rh-ruby24 rh-ruby24-ruby-devel",
         "mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker",
-        "echo -e \"{\n    \"live-restore\": true,\n    \"group\": \"docker\"\n}\" > /etc/docker/daemon.json && chown root:root /etc/docker/daemon.json && chmod 0644 /etc/docker/daemon.json",
+        "echo -e '{\n  \"live-restore\": true,\n  \"group\": \"docker\"\n}' > /etc/docker/daemon.json && chown root:root /etc/docker/daemon.json && chmod 0644 /etc/docker/daemon.json",
         "systemctl enable docker",
         "curl https://releases.hashicorp.com/terraform/0.11.5/terraform_0.11.5_linux_amd64.zip -o /tmp/terraform_0.11.5_linux_amd64.zip && unzip -d /usr/bin /tmp/terraform_0.11.5_linux_amd64.zip && rm -f /tmp/terraform_0.11.5_linux_amd64.zip",
         "cp /etc/chrony.conf{,.orig}",
@@ -62,7 +62,11 @@
     },
     {
       "type": "ansible",
-      "playbook_file": "./hardening.yml"
+      "playbook_file": "./hardening.yml",
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes"
+      ]
     }
   ],
 

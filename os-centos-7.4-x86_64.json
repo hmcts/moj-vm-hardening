@@ -25,11 +25,6 @@
   ],
   "provisioners": [
     {
-      "type": "file",
-      "source": "openlogic.repo",
-      "destination": "/tmp/"
-    },
-    {
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
