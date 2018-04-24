@@ -3,6 +3,7 @@
     {
       "name": "azure-os-image",
       "type": "azure-arm",
+      "vm_size": "Standard_A2_v2",
       "os_type": "Linux",
       "client_id": "{{user `azure_client_id`}}",
       "client_secret": "{{user `azure_client_secret`}}",
