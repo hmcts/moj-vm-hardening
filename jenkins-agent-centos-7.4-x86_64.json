@@ -44,7 +44,7 @@
         "yum --releasever=7.4.1708 update -y",
         "yum install -y cloud-init epel-release libselinux-python centos-release-scl",
         "yum install -y python2-pip",
-        "pip install --upgrade pip docker-compose",
+        "pip install --upgrade 'pip<10' docker-compose",
         "curl --location https://rpm.nodesource.com/setup_8.x | sudo bash -",
         "yum install -y nodejs",
         "npm install npm@latest minimatch@latest graceful-fs@latest -g",
