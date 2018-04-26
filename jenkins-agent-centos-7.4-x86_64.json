@@ -3,6 +3,7 @@
     {
       "name": "azure-os-image",
       "type": "azure-arm",
+      "vm_size": "Standard_A2_v2",
       "os_type": "Linux",
       "client_id": "{{user `azure_client_id`}}",
       "client_secret": "{{user `azure_client_secret`}}",
@@ -43,7 +44,7 @@
         "yum --releasever=7.4.1708 update -y",
         "yum install -y cloud-init epel-release libselinux-python centos-release-scl",
         "yum install -y python2-pip",
-        "pip install --upgrade pip docker-compose",
+        "pip install --upgrade 'pip<10' docker-compose",
         "curl --location https://rpm.nodesource.com/setup_8.x | sudo bash -",
         "yum install -y nodejs",
         "npm install npm@latest minimatch@latest graceful-fs@latest -g",

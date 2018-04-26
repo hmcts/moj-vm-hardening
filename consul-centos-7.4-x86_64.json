@@ -3,6 +3,7 @@
     {
       "name": "azure-os-image",
       "type": "azure-arm",
+      "vm_size": "Standard_A2_v2",
       "os_type": "Linux",
       "client_id": "{{user `azure_client_id`}}",
       "client_secret": "{{user `azure_client_secret`}}",
@@ -35,7 +36,7 @@
         "yum --releasever=7.4.1708 update -y",
         "yum install -y cloud-init epel-release libselinux-python",
         "yum install -y python2-pip",
-        "pip install --upgrade pip",
+        "pip install --upgrade 'pip<10'",
         "cp /etc/chrony.conf{,.orig}",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
       ],
