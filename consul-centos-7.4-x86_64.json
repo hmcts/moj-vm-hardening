@@ -59,7 +59,7 @@
         "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
         "sudo sh -c 'echo -e \"[azure-cli]\nname=Azure CLI\nbaseurl=https://packages.microsoft.com/yumrepos/azure-cli\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc\" > /etc/yum.repos.d/azure-cli.repo'",
         "sudo yum check-update && sudo yum install -y azure-cli git python-pip cloud-init",
-        "git clone https://github.com/hmcts/moj-module-consul.git /tmp/terraform-consul-azure",
+        "git clone https://{{user `github_token`}}@github.com/hmcts/moj-module-consul.git /tmp/terraform-consul-azure",
         "/tmp/terraform-consul-azure/modules/install-consul/install-consul --version {{user `consul_version`}}",
         "/tmp/terraform-consul-azure/modules/install-dnsmasq/install-dnsmasq",
         "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
