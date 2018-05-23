@@ -56,7 +56,8 @@
         "systemctl enable docker",
         "curl https://releases.hashicorp.com/terraform/0.11.5/terraform_0.11.5_linux_amd64.zip -o /tmp/terraform_0.11.5_linux_amd64.zip && unzip -d /usr/bin /tmp/terraform_0.11.5_linux_amd64.zip && rm -f /tmp/terraform_0.11.5_linux_amd64.zip",
         "cp /etc/chrony.conf{,.orig}",
-        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
+        "wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w {{OMSID}} -s {{OMSKEY}}"
       ],
       "inline_shebang": "/bin/bash -x",
       "skip_clean": true
