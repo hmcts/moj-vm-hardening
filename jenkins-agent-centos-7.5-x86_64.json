@@ -16,7 +16,7 @@
       "capture_name_prefix": "jenkins-agent",
       "image_publisher": "openlogic",
       "image_offer": "CentOS",
-      "image_sku": "7.5",
+      "image_sku": "7.4",
       "location": "{{user `azure_location`}}",
       "ssh_username": "{{user `ssh_user`}}",
       "ssh_pty": "true"
