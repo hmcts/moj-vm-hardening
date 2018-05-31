@@ -38,7 +38,7 @@
         "echo {{user `hashicorp_vault_token`}} | tee -a /tmp/vault-token",
         "mv /tmp/*.repo /etc/yum.repos.d/",
         "yum install -y deltarpm",
-        "yum --releasever=7.4.1708 update -y",
+        "yum --releasever=7.5.1804 update -y",
         "yum install -y cloud-init epel-release libselinux-python centos-release-scl",
         "yum install -y python2-pip",
         "pip install --upgrade 'pip<10' docker-compose",
@@ -59,7 +59,7 @@
         "cp /etc/chrony.conf{,.orig}",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
         "rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm",
-        "yum --releasever=7.4.1708 update && yum install -y libunwind libicu dotnet-runtime-2.1.0-rc1",
+        "yum --releasever=7.5.1804 update && yum install -y libunwind libicu dotnet-runtime-2.1.0-rc1",
         "wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64",
         "tar -xf /tmp/azcopy.tar.gz -C /tmp",
         "/tmp/install.sh",
@@ -79,7 +79,7 @@
   ],
 
   "variables": {
-    "basename": "centos-7-4-x86-64",
+    "basename": "centos-7-5-x86-64",
     "version": "{{isotime \"2006-01-02\"}}",
     "revision": "1",
     "size": "8",
