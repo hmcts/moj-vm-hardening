@@ -57,9 +57,11 @@ export AZURE_STORAGE_ACCESS_KEY=<storage_account_key>
 
 ## Example Usage
 
-NOTE: Before running the packer command, check out the latest `ansible-hardening` playbook with the following command:
+NOTE: Before running the packer command, check out the latest hardening playbooks into the project root with the following commands:
 ```
 git clone https://github.com/openstack/ansible-hardening
+git clone https://github.com/geerlingguy/ansible-role-clamav
+git clone https://github.com/contino/moj-hardening-ansible
 ```
 
 Once the ansible-hardening repo has been checked out, run packer with the following arguments:
