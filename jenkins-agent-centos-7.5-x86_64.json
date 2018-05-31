@@ -57,7 +57,7 @@
         "systemctl enable docker",
         "curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip -o /tmp/terraform_0.11.7_linux_amd64.zip && unzip -d /usr/bin /tmp/terraform_0.11.7_linux_amd64.zip && rm -f /tmp/terraform_0.11.7_linux_amd64.zip",
         "cp /etc/chrony.conf{,.orig}",
-        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
         "rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm",
         "yum --releasever=7.5.1804 update && yum install -y libunwind libicu dotnet-runtime-2.1.0-rc1",
         "wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64",
