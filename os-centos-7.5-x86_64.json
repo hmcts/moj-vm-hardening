@@ -1,0 +1,65 @@
+{
+  "builders": [
+    {
+      "name": "azure-os-image",
+      "type": "azure-arm",
+      "vm_size": "Standard_A2_v2",
+      "os_type": "Linux",
+      "client_id": "{{user `azure_client_id`}}",
+      "client_secret": "{{user `azure_client_secret`}}",
+      "subscription_id": "{{user `azure_subscription_id`}}",
+      "tenant_id": "{{user `azure_tenant_id`}}",
+      "object_id": "{{user `azure_object_id`}}",
+      "image_publisher": "openlogic",
+      "image_offer": "CentOS",
+      "image_sku": "7.4",
+      "location": "{{user `azure_location`}}",
+      "ssh_username": "{{user `ssh_user`}}",
+      "ssh_pty": "true",
+      "managed_image_name": "moj-centos-base-{{isotime \"20060102150405\"}}",
+      "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
+      "azure_tags": {
+        "timestamp": "{{isotime \"20060102150405\"}}",
+        "imagetype": "base"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
+      "inline": [
+        "yum install -y deltarpm",
+        "yum-config-manager --disable openlogic",
+        "yum --releasever=7.5.1804 update -y",
+        "yum install -y epel-release libselinux-python",
+        "yum install -y python2-pip",
+        "pip install --upgrade 'pip<10'",
+        "cp /etc/chrony.conf{,.orig}",
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
+      ],
+      "inline_shebang": "/bin/bash -x",
+      "skip_clean": true
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "./hardening.yml",
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes"
+      ]
+    }
+  ],
+
+  "variables": {
+    "azure_subscription_id": "null",
+    "azure_tenant_id": "null",
+    "azure_object_id": "null",
+    "azure_resource_group_name": "null",
+    "azure_storage_account": "null",
+    "azure_client_id": "null",
+    "azure_client_secret": "null",
+    "azure_location": "uksouth",
+    "ssh_user": "null"
+  }
+}
