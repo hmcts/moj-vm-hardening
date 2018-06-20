@@ -35,7 +35,8 @@
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
         "apt update -y",
-        "apt dist-upgrade -y",
+        "DEBIAN_FRONTEND=noninteractive apt dist-upgrade -y",
+        "apt autoremove",
         "cp /etc/chrony.conf{,.orig}",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf"
       ],
