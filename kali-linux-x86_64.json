@@ -38,7 +38,7 @@
         "apt update -y",
         "DEBIAN_FRONTEND=noninteractive apt dist-upgrade -y",
         "apt install -y linux-image-4.16.0-kali2-cloud-amd64",
-        "apt install -y azure-cli"
+        "apt install -y azure-cli",
         "apt install -y postgresql && systemctl enable postgresql && systemctl start postgresql",
         "/usr/bin/msfdb init",
         "apt install -y chrony",
