@@ -35,6 +35,7 @@
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
         "echo \"deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main\" | tee /etc/apt/sources.list.d/azure-cli.list",
+        "curl -L https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
         "apt update -y",
         "DEBIAN_FRONTEND=noninteractive apt dist-upgrade -y",
         "apt install -y linux-image-4.16.0-kali2-cloud-amd64",
@@ -42,8 +43,8 @@
         "apt install -y postgresql && systemctl enable postgresql && systemctl start postgresql",
         "/usr/bin/msfdb init",
         "apt install -y chrony",
-        "cp /etc/chrony.conf{,.orig}",
-        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
+        "cp /etc/chrony/chrony.conf{,.orig}",
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony/chrony.conf && cat /etc/chrony/chrony.conf",
         "apt autoremove"
       ],
       "inline_shebang": "/bin/bash -x",
