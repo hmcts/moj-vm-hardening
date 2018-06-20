@@ -21,6 +21,11 @@
       "azure_tags": {
         "timestamp": "{{isotime \"20060102150405\"}}",
         "imagetype": "base"
+      },
+      "plan_info": {
+        "plan_name": "kali",
+        "plan_product": "kali-linux",
+        "plan_publisher": "kali-linux"
       }
     }
   ],
