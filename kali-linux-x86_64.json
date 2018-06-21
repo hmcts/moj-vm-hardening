@@ -55,6 +55,9 @@
   ],
 
   "variables": {
+    "basename": "kali-linux",
+    "version": "{{isotime \"2006-01-02\"}}",
+    "revision": "1",
     "azure_subscription_id": "null",
     "azure_tenant_id": "null",
     "azure_object_id": "null",
