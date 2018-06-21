@@ -7,6 +7,8 @@
       "os_type": "Linux",
       "client_id": "{{user `azure_client_id`}}",
       "client_secret": "{{user `azure_client_secret`}}",
+      "resource_group_name": "{{user `azure_resource_group_name`}}",
+      "storage_account": "{{user `azure_storage_account`}}",
       "subscription_id": "{{user `azure_subscription_id`}}",
       "tenant_id": "{{user `azure_tenant_id`}}",
       "object_id": "{{user `azure_object_id`}}",
@@ -16,11 +18,11 @@
       "location": "{{user `azure_location`}}",
       "ssh_username": "{{user `ssh_user`}}",
       "ssh_pty": "true",
-      "managed_image_name": "kali-linux-{{isotime \"20060102150405\"}}",
-      "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
+      "capture_container_name": "{{user `basename`}}-{{user `version`}}-{{user `revision`}}",
+      "capture_name_prefix": "kali-linux-agent",
       "azure_tags": {
         "timestamp": "{{isotime \"20060102150405\"}}",
-        "imagetype": "base"
+        "imagetype": "kali-linux-agegnt"
       },
       "plan_info": {
         "plan_name": "kali",
