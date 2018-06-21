@@ -39,7 +39,7 @@
         "mv /tmp/*.repo /etc/yum.repos.d/",
         "yum install -y deltarpm",
         "yum --releasever=7.5.1804 update -y",
-        "yum install -y cloud-init epel-release libselinux-python centos-release-scl",
+        "yum install -y cloud-init epel-release libselinux-python centos-release-scl jq",
         "yum install -y python2-pip",
         "pip install --upgrade 'pip<10' docker-compose",
         "curl --location https://rpm.nodesource.com/setup_8.x | sudo bash -",
