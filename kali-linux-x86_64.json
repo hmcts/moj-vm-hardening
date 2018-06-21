@@ -45,7 +45,7 @@
         "apt -o Dpkg::Progress-Fancy=\"0\" install -y chrony",
         "cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.orig",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony/chrony.conf && cat /etc/chrony/chrony.conf",
-        "apt autoremove"
+        "apt -o Dpkg::Progress-Fancy=\"0\" autoremove"
       ],
       "inline_shebang": "/bin/bash -x",
       "skip_clean": true
