@@ -1,0 +1,71 @@
+{
+  "builders": [
+    {
+      "name": "azure-os-image",
+      "type": "azure-arm",
+      "vm_size": "Standard_A2_v2",
+      "os_type": "Linux",
+      "client_id": "{{user `azure_client_id`}}",
+      "client_secret": "{{user `azure_client_secret`}}",
+      "resource_group_name": "{{user `azure_resource_group_name`}}",
+      "storage_account": "{{user `azure_storage_account`}}",
+      "subscription_id": "{{user `azure_subscription_id`}}",
+      "tenant_id": "{{user `azure_tenant_id`}}",
+      "object_id": "{{user `azure_object_id`}}",
+      "image_publisher": "kali-linux",
+      "image_offer": "kali-linux",
+      "image_sku": "kali",
+      "location": "{{user `azure_location`}}",
+      "ssh_username": "{{user `ssh_user`}}",
+      "ssh_pty": "true",
+      "capture_container_name": "{{user `basename`}}-{{user `version`}}-{{user `revision`}}",
+      "capture_name_prefix": "kali-linux-agent",
+      "azure_tags": {
+        "timestamp": "{{isotime \"20060102150405\"}}",
+        "imagetype": "kali-linux-agegnt"
+      },
+      "plan_info": {
+        "plan_name": "kali",
+        "plan_product": "kali-linux",
+        "plan_publisher": "kali-linux"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
+      "inline": [
+        "echo \"deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main\" | tee /etc/apt/sources.list.d/azure-cli.list",
+        "curl -L https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
+        "apt update -y",
+        "DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Progress-Fancy=\"0\"  dist-upgrade -y",
+        "apt -o Dpkg::Progress-Fancy=\"0\" install -y linux-image-4.16.0-kali2-cloud-amd64",
+        "apt -o Dpkg::Progress-Fancy=\"0\" install -y azure-cli",
+        "apt -o Dpkg::Progress-Fancy=\"0\" install -y postgresql && systemctl enable postgresql && systemctl start postgresql",
+        "/usr/bin/msfdb init",
+        "apt -o Dpkg::Progress-Fancy=\"0\" install -y chrony",
+        "cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.orig",
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony/chrony.conf && cat /etc/chrony/chrony.conf",
+        "apt -o Dpkg::Progress-Fancy=\"0\" autoremove"
+      ],
+      "inline_shebang": "/bin/bash -x",
+      "skip_clean": true
+    }
+  ],
+
+  "variables": {
+    "basename": "kali-linux",
+    "version": "{{isotime \"2006-01-02\"}}",
+    "revision": "1",
+    "azure_subscription_id": "null",
+    "azure_tenant_id": "null",
+    "azure_object_id": "null",
+    "azure_resource_group_name": "null",
+    "azure_storage_account": "null",
+    "azure_client_id": "null",
+    "azure_client_secret": "null",
+    "azure_location": "uksouth",
+    "ssh_user": "null"
+  }
+}
