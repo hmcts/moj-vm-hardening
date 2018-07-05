@@ -20,7 +20,7 @@
       "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
       "azure_tags": {
         "timestamp": "{{isotime \"20060102150405\"}}",
-        "imagetype": "base"
+        "imagetype": "base74"
       }
     }
   ],
