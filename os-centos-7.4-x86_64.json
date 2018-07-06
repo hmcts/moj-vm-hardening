@@ -20,7 +20,7 @@
       "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
       "azure_tags": {
         "timestamp": "{{isotime \"20060102150405\"}}",
-        "imagetype": "base"
+        "imagetype": "base74"
       }
     }
   ],
@@ -30,8 +30,6 @@
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
         "yum install -y deltarpm",
-        "yum install -y kmod-microsoft-hyper-v-4.2.3.4-20180104.x86_64",
-        "yum install -y microsoft-hyper-v-4.2.3.4-20180104.x86_64",
         "yum-config-manager --disable openlogic",
         "yum --releasever=7.4.1708 update -y",
         "yum install -y epel-release libselinux-python",
