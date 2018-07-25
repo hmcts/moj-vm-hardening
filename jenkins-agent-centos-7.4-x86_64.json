@@ -68,14 +68,6 @@
       ],
       "inline_shebang": "/bin/bash -x",
       "skip_clean": true
-    },
-    {
-      "type": "ansible",
-      "playbook_file": "./hardening.yml",
-      "extra_arguments": [
-        "--ssh-extra-args",
-        "-o IdentitiesOnly=yes"
-      ]
     }
   ],
 
