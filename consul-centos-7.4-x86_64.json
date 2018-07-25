@@ -43,14 +43,6 @@
       "skip_clean": true
     },
     {
-      "type": "ansible",
-      "playbook_file": "./hardening.yml",
-      "extra_arguments": [
-        "--ssh-extra-args",
-        "-o IdentitiesOnly=yes"
-      ]
-    },
-    {
       "type": "shell",
       "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
       "inline": [
