@@ -1,0 +1,80 @@
+{
+  "builders": [
+    {
+      "name": "azure-os-image",
+      "type": "azure-arm",
+      "vm_size": "Standard_A2_v2",
+      "os_type": "Linux",
+      "client_id": "{{user `azure_client_id`}}",
+      "client_secret": "{{user `azure_client_secret`}}",
+      "resource_group_name": "{{user `azure_resource_group_name`}}",
+      "storage_account": "{{user `azure_storage_account`}}",
+      "subscription_id": "{{user `azure_subscription_id`}}",
+      "tenant_id": "{{user `azure_tenant_id`}}",
+      "object_id": "{{user `azure_object_id`}}",
+      "capture_container_name": "{{user `basename`}}-{{user `version`}}-{{user `revision`}}",
+      "capture_name_prefix": "sftp-server",
+      "image_publisher": "openlogic",
+      "image_offer": "CentOS",
+      "image_sku": "7.5",
+      "location": "{{user `azure_location`}}",
+      "ssh_username": "{{user `ssh_user`}}",
+      "ssh_pty": "true"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "repos/",
+      "destination": "/tmp/"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
+      "inline": [
+        "echo '-----BEGIN RSA PRIVATE KEY-----' | tee /tmp/sftpssh_id_rsa",
+        "echo {{user `sftp_ssh_key`}} | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /tmp/sftpssh_id_rsa",
+        "echo '-----END RSA PRIVATE KEY-----' | tee -a /tmp/sftpssh_id_rsa",
+        "echo {{user `hashicorp_vault_token`}} | tee -a /tmp/vault-token",
+        "mv /tmp/*.repo /etc/yum.repos.d/",
+        "yum install -y deltarpm",
+        "yum --releasever=7.5.1804 update -y",
+        "yum install -y cloud-init epel-release libselinux-python centos-release-scl",
+        "yum install -y dnsmasq jq",
+        "yum install -y rh-ruby24 rh-ruby24-ruby-devel",
+        "cp /etc/chrony.conf{,.orig}",
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
+        "rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm",
+        "yum --releasever=7.5.1804 update && yum install -y libunwind libicu dotnet-runtime-2.1.0-rc1"
+      ],
+      "inline_shebang": "/bin/bash -x",
+      "skip_clean": true
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "./hardening.yml",
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes"
+      ]
+    }
+  ],
+
+  "variables": {
+    "basename": "centos-7-5-x86-64",
+    "version": "{{isotime \"2006-01-02\"}}",
+    "revision": "1",
+    "size": "8",
+    "azure_subscription_id": "null",
+    "azure_tenant_id": "null",
+    "azure_object_id": "null",
+    "azure_resource_group_name": "null",
+    "azure_storage_account": "null",
+    "azure_client_id": "null",
+    "azure_client_secret": "null",
+    "azure_location": "uksouth",
+    "ssh_user": "null",
+    "sftp_ssh_key": "null",
+    "hashicorp_vault_token": "null"
+  }
+}
