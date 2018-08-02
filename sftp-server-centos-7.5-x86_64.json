@@ -57,7 +57,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes"
       ],
-      "ansible_env_vars": [ "ANSIBLE_COW_SELECTION=random" ]
+      "ansible_env_vars": [ "ANSIBLE_NOCOWS=1" ]
     }
   ],
 
