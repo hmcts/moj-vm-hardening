@@ -53,6 +53,7 @@ export AZURE_STORAGE_ACCESS_KEY=<storage_account_key>
 | `azure_location`| uksouth | Azure location | yes |
 | `ssh_user`| null | SSH username | yes |
 | `ssh_password`| null | SSH password | yes |
+| `consul_module_version` | 0.1.6 | Git revision (tag) of hmcts/cnp-module-consul | no
 
 
 ## Example Usage
