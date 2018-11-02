@@ -15,7 +15,7 @@
       "location": "{{user `azure_location`}}",
       "ssh_username": "{{user `ssh_user`}}",
       "ssh_pty": "true",
-      "managed_image_name": "moj-centos-consul-{{isotime \"20060102150405\"}}",
+      "managed_image_name": "moj-centos-consul-{{user `consul_module_version`}}-{{isotime \"20060102150405\"}}",
       "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
       "azure_tags": {
         "timestamp": "{{isotime \"20060102150405\"}}",
@@ -50,7 +50,7 @@
         "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
         "sudo sh -c 'echo -e \"[azure-cli]\nname=Azure CLI\nbaseurl=https://packages.microsoft.com/yumrepos/azure-cli\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc\" > /etc/yum.repos.d/azure-cli.repo'",
         "sudo yum check-update && sudo yum install -y azure-cli git python-pip cloud-init",
-        "git clone https://{{user `github_token`}}@github.com/hmcts/moj-module-consul.git /tmp/terraform-consul-azure",
+        "git clone -b {{user `consul_module_version`}} --depth 1 https://{{user `github_token`}}@github.com/hmcts/moj-module-consul.git /tmp/terraform-consul-azure",
         "/tmp/terraform-consul-azure/modules/install-consul/install-consul --version {{user `consul_version`}}",
         "/tmp/terraform-consul-azure/modules/install-dnsmasq/install-dnsmasq",
         "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
@@ -72,6 +72,7 @@
     "ssh_user": "null",
     "github_token": "null",
     "consul_version": "0.9.2",
-    "base_image": "null"
+    "base_image": "null",
+    "consul_module_version": "0.1.6"
   }
 }
