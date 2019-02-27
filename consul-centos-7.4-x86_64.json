@@ -73,6 +73,6 @@
     "github_token": "null",
     "consul_version": "0.9.2",
     "base_image": "null",
-    "consul_module_version": "0.1.6"
+    "consul_module_version": "0.1.7"
   }
 }
