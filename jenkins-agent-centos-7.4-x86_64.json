@@ -67,7 +67,9 @@
         "wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64",
         "tar -xf /tmp/azcopy.tar.gz -C /tmp",
         "/tmp/install.sh",
-        "rm -rf /tmp/azcopy.tar.gz /tmp/azcopy /tmp/install.sh"
+        "rm -rf /tmp/azcopy.tar.gz /tmp/azcopy /tmp/install.sh",
+        "curl https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz -o /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
+        "tar zxf /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz  -C /usr/share/ && rm -f /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz"
       ],
       "inline_shebang": "/bin/bash -x",
       "skip_clean": true
