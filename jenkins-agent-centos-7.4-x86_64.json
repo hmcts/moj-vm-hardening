@@ -69,7 +69,8 @@
         "/tmp/install.sh",
         "rm -rf /tmp/azcopy.tar.gz /tmp/azcopy /tmp/install.sh",
         "curl https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz -o /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
-        "tar zxf /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz  -C /usr/share/ && rm -f /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz"
+        "tar zxf /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz  -C /usr/share/ && rm -f /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
+        "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash"
       ],
       "inline_shebang": "/bin/bash -x",
       "skip_clean": true
