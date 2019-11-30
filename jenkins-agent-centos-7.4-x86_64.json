@@ -15,11 +15,11 @@
       "location": "{{user `azure_location`}}",
       "ssh_username": "{{user `ssh_user`}}",
       "ssh_pty": "true",
-      "managed_image_name": "moj-centos-agent74-{{isotime \"20060102150405\"}}",
+      "managed_image_name": "cnp-jenkins-agent74-{{isotime \"20060102150405\"}}",
       "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
       "azure_tags": {
         "timestamp": "{{isotime \"20060102150405\"}}",
-        "imagetype": "centos-agent74"
+        "imagetype": "centos-jenkins-agent74"
       }
     }
   ],
@@ -36,7 +36,6 @@
         "echo '-----BEGIN RSA PRIVATE KEY-----' | tee /tmp/jenkinsssh_id_rsa",
         "echo {{user `jenkins_ssh_key`}} | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /tmp/jenkinsssh_id_rsa",
         "echo '-----END RSA PRIVATE KEY-----' | tee -a /tmp/jenkinsssh_id_rsa",
-        "echo {{user `hashicorp_vault_token`}} | tee -a /tmp/vault-token",
         "mv /tmp/*.repo /etc/yum.repos.d/",
         "yum install -y deltarpm",
         "yum --releasever=7.4.1708 update -y",
@@ -44,12 +43,12 @@
         "yum install -y python2-pip",
         "pip install --upgrade 'pip<10' docker-compose",
         "curl --location https://rpm.nodesource.com/setup_8.x | sudo bash -",
-        "rpm --import https://dl.iuscommunity.org/pub/ius/IUS-COMMUNITY-GPG-KEY",
+        "rpm --import https://dl.iuscommunity.org/pub/ius/IUS-COMMUNITY-GPG-KEY https://repo.ius.io/RPM-GPG-KEY-IUS-7",
         "yum install -y https://centos7.iuscommunity.org/ius-release.rpm",
-        "yum install -y nodejs python36",
+        "yum install -y nodejs",
         "npm install npm@latest minimatch@latest graceful-fs@latest -g",
         "npm install --global gulp eslint",
-        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk maven git yarn-1.12.3-1 rpmdevtools python-jenkins azure-cli-2.0.46 dnsmasq docker-ce make gcc-c++ google-chrome-stable mesa-libOSMesa mesa-libOSMesa-devel gnu-free-sans-fonts ipa-gothic-fonts ipa-pgothic-fonts libXcursor libXdamage libXScrnSaver libXrandr pango atk at-spi2-atk gtk3",
+        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk maven git yarn-1.12.3-1 azure-cli-2.0.77 dnsmasq docker-ce make gcc-c++ google-chrome-stable mesa-libOSMesa mesa-libOSMesa-devel gnu-free-sans-fonts ipa-gothic-fonts ipa-pgothic-fonts libXcursor libXdamage libXScrnSaver libXrandr pango atk at-spi2-atk gtk3",
         "LIBOSMESA=$(find / -name \"libOSMesa*\" -type f)",
         "ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so",
         "echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf",
@@ -58,7 +57,6 @@
         "mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker",
         "echo -e '{\n  \"live-restore\": true,\n  \"group\": \"docker\"\n}' > /etc/docker/daemon.json && chown root:root /etc/docker/daemon.json && chmod 0644 /etc/docker/daemon.json",
         "systemctl enable docker",
-        "curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip -o /tmp/terraform_0.11.7_linux_amd64.zip && unzip -d /usr/bin /tmp/terraform_0.11.7_linux_amd64.zip && rm -f /tmp/terraform_0.11.7_linux_amd64.zip",
         "cp /etc/chrony.conf{,.orig}",
         "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
         "rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm",
@@ -70,7 +68,10 @@
         "curl https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz -o /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
         "tar zxf /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz  -C /usr/share/ && rm -f /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
         "mkdir /opt/nvm && chown 1001:1001 /opt/nvm",
-        "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash"
+        "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash",
+        "git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv",
+        "ln -s /opt/tfenv/bin/* /bin",
+        "tfenv install 0.11.7"
       ],
       "inline_shebang": "/bin/bash -x",
       "skip_clean": true
