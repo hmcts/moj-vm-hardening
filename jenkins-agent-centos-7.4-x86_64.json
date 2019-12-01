@@ -69,7 +69,7 @@
         "tar zxf /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz  -C /usr/share/ && rm -f /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
         "mkdir /opt/nvm && chown 1001:1001 /opt/nvm",
         "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash",
-        "git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv",
+        "git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv && chown -R 1001:1001 /opt/tfenv",
         "ln -s /opt/tfenv/bin/* /bin",
         "tfenv install 0.11.7"
       ],
