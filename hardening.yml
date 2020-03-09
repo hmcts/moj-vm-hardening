@@ -10,6 +10,7 @@
       - 1.uk.pool.ntp.org
       - 2.uk.pool.ntp.org
       - 3.uk.pool.ntp.org
+    stig_version: rhel7
   roles:
     - ansible-hardening
     - ansible-role-clamav

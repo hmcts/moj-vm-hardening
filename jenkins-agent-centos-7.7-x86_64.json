@@ -1,0 +1,97 @@
+{
+  "builders": [
+    {
+      "name": "azure-os-image",
+      "type": "azure-arm",
+      "vm_size": "Standard_A2_v2",
+      "os_type": "Linux",
+      "client_id": "{{user `azure_client_id`}}",
+      "client_secret": "{{user `azure_client_secret`}}",
+      "subscription_id": "{{user `azure_subscription_id`}}",
+      "tenant_id": "{{user `azure_tenant_id`}}",
+      "object_id": "{{user `azure_object_id`}}",
+      "image_publisher": "openlogic",
+      "image_offer": "CentOS",
+      "image_sku": "7.7",
+      "location": "{{user `azure_location`}}",
+      "ssh_username": "{{user `ssh_user`}}",
+      "ssh_pty": "true",
+      "managed_image_name": "cnp-jenkins-agent77-{{isotime \"20060102150405\"}}",
+      "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
+      "azure_tags": {
+        "timestamp": "{{isotime \"20060102150405\"}}",
+        "imagetype": "centos-jenkins-agent77"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "repos/",
+      "destination": "/tmp/"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
+      "inline": [
+        "echo '-----BEGIN RSA PRIVATE KEY-----' | tee /tmp/jenkinsssh_id_rsa",
+        "echo {{user `jenkins_ssh_key`}} | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /tmp/jenkinsssh_id_rsa",
+        "echo '-----END RSA PRIVATE KEY-----' | tee -a /tmp/jenkinsssh_id_rsa",
+        "mv /tmp/*.repo /etc/yum.repos.d/",
+        "yum install -y deltarpm",
+        "yum-config-manager --disable openlogic",
+        "yum --releasever=7.7.1908 update -y",
+        "yum install -y cloud-init epel-release libselinux-python centos-release-scl",
+        "yum install -y python3-pip",
+        "pip3 install --upgrade docker-compose",
+        "curl --location https://rpm.nodesource.com/setup_12.x | sudo bash -",
+        "rpm --import https://dl.iuscommunity.org/pub/ius/IUS-COMMUNITY-GPG-KEY https://repo.ius.io/RPM-GPG-KEY-IUS-7",
+        "yum install -y https://centos7.iuscommunity.org/ius-release.rpm",
+        "yum install -y nodejs",
+        "npm install npm@latest minimatch@latest graceful-fs@latest -g",
+        "npm install --global gulp eslint",
+        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk maven git yarn-1.21.1-1 azure-cli-2.0.77 dnsmasq docker-ce make gcc-c++ google-chrome-stable mesa-libOSMesa mesa-libOSMesa-devel gnu-free-sans-fonts ipa-gothic-fonts ipa-pgothic-fonts libXcursor libXdamage libXScrnSaver libXrandr pango atk at-spi2-atk gtk3",
+        "LIBOSMESA=$(find / -name \"libOSMesa*\" -type f)",
+        "ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so",
+        "echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf",
+        "grubby --args=\"namespace.unpriv_enable=1\" --update-kernel=\"$(grubby --default-kernel)\"",
+        "yum install -y rh-ruby24 rh-ruby24-ruby-devel",
+        "mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker",
+        "echo -e '{\n  \"live-restore\": true,\n  \"group\": \"docker\"\n}' > /etc/docker/daemon.json && chown root:root /etc/docker/daemon.json && chmod 0644 /etc/docker/daemon.json",
+        "systemctl enable docker",
+        "cp /etc/chrony.conf{,.orig}",
+        "echo \"refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\" > /etc/chrony.conf && cat /etc/chrony.conf",
+        "rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm",
+        "yum --releasever=7.7.1908 update && yum install -y libunwind libicu dotnet-runtime-2.1.0-rc1",
+        "wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64",
+        "tar -xf /tmp/azcopy.tar.gz -C /tmp",
+        "/tmp/install.sh",
+        "rm -rf /tmp/azcopy.tar.gz /tmp/azcopy /tmp/install.sh",
+        "curl https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz -o /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
+        "tar zxf /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz  -C /usr/share/ && rm -f /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
+        "mkdir /opt/nvm && chown 1001:1001 /opt/nvm",
+        "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash",
+        "git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv",
+        "ln -s /opt/tfenv/bin/* /bin",
+        "tfenv install 0.11.7 && chown -R 1001:1001 /opt/tfenv"
+      ],
+      "inline_shebang": "/bin/bash -x",
+      "skip_clean": true
+    }
+  ],
+
+  "variables": {
+    "azure_subscription_id": "null",
+    "azure_tenant_id": "null",
+    "azure_object_id": "null",
+    "azure_resource_group_name": "null",
+    "azure_storage_account": "null",
+    "azure_client_id": "null",
+    "azure_client_secret": "null",
+    "azure_location": "uksouth",
+    "ssh_user": "null",
+    "jenkins_ssh_key": "null",
+    "hashicorp_vault_token": "null",
+    "base_image": "null"
+  }
+}
