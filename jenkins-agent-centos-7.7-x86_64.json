@@ -50,7 +50,7 @@
         "yum install -y nodejs",
         "npm install npm@latest minimatch@latest graceful-fs@latest -g",
         "npm install --global gulp eslint",
-        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk maven git yarn-1.21.1-1 azure-cli-2.0.77 dnsmasq docker-ce make gcc-c++ google-chrome-stable mesa-libOSMesa mesa-libOSMesa-devel gnu-free-sans-fonts ipa-gothic-fonts ipa-pgothic-fonts libXcursor libXdamage libXScrnSaver libXrandr pango atk at-spi2-atk gtk3",
+        "yum install -y java-1.8.0-openjdk-headless java-1.8.0-openjdk maven git yarn-1.21.1-1 azure-cli-2.0.77 docker-ce make gcc-c++ google-chrome-stable mesa-libOSMesa mesa-libOSMesa-devel gnu-free-sans-fonts ipa-gothic-fonts ipa-pgothic-fonts libXcursor libXdamage libXScrnSaver libXrandr pango atk at-spi2-atk gtk3",
         "LIBOSMESA=$(find / -name \"libOSMesa*\" -type f)",
         "ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so",
         "echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf",
