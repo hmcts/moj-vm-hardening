@@ -38,7 +38,7 @@
         "echo {{user `jenkins_ssh_key`}} | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /tmp/jenkinsssh_id_rsa",
         "echo '-----END RSA PRIVATE KEY-----' | tee -a /tmp/jenkinsssh_id_rsa",
         "mv /tmp/*.repo /etc/yum.repos.d/",
-        "yum install -y deltarpm",
+        "yum install -y deltarpm rsync",
         "yum-config-manager --disable openlogic",
         "yum --releasever=7.7.1908 update -y",
         "yum install -y cloud-init epel-release libselinux-python centos-release-scl",
