@@ -67,8 +67,6 @@
         "tar -xf /tmp/azcopy.tar.gz -C /tmp",
         "/tmp/install.sh",
         "rm -rf /tmp/azcopy.tar.gz /tmp/azcopy /tmp/install.sh",
-        "curl https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz -o /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
-        "tar zxf /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz  -C /usr/share/ && rm -f /tmp/openjdk-11.0.2_linux-x64_bin.tar.gz",
         "mkdir /opt/nvm && chown 1001:1001 /opt/nvm",
         "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash",
         "git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv",
