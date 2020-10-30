@@ -50,7 +50,7 @@
         "yum install -y nodejs",
         "npm install npm@latest minimatch@latest graceful-fs@latest -g",
         "npm install --global gulp eslint",
-        "yum install -y java-11-openjdk-devel maven git yarn-1.21.1-1 azure-cli-2.0.77 docker-ce make gcc-c++ google-chrome-stable mesa-libOSMesa mesa-libOSMesa-devel gnu-free-sans-fonts ipa-gothic-fonts ipa-pgothic-fonts libXcursor libXdamage libXScrnSaver libXrandr pango atk at-spi2-atk gtk3",
+        "yum install -y java-11-openjdk-devel git yarn-1.21.1-1 azure-cli-2.0.77 docker-ce make gcc-c++ google-chrome-stable mesa-libOSMesa mesa-libOSMesa-devel gnu-free-sans-fonts ipa-gothic-fonts ipa-pgothic-fonts libXcursor libXdamage libXScrnSaver libXrandr pango atk at-spi2-atk gtk3",
         "LIBOSMESA=$(find / -name \"libOSMesa*\" -type f)",
         "ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so",
         "echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf",
@@ -71,7 +71,7 @@
         "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash",
         "git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv",
         "ln -s /opt/tfenv/bin/* /bin",
-        "tfenv install 0.11.7 && chown -R 1001:1001 /opt/tfenv"
+        "tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv"
       ],
       "inline_shebang": "/bin/bash -x",
       "skip_clean": true
