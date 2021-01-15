@@ -34,9 +34,9 @@
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
       "inline": [
-        "echo '-----BEGIN RSA PRIVATE KEY-----' | tee /tmp/jenkinsssh_id_rsa",
-        "echo {{user `jenkins_ssh_key`}} | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /tmp/jenkinsssh_id_rsa",
-        "echo '-----END RSA PRIVATE KEY-----' | tee -a /tmp/jenkinsssh_id_rsa",
+        "echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa",
+        "echo {{user `jenkins_ssh_key`}} | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa",
+        "echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa",
         "mv /tmp/*.repo /etc/yum.repos.d/",
         "yum install -y deltarpm rsync",
         "yum-config-manager --disable openlogic",
