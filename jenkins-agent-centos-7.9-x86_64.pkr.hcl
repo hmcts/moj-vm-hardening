@@ -48,6 +48,11 @@ variable "ssh_password" {
   default = "null"
 }
 
+variable "jenkins_ssh_key" {
+  type    = string
+  default = "null"
+}
+
 source "azure-arm" "azure-os-image" {
   azure_tags = {
     imagetype = "base79"
@@ -61,7 +66,6 @@ source "azure-arm" "azure-os-image" {
   location                          = "${var.azure_location}"
   managed_image_name                = "moj-centos-base-${formatdate("YYYYMMDDhhmmss",timestamp())}"
   managed_image_resource_group_name = "${var.azure_resource_group_name}"
-  object_id                         = "${var.azure_object_id}"
   os_type                           = "Linux"
   ssh_pty                           = "true"
   ssh_username                      = "${var.ssh_user}"

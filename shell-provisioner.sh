@@ -40,3 +40,5 @@ git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv
 ln -s /opt/tfenv/bin/* /bin
 yum install -y unzip
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
+rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+yum -y install dotnet-sdk-5.0
