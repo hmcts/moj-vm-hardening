@@ -8,6 +8,11 @@ variable "azure_client_secret" {
   default = ""
 }
 
+variable "azure_image_version" {
+  type    = string
+  default = "2.2.5"
+}
+
 variable "azure_location" {
   type    = string
   default = "uksouth"
@@ -58,20 +63,28 @@ source "azure-arm" "azure-os-image" {
     imagetype = "centos-jenkins-agent79"
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
   }
-  client_id                         = "${var.azure_client_id}"
-  client_secret                     = "${var.azure_client_secret}"
+  client_id                         = var.azure_client_id
+  client_secret                     = var.azure_client_secret
   image_offer                       = "CentOS"
   image_publisher                   = "openlogic"
   image_sku                         = "7_9"
-  location                          = "${var.azure_location}"
+  location                          = var.azure_location
   managed_image_name                = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
-  managed_image_resource_group_name = "${var.azure_resource_group_name}"
+  managed_image_resource_group_name = var.azure_resource_group_name
   os_type                           = "Linux"
   ssh_pty                           = "true"
-  ssh_username                      = "${var.ssh_user}"
-  subscription_id                   = "${var.azure_subscription_id}"
-  tenant_id                         = "${var.azure_tenant_id}"
+  ssh_username                      = var.ssh_user
+  subscription_id                   = var.azure_subscription_id
+  tenant_id                         = var.azure_tenant_id
   vm_size                           = "Standard_A2_v2"
+}
+
+shared_image_gallery_destination {
+  subscription        = var.azure_subscription_id
+  resource_group      = var.azure_resource_group_name
+  gallery_name        = "cnpimagegallery"
+  image_name          = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
+  image_version       = var.azure_image_version
 }
 
 build {
