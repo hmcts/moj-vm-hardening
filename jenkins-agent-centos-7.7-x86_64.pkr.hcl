@@ -55,16 +55,16 @@ variable "jenkins_ssh_key" {
 
 source "azure-arm" "azure-os-image" {
   azure_tags = {
-    imagetype = "base77"
+    imagetype = "centos-jenkins-agent79"
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
   }
   client_id                         = "${var.azure_client_id}"
   client_secret                     = "${var.azure_client_secret}"
   image_offer                       = "CentOS"
   image_publisher                   = "openlogic"
-  image_sku                         = "7_7"
+  image_sku                         = "7_9"
   location                          = "${var.azure_location}"
-  managed_image_name                = "moj-centos-base-${formatdate("YYYYMMDDhhmmss",timestamp())}"
+  managed_image_name                = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
   managed_image_resource_group_name = "${var.azure_resource_group_name}"
   os_type                           = "Linux"
   ssh_pty                           = "true"
