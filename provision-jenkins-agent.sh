@@ -61,8 +61,8 @@ systemctl enable docker
 cp /etc/chrony.conf{,.orig}
 echo \refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\ > /etc/chrony.conf && cat /etc/chrony.conf
 
-rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
-yum --releasever=7 update && yum install -y libunwind libicu dotnet-runtime-2.1.0-rc1
+rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+yum --releasever=7 update && yum install -y libunwind libicu dotnet-runtime-5.0
 
 wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64
 tar -xf /tmp/azcopy.tar.gz -C /tmp
@@ -78,6 +78,3 @@ ln -s /opt/tfenv/bin/* /bin
 yum install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
-
-rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-yum -y install dotnet-sdk-5.0
