@@ -62,7 +62,7 @@ cp /etc/chrony.conf{,.orig}
 echo \refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\ > /etc/chrony.conf && cat /etc/chrony.conf
 
 rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-yum --releasever=7 update && yum install -y libunwind libicu dotnet-runtime-5.0
+yum --releasever=7 update && yum install -y libunwind libicu dotnet-sdk-5.0
 
 wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64
 tar -xf /tmp/azcopy.tar.gz -C /tmp
