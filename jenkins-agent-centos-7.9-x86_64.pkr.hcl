@@ -8,6 +8,11 @@ variable "azure_client_secret" {
   default = ""
 }
 
+variable "azure_image_version" {
+  type    = string
+  default = "2.2.5"
+}
+
 variable "azure_location" {
   type    = string
   default = "uksouth"
@@ -79,6 +84,7 @@ shared_image_gallery_destination {
   resource_group      = var.azure_resource_group_name
   gallery_name        = "cnpimagegallery"
   image_name          = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
+  image_version       = var.azure_image_version
 }
 
 build {
