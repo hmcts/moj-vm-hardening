@@ -94,7 +94,7 @@ source "azure-arm" "azure-os-image" {
     gallery_name        = "cnpimagegallery"
     image_name          = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
     image_version       = var.azure_image_version
-    replication_regions = ["East US", "East US 2"]
+    replication_regions = ["UK South", "UK South"]
   }
 }
 
