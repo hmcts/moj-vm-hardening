@@ -77,14 +77,15 @@ source "azure-arm" "azure-os-image" {
   subscription_id                   = var.azure_subscription_id
   tenant_id                         = var.azure_tenant_id
   vm_size                           = "Standard_A2_v2"
-}
 
-shared_image_gallery_destination {
-  subscription        = var.azure_subscription_id
-  resource_group      = var.azure_resource_group_name
-  gallery_name        = "cnpimagegallery"
-  image_name          = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
-  image_version       = var.azure_image_version
+  shared_image_gallery_destination {
+    subscription        = var.azure_subscription_id
+    resource_group      = var.azure_resource_group_name
+    gallery_name        = "cnpimagegallery"
+    image_name          = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
+    image_version       = var.azure_image_version
+    replication_regions = ["UK South"]
+  }
 }
 
 build {
