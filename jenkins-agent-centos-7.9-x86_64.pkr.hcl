@@ -58,6 +58,16 @@ variable "jenkins_ssh_key" {
   default = ""
 }
 
+variable "hashicorp_vault_token" {
+  type    = string
+  default = ""
+}
+
+variable "base_image" {
+  type    = string
+  default = ""
+}
+
 source "azure-arm" "azure-os-image" {
   azure_tags = {
     imagetype = "centos-jenkins-agent79"
@@ -84,7 +94,7 @@ source "azure-arm" "azure-os-image" {
     gallery_name        = "cnpimagegallery"
     image_name          = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
     image_version       = var.azure_image_version
-    replication_regions = ["UK South", "UK West"]
+    replication_regions = ["UK South"]
   }
 }
 
