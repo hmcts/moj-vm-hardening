@@ -58,16 +58,6 @@ variable "jenkins_ssh_key" {
   default = ""
 }
 
-variable "hashicorp_vault_token" {
-  type    = string
-  default = ""
-}
-
-variable "base_image" {
-  type    = string
-  default = ""
-}
-
 source "azure-arm" "azure-os-image" {
   azure_tags = {
     imagetype = "centos-jenkins-agent79"
