@@ -58,6 +58,11 @@ variable "jenkins_ssh_key" {
   default = ""
 }
 
+variable "gallery_resource_group_name" {
+  type    = string
+  default = ""
+}
+
 source "azure-arm" "azure-os-image" {
   azure_tags = {
     imagetype = "centos-jenkins-agent79"
@@ -80,7 +85,7 @@ source "azure-arm" "azure-os-image" {
 
   shared_image_gallery_destination {
     subscription        = var.subscription_id
-    resource_group      = var.azure_resource_group_name
+    resource_group      = var.gallery_resource_group_name
     gallery_name        = "cnpimagegallery"
     image_name          = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
     image_version       = var.azure_image_version
