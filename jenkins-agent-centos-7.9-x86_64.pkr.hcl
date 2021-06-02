@@ -1,9 +1,9 @@
-variable "azure_client_id" {
+variable "client_id" {
   type    = string
   default = ""
 }
 
-variable "azure_client_secret" {
+variable "client_secret" {
   type    = string
   default = ""
 }
@@ -33,12 +33,12 @@ variable "azure_storage_account" {
   default = ""
 }
 
-variable "azure_subscription_id" {
+variable "subscription_id" {
   type    = string
   default = ""
 }
 
-variable "azure_tenant_id" {
+variable "tenant_id" {
   type    = string
   default = ""
 }
@@ -63,8 +63,8 @@ source "azure-arm" "azure-os-image" {
     imagetype = "centos-jenkins-agent79"
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
   }
-  client_id                         = var.azure_client_id
-  client_secret                     = var.azure_client_secret
+  client_id                         = var.client_id
+  client_secret                     = var.client_secret
   image_offer                       = "CentOS"
   image_publisher                   = "openlogic"
   image_sku                         = "7_9"
@@ -74,12 +74,12 @@ source "azure-arm" "azure-os-image" {
   os_type                           = "Linux"
   ssh_pty                           = "true"
   ssh_username                      = var.ssh_user
-  subscription_id                   = var.azure_subscription_id
-  tenant_id                         = var.azure_tenant_id
+  subscription_id                   = var.subscription_id
+  tenant_id                         = var.tenant_id
   vm_size                           = "Standard_A2_v2"
 
   shared_image_gallery_destination {
-    subscription        = var.azure_subscription_id
+    subscription        = var.subscription_id
     resource_group      = var.azure_resource_group_name
     gallery_name        = "cnpimagegallery"
     image_name          = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
