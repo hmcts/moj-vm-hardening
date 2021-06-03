@@ -102,8 +102,13 @@ build {
     }
 
   provisioner "shell" {
+    inline = ["echo '${var.jenkins_ssh_key}' | sed -e 's/[[:blank:]]\\+/\\n/g' | sudo tee -a /opt/jenkinsssh_id_rsa"] 
+  }
+  
+  provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'"
     script          = "provision-jenkins-agent.sh"
+    environment_vars = ["JENKINS_SSH_KEY=${var.jenkins_ssh_key}"]
   }
 
 }
