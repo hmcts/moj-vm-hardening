@@ -100,10 +100,6 @@ build {
       source = "repos/"
       destination = "/tmp/"
     }
-
-  provisioner "shell" {
-    inline = ["echo '${var.jenkins_ssh_key}' | sed -e 's/[[:blank:]]\\+/\\n/g' | sudo tee -a /opt/jenkinsssh_id_rsa"] 
-  }
   
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'"
