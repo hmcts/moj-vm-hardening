@@ -10,7 +10,7 @@ variable "client_secret" {
 
 variable "azure_image_version" {
   type    = string
-  default = "2.2.5"
+  default = "2.2.6"
 }
 
 variable "azure_location" {
@@ -100,10 +100,11 @@ build {
       source = "repos/"
       destination = "/tmp/"
     }
-
+  
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'"
     script          = "provision-jenkins-agent.sh"
+    environment_vars = ["JENKINS_SSH_KEY=${var.jenkins_ssh_key}"]
   }
 
 }
