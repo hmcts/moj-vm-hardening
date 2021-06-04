@@ -16,8 +16,13 @@ pip3 install --upgrade docker-compose
 
 curl --location https://rpm.nodesource.com/setup_12.x | sudo bash -
 rpm --import https://repo.ius.io/RPM-GPG-KEY-IUS-7
-yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+yum localinstall -y google-chrome-stable_current_x86_64.rpm
+
+yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+yum-config-manager --enable pgdg11
 yum install -y nodejs postgresql11
 
 npm install npm@latest minimatch@latest graceful-fs@latest -g
@@ -31,7 +36,6 @@ yum install -y \
   docker-ce \
   make \
   gcc-c++ \
-  google-chrome-stable \
   mesa-libOSMesa \
   mesa-libOSMesa-devel \
   gnu-free-sans-fonts \
@@ -55,7 +59,7 @@ grubby --args=namespace.unpriv_enable=1 --update-kernel=$(grubby --default-kerne
 yum install -y rh-ruby24 rh-ruby24-ruby-devel
 
 mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker
-echo -e '{\n  \live-restore\: true,\n  \group\: \docker\\n}' > /etc/docker/daemon.json && chown root:root /etc/docker/daemon.json && chmod 0644 /etc/docker/daemon.json
+echo -e '{\n  \live-restore\: true,\n  \group\: \docker\\n}' > /etc/docker/daemon.conf && chown root:root /etc/docker/daemon.conf && chmod 0644 /etc/docker/daemon.conf
 systemctl enable docker
 
 cp /etc/chrony.conf{,.orig}
