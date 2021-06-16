@@ -28,11 +28,20 @@ yum install -y nodejs postgresql11
 npm install npm@latest minimatch@latest graceful-fs@latest -g
 npm install --global gulp eslint
 
+npm install --global yarn
+
+rpm --import https://packages.microsoft.com/keys/microsoft.asc
+echo -e "[azure-cli]
+name=Azure CLI
+baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/azure-cli.repo
+
 yum install -y \
   java-11-openjdk-devel \
   git \
-  yarn-1.21.1-1 \
-  azure-cli-2.0.77 \
+  azure-cli \
   docker-ce \
   make \
   gcc-c++ \
@@ -66,7 +75,7 @@ cp /etc/chrony.conf{,.orig}
 echo \refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\ > /etc/chrony.conf && cat /etc/chrony.conf
 
 rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-yum --releasever=7 update && yum install -y libunwind libicu dotnet-sdk-5.0
+yum --releasever=7 update && yum install -y dotnet-sdk-5.0
 
 wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64
 tar -xf /tmp/azcopy.tar.gz -C /tmp
@@ -82,3 +91,15 @@ ln -s /opt/tfenv/bin/* /bin
 yum install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
+
+packages=(az azcopy docker dotnet npm psql pip3 terraform yarn)
+
+for i in "${packages[@]}"
+
+do
+  	if command -v "${i}"; then
+                echo -n "${i} is installed. Version is "; ${i} --version
+        else
+            	echo "${i} is missing!"
+        fi
+done
