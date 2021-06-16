@@ -4,7 +4,7 @@ echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 mv /tmp/*.repo /etc/yum.repos.d/
-yum install -y deltarpm rsync 
+yum install -y deltarpm rsync
 yum-config-manager --disable openlogic
 yum --releasever=7 update -y
 yum install -y cloud-init epel-release libselinux-python centos-release-scl
@@ -28,11 +28,20 @@ yum install -y nodejs postgresql11
 npm install npm@latest minimatch@latest graceful-fs@latest -g
 npm install --global gulp eslint
 
+npm install --global yarn
+
+rpm --import https://packages.microsoft.com/keys/microsoft.asc
+echo -e "[azure-cli]
+name=Azure CLI
+baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/azure-cli.repo
+
 yum install -y \
   java-11-openjdk-devel \
   git \
-  yarn-1.21.1-1 \
-  azure-cli-2.0.77 \
+  azure-cli \
   docker-ce \
   make \
   gcc-c++ \
@@ -51,6 +60,12 @@ yum install -y \
   gtk3 \
   wget
 
+
+curl https://packages.microsoft.com/config/rhel/7/prod.repo > ./microsoft-prod.repo
+sudo cp ./microsoft-prod.repo /etc/yum.repos.d/
+yum update -y
+yum --releasever=7 update && yum install -y libunwind libicu dotnet-sdk-5.0
+
 LIBOSMESA=$(find / -name 'libOSMesa*' -type f)
 ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
 echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
@@ -64,9 +79,6 @@ systemctl enable docker
 
 cp /etc/chrony.conf{,.orig}
 echo \refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\ > /etc/chrony.conf && cat /etc/chrony.conf
-
-rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-yum --releasever=7 update && yum install -y libunwind libicu dotnet-sdk-5.0
 
 wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64
 tar -xf /tmp/azcopy.tar.gz -C /tmp
@@ -82,3 +94,15 @@ ln -s /opt/tfenv/bin/* /bin
 yum install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
+
+packages=(az azcopy docker dotnet npm psql pip3 terraform yarn)
+
+for i in "${packages[@]}"
+
+do
+  	if command -v "${i}"; then
+                echo -n "${i} is installed. Version is "; ${i} --version
+        else
+            	echo "${i} is missing!"
+        fi
+done
