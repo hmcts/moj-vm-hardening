@@ -4,7 +4,7 @@ echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 mv /tmp/*.repo /etc/yum.repos.d/
-yum install -y deltarpm rsync 
+yum install -y deltarpm rsync
 yum-config-manager --disable openlogic
 yum --releasever=7 update -y
 yum install -y cloud-init epel-release libselinux-python centos-release-scl
@@ -60,6 +60,12 @@ yum install -y \
   gtk3 \
   wget
 
+
+curl https://packages.microsoft.com/config/rhel/7/prod.repo > ./microsoft-prod.repo
+sudo cp ./microsoft-prod.repo /etc/yum.repos.d/
+yum update -y
+yum --releasever=7 update && yum install -y dotnet-sdk-5.0
+
 LIBOSMESA=$(find / -name 'libOSMesa*' -type f)
 ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
 echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
@@ -73,9 +79,6 @@ systemctl enable docker
 
 cp /etc/chrony.conf{,.orig}
 echo \refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\ > /etc/chrony.conf && cat /etc/chrony.conf
-
-rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-yum --releasever=7 update && yum install -y dotnet-sdk-5.0
 
 wget -O /tmp/azcopy.tar.gz https://aka.ms/downloadazcopylinux64
 tar -xf /tmp/azcopy.tar.gz -C /tmp
