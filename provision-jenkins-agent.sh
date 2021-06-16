@@ -64,7 +64,7 @@ yum install -y \
 curl https://packages.microsoft.com/config/rhel/7/prod.repo > ./microsoft-prod.repo
 sudo cp ./microsoft-prod.repo /etc/yum.repos.d/
 yum update -y
-yum --releasever=7 update && yum install -y dotnet-sdk-5.0
+yum --releasever=7 update && yum install -y libunwind libicu dotnet-sdk-5.0
 
 LIBOSMESA=$(find / -name 'libOSMesa*' -type f)
 ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
