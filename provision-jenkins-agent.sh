@@ -100,10 +100,10 @@ packages=(az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp j
 for i in "${packages[@]}"
 
 do
-  	if command -v "${i}"; then
-            echo -n "${i} is installed. Version is "; ${i} --version
-        else
-            echo "${i} is missing!"
-            exit 1
-        fi
+  if command -v "${i}"; then
+     echo -n "${i} is installed. Version is "; ${i} --version
+  else
+     echo "${i} is missing!"
+     exit 1
+  fi
 done
