@@ -95,14 +95,15 @@ yum install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=(az azcopy docker dotnet npm psql pip3 terraform yarn)
+packages=(az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java make node npm psql pip3 rsync terraform tfenv yarn wget)
 
 for i in "${packages[@]}"
 
 do
-  	if command -v "${i}"; then
-                echo -n "${i} is installed. Version is "; ${i} --version
-        else
-            	echo "${i} is missing!"
-        fi
+  if command -v "${i}"; then
+     echo -n "${i} is installed. Version is "; ${i} --version
+  else
+     echo "${i} is missing!"
+     exit 1
+  fi
 done
