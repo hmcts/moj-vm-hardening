@@ -1,0 +1,25 @@
+name: Bastion Packer
+jobs:
+  - job: Ubuntu1804
+    pool:
+      vmImage: 'ubuntu-18.04'
+
+    steps:
+      - checkout: self
+      - task: riezebosch.Packer.PackerTool.PackerTool@0
+        displayName: 'Install Packer'
+        inputs:
+          version: 1.7.4
+
+      - task: riezebosch.Packer.Packer.Packer@1
+        displayName: 'Validate Jenkins Agent'
+        inputs:
+          command: validate jenkins-agent-centos-7.9-x86_64.pkr.hcl
+          azureSubscription: dts-management-prod-intsvc
+
+      - task: riezebosch.Packer.Packer.Packer@1
+        displayName: 'Build Jenkins Agent'
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
+        inputs:
+          command: build jenkins-agent-centos-7.9-x86_64.pkr.hcl
+          azureSubscription: dts-management-prod-intsvc
