@@ -14,12 +14,14 @@ jobs:
       - task: riezebosch.Packer.Packer.Packer@1
         displayName: 'Validate Jenkins Agent'
         inputs:
-          command: validate jenkins-agent-centos-7.9-x86_64.pkr.hcl
+          templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
+          command: validate
           azureSubscription: dts-management-prod-intsvc
 
       - task: riezebosch.Packer.Packer.Packer@1
         displayName: 'Build Jenkins Agent'
         condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
         inputs:
-          command: build jenkins-agent-centos-7.9-x86_64.pkr.hcl
+          templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
+          command: build
           azureSubscription: dts-management-prod-intsvc
