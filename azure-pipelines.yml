@@ -23,5 +23,7 @@ jobs:
         condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
         inputs:
           templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
+          variables: |
+              jenkins_ssh_key=$(JENKINS_SSH_KEY)
           command: build
           azureSubscription: dts-management-prod-intsvc
