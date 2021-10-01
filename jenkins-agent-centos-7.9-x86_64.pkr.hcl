@@ -10,7 +10,7 @@ variable "client_secret" {
 
 variable "azure_image_version" {
   type    = string
-  default = "2.3.0"
+  default = "1.0.2"
 }
 
 variable "azure_location" {
@@ -23,9 +23,9 @@ variable "azure_object_id" {
   default = ""
 }
 
-variable "azure_resource_group_name" {
+variable "resource_group_name" {
   type    = string
-  default = ""
+  default = "hmcts-image-gallery-rg"
 }
 
 variable "azure_storage_account" {
@@ -58,11 +58,6 @@ variable "jenkins_ssh_key" {
   default = ""
 }
 
-variable "gallery_resource_group_name" {
-  type    = string
-  default = ""
-}
-
 source "azure-arm" "azure-os-image" {
   azure_tags = {
     imagetype = "centos-jenkins-agent79"
@@ -75,7 +70,7 @@ source "azure-arm" "azure-os-image" {
   image_sku                         = "7_9"
   location                          = var.azure_location
   managed_image_name                = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
-  managed_image_resource_group_name = var.azure_resource_group_name
+  managed_image_resource_group_name = var.resource_group_name
   os_type                           = "Linux"
   ssh_pty                           = "true"
   ssh_username                      = var.ssh_user
@@ -85,8 +80,8 @@ source "azure-arm" "azure-os-image" {
 
   shared_image_gallery_destination {
     subscription        = var.subscription_id
-    resource_group      = var.gallery_resource_group_name
-    gallery_name        = "cnpimagegallery"
+    resource_group      = var.resource_group_name
+    gallery_name        = "hmcts"
     image_name          = "jenkins-agent"
     image_version       = var.azure_image_version
     replication_regions = ["UK South"]
