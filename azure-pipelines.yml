@@ -1,4 +1,4 @@
-name: Bastion Packer
+name: Jenkins Agent Packer
 jobs:
   - job: Ubuntu1804
     pool:
