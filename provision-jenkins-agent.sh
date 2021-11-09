@@ -64,7 +64,7 @@ yum install -y \
 curl https://packages.microsoft.com/config/rhel/7/prod.repo > ./microsoft-prod.repo
 sudo cp ./microsoft-prod.repo /etc/yum.repos.d/
 yum update -y
-yum --releasever=7 update && yum install -y libunwind libicu dotnet-sdk-5.0
+yum --releasever=7 update && sudo yum install -y libunwind libicu dotnet-sdk-5.0
 
 LIBOSMESA=$(find / -name 'libOSMesa*' -type f)
 ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
@@ -95,7 +95,7 @@ yum install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=(az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java make node npm psql pip3 rsync terraform tfenv yarn wget)
+packages=(az azcopy cloud-init docker  eslint gcc git google-chrome gulp java make node npm psql pip3 rsync terraform tfenv yarn wget)
 
 for i in "${packages[@]}"
 
