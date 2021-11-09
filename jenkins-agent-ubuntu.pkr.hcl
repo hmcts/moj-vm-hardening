@@ -67,7 +67,7 @@ source "azure-arm" "azure-os-image" {
   client_secret                     = var.client_secret
   image_offer                       = "0001-com-ubuntu-server-focal"
   image_publisher                   = "Canonical"
-  image_sku                         = "20_04-lts:latest"
+  image_sku                         = "20_04-lts"
   location                          = var.azure_location
   managed_image_name                = "jenkins-ubuntu-${formatdate("YYYYMMDDhhmmss",timestamp())}"
   managed_image_resource_group_name = var.resource_group_name
