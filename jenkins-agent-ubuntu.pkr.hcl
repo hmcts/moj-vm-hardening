@@ -97,7 +97,7 @@ build {
     }
   
   provisioner "shell" {
-    execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'"
+    execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E bash '{{ .Path }}'"
     script          = "provision-jenkins-ubuntu-agent.sh"
     environment_vars = ["JENKINS_SSH_KEY=${var.jenkins_ssh_key}"]
   }
