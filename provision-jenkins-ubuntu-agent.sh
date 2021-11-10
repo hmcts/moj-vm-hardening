@@ -18,8 +18,6 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-
 npm install npm@latest minimatch@latest graceful-fs@latest -g
 npm install --global gulp eslint
 
@@ -51,6 +49,8 @@ apt install -y \
   libatk-bridge2.0-0 \
   libgtk-3-0 \
   wget
+
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
@@ -107,7 +107,7 @@ apt install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java make node npm psql pip3 rsync terraform tfenv yarn wget )
+packages=( az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java make node npm psql pip3 rsync terraform tfenv yarn wget  )
 
 for i in "${packages[@]}"
 
