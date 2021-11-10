@@ -4,7 +4,8 @@ echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 apt update -y
-sudo apt install -y python3-pip
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python3.6 get-pip.py
 sudo apt install -y python3-testresources
 pip3 install --upgrade setuptools
 pip3 install --upgrade pip
