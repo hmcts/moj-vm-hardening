@@ -8,7 +8,7 @@ bash --version
 apt update -y
 wget https://bootstrap.pypa.io/get-pip.py
 sudo python3.6 get-pip.py
-sudo apt install -y python3-testresources
+# sudo apt install -y python3-testresources
 pip3 install --upgrade setuptools
 pip3 install --upgrade pip
 pip3 install --upgrade docker-compose
@@ -111,7 +111,7 @@ apt install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java make node npm psql pip3 rsync terraform tfenv yarn wget )
+packages=( az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java make node npm psql pip rsync terraform tfenv yarn wget )
 
 for i in "${packages[@]}"
 
