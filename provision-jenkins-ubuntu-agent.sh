@@ -6,8 +6,8 @@ echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 bash --version
 
 apt update -y
-wget https://bootstrap.pypa.io/get-pip.py
-sudo python3.6 get-pip.py
+sudo apt install -y python3-pip
+sudo apt install -y python3-testresources
 # sudo apt install -y python3-testresources
 pip3 install --upgrade setuptools
 pip3 install --upgrade pip
