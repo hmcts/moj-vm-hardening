@@ -77,6 +77,15 @@ source "azure-arm" "azure-os-image" {
   subscription_id                   = var.subscription_id
   tenant_id                         = var.tenant_id
   vm_size                           = "Standard_A2_v2"
+
+  // shared_image_gallery_destination {
+  //   subscription        = var.subscription_id
+  //   resource_group      = var.resource_group_name
+  //   gallery_name        = "hmcts"
+  //   image_name          = "jenkins-agent"
+  //   image_version       = var.azure_image_version
+  //   replication_regions = ["UK South"]
+  // }
 }
 
 build {
