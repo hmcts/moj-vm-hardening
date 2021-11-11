@@ -3,12 +3,9 @@ echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
-bash --version
-
 apt update -y
 sudo apt install -y python3-pip
 sudo apt install -y python3-testresources
-# sudo apt install -y python3-testresources
 pip3 install --upgrade setuptools
 pip3 install --upgrade pip
 pip3 install --upgrade docker-compose
