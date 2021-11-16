@@ -58,7 +58,28 @@ variable "jenkins_ssh_key" {
   default = ""
 }
 
-source "azure-arm" "azure-os-image" {
+source "azure-arm" "azure-no-sig" {
+  azure_tags = {
+    imagetype = "jenkins-ubuntu"
+    timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
+  }
+  client_id                         = var.client_id
+  client_secret                     = var.client_secret
+  image_offer                       = "0001-com-ubuntu-server-focal"
+  image_publisher                   = "Canonical"
+  image_sku                         = "20_04-lts"
+  location                          = var.azure_location
+  managed_image_name                = "jenkins-ubuntu-${formatdate("YYYYMMDDhhmmss",timestamp())}"
+  managed_image_resource_group_name = var.resource_group_name
+  os_type                           = "Linux"
+  ssh_pty                           = "true"
+  ssh_username                      = var.ssh_user
+  subscription_id                   = var.subscription_id
+  tenant_id                         = var.tenant_id
+  vm_size                           = "Standard_A2_v2"
+}
+
+source "azure-arm" "azure-sig-publish" {
   azure_tags = {
     imagetype = "jenkins-ubuntu"
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
@@ -78,24 +99,24 @@ source "azure-arm" "azure-os-image" {
   tenant_id                         = var.tenant_id
   vm_size                           = "Standard_A2_v2"
 
-  // shared_image_gallery_destination {
-  //   subscription        = var.subscription_id
-  //   resource_group      = var.resource_group_name
-  //   gallery_name        = "hmcts"
-  //   image_name          = "jenkins-agent"
-  //   image_version       = var.azure_image_version
-  //   replication_regions = ["UK South"]
-  // }
+   shared_image_gallery_destination {
+     subscription        = var.subscription_id
+     resource_group      = var.resource_group_name
+     gallery_name        = "hmcts"
+     image_name          = "jenkins-agent"
+     image_version       = var.azure_image_version
+     replication_regions = ["UK South"]
+   }
 }
 
 build {
-  sources = ["source.azure-arm.azure-os-image"]
+  sources = ["source.azure-arm.azure-no-sig","source.azure-arm.azure-sig-publish"]
 
   provisioner "file" {
-      source = "repos/"
-      destination = "/tmp/"
-    }
-  
+    source = "repos/"
+    destination = "/tmp/"
+  }
+
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E bash '{{ .Path }}'"
     script          = "provision-jenkins-ubuntu-agent.sh"

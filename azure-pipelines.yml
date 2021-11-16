@@ -27,6 +27,23 @@ stages:
               command: validate
               azureSubscription: dts-management-prod-intsvc
 
+  - stage: Build_ubuntu_no_sig
+    pool:
+      vmImage: 'ubuntu-18.04'
+    jobs:
+      - job: Build
+        steps:
+          - task: riezebosch.Packer.Packer.Packer@1
+            displayName: 'Build Jenkins Agent for Ubuntu'
+            condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+            inputs:
+              templatePath: jenkins-agent-ubuntu.pkr.hcl
+              variables: |
+                  jenkins_ssh_key=$(JENKINS_SSH_KEY)
+              command: build
+              azureSubscription: dts-management-prod-intsvc
+              options: --only=azure-arm.azure-no-sig
+
   - stage: Build_Ubuntu
     pool:
       vmImage: 'ubuntu-18.04'
