@@ -44,7 +44,7 @@ stages:
               azureSubscription: dts-management-prod-intsvc
 
   - stage: Build CentOS
-    depends: []
+    dependsOn: []
     pool:
       vmImage: 'ubuntu-18.04'
     jobs:
