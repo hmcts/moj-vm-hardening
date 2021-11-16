@@ -23,7 +23,7 @@ stages:
           - task: riezebosch.Packer.Packer.Packer@1
             displayName: 'Validate Jenkins Agent for CentOs'
             inputs:
-              templatePath: jenkins-agent-centos-7.9-x86.pkr.hcl
+              templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
               command: validate
               azureSubscription: dts-management-prod-intsvc
 
@@ -44,7 +44,7 @@ stages:
               azureSubscription: dts-management-prod-intsvc
 
   - stage: Build_CentOS
-    dependsOn: []
+    dependsOn: Validate
     pool:
       vmImage: 'ubuntu-18.04'
     jobs:
