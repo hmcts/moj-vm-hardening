@@ -4,27 +4,27 @@ echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 apt update -y
-sudo apt install -y python3-pip
-sudo apt install -y python3-testresources
+apt install -y python3-pip
+apt install -y python3-testresources
 pip3 install --upgrade setuptools
 pip3 install --upgrade pip
 pip3 install --upgrade docker-compose
 
-curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_14.x
 apt install -y nodejs
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 npm install npm@latest minimatch@latest graceful-fs@latest -g
 npm install --global gulp eslint
 
 npm install --global yarn
 
-sudo apt remove azure-cli -y && sudo apt autoremove -y
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+apt remove azure-cli -y && apt autoremove -y
+curl -sL https://aka.ms/InstallAzureCLIDeb
 
 apt install -y \
   ca-certificates \
@@ -51,24 +51,18 @@ apt install -y \
   wget
 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo apt install ./google-chrome-stable_current_amd64.deb
+apt install -y ./google-chrome-stable_current_amd64.deb
 
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
 apt update
 apt install -y postgresql postgresql-contrib
 
 wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
+dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
-apt update; \
-  sudo apt install -y apt-transport-https && \
-  sudo apt update && \
-  sudo apt install -y dotnet-sdk-5.0
-sudo apt update; \
-  sudo apt install -y apt-transport-https && \
-  sudo apt update && \
-  sudo apt install -y aspnetcore-runtime-5.0 && \
+apt update
+apt install -y apt-transport-https dotnet-sdk-5.0 apt-transport-https aspnetcore-runtime-5.0
 
 [ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
 LIBOSMESA=$(find / -name 'libOSMesa*' -type f)
@@ -76,7 +70,7 @@ ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
 echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
 # grubby --args=namespace.unpriv_enable=1 --update-kernel=$(grubby --default-kernel)
 
-apt install -y ruby-full ruby-dev
+apt install -y ruby-full ruby-dev chrony
 
 mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker
 echo -e '{\n  \live-restore\: true,\n  \group\: \docker\\n}' > /etc/docker/daemon.conf && chown root:root /etc/docker/daemon.conf && chmod 0644 /etc/docker/daemon.conf
@@ -85,18 +79,14 @@ systemctl enable docker
 cp /etc/chrony/chrony.conf{,.orig}
 echo \refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\ > /etc/chrony/chrony.conf && cat /etc/chrony/chrony.conf
 
-
 #Download AzCopy
 wget https://aka.ms/downloadazcopy-v10-linux
 
 #Expand Archive
 tar -xvf downloadazcopy-v10-linux
 
-#(Optional) Remove existing AzCopy version
-sudo rm /usr/bin/azcopy
-
 #Move AzCopy to the destination you want to store it
-sudo cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
+cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
 
 mkdir /opt/nvm && chown 1001:1001 /opt/nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash

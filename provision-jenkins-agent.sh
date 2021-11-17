@@ -4,7 +4,10 @@ echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 mv /tmp/*.repo /etc/yum.repos.d/
-yum install -y deltarpm rsync
+
+rm -rf /etc/yum.repos.d/epel*
+
+yum install -y deltarpm rsync yum-utils
 yum-config-manager --disable openlogic
 yum --releasever=7 update -y
 yum install -y cloud-init epel-release libselinux-python centos-release-scl
@@ -18,12 +21,8 @@ curl --location https://rpm.nodesource.com/setup_12.x | sudo bash -
 rpm --import https://repo.ius.io/RPM-GPG-KEY-IUS-7
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-yum localinstall -y google-chrome-stable_current_x86_64.rpm
-
 yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-yum-config-manager --enable pgdg11
-yum install -y nodejs postgresql11
+yum install -y nodejs postgresql11-server
 
 npm install npm@latest minimatch@latest graceful-fs@latest -g
 npm install --global gulp eslint
@@ -60,6 +59,8 @@ yum install -y \
   gtk3 \
   wget
 
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+yum localinstall -y google-chrome-stable_current_x86_64.rpm
 
 curl https://packages.microsoft.com/config/rhel/7/prod.repo > ./microsoft-prod.repo
 sudo cp ./microsoft-prod.repo /etc/yum.repos.d/

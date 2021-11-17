@@ -3,7 +3,7 @@ name: Jenkins Agent Packer
 stages:
   - stage: Validate
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-20.04'
     jobs:
       - job: Validate
         steps:
@@ -27,9 +27,9 @@ stages:
               command: validate
               azureSubscription: dts-management-prod-intsvc
 
-  - stage: Build_ubuntu_no_sig
+  - stage: Build_Ubuntu_Without_SIG
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-20.04'
     jobs:
       - job: Build
         steps:
@@ -44,9 +44,9 @@ stages:
               azureSubscription: dts-management-prod-intsvc
               options: --only=azure-arm.azure-no-sig
 
-  - stage: Build_Ubuntu
+  - stage: Build_Ubuntu_SIG_Publish
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-20.04'
     jobs:
       - job: Build
         steps:
@@ -60,10 +60,27 @@ stages:
               command: build
               azureSubscription: dts-management-prod-intsvc
 
-  - stage: Build_CentOS
+  - stage: Build_CentOS_Without_SIG
     dependsOn: Validate
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-20.04'
+    jobs:
+      - job: Build
+        steps:
+          - task: riezebosch.Packer.Packer.Packer@1
+            displayName: 'Build Jenkins Agent for CentOS'
+            condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+            inputs:
+              templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
+              variables: |
+                  jenkins_ssh_key=$(JENKINS_SSH_KEY)
+              command: build
+              azureSubscription: dts-management-prod-intsvc
+              options: --only=azure-arm.azure-no-sig
+
+  - stage: Build_CentOS_SIG_Publish
+    pool:
+      vmImage: 'ubuntu-20.04'
     jobs:
       - job: Build
         steps:
