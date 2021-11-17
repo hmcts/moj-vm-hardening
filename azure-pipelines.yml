@@ -3,7 +3,7 @@ name: Jenkins Agent Packer
 stages:
   - stage: Validate
     pool:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     jobs:
       - job: Validate
         steps:
@@ -29,7 +29,7 @@ stages:
 
   - stage: Build_Ubuntu_Without_SIG
     pool:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     jobs:
       - job: Build
         steps:
@@ -46,7 +46,7 @@ stages:
 
   - stage: Build_Ubuntu_SIG_Publish
     pool:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     jobs:
       - job: Build
         steps:
@@ -63,7 +63,7 @@ stages:
   - stage: Build_CentOS_Without_SIG
     dependsOn: Validate
     pool:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     jobs:
       - job: Build
         steps:
@@ -80,7 +80,7 @@ stages:
 
   - stage: Build_CentOS_SIG_Publish
     pool:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     jobs:
       - job: Build
         steps:
