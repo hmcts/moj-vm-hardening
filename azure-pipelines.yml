@@ -59,6 +59,7 @@ stages:
                   jenkins_ssh_key=$(JENKINS_SSH_KEY)
               command: build
               azureSubscription: dts-management-prod-intsvc
+              options: --only=azure-arm.azure-sig-publish
 
   - stage: Build_CentOS_Without_SIG
     dependsOn: Validate
@@ -93,3 +94,4 @@ stages:
                   jenkins_ssh_key=$(JENKINS_SSH_KEY)
               command: build
               azureSubscription: dts-management-prod-intsvc
+              options: --only=azure-arm.azure-sig-publish
