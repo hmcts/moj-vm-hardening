@@ -6,7 +6,7 @@ strategy:
       os: Ubuntu
       templatePath: jenkins-agent-ubuntu.pkr.hcl
     CentOS:
-      os: Ubuntu
+      os: CentOS
       templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
 
 pool:
@@ -28,7 +28,7 @@ steps:
 
 
   - task: riezebosch.Packer.Packer.Packer@1
-    displayName: 'Build Jenkins Agent for $(os)'
+    displayName: 'Build Jenkins Agent for $(os) - No SIG'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       templatePath: $(templatePath)
@@ -39,7 +39,7 @@ steps:
       options: --only=azure-arm.azure-no-sig
 
   - task: riezebosch.Packer.Packer.Packer@1
-    displayName: 'Build Jenkins Agent for $(os)'
+    displayName: 'Build Jenkins Agent for $(os) - SIG Publish'
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       templatePath: $(templatePath)
