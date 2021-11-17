@@ -19,6 +19,16 @@ curl --location https://rpm.nodesource.com/setup_12.x
 rpm --import https://repo.ius.io/RPM-GPG-KEY-IUS-7
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
+postgres=$(rpm -qa | grep postgres)
+if [ -z $postgres ]; then
+rpm -e $postgres
+fi
+
+pgdg=$(rpm -qa | grep pgdg)
+if [ -z "$pgdg" ]; then
+rpm -e $pgdg
+fi
+
 yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 yum install -y nodejs postgresql11-server
 
@@ -66,7 +76,7 @@ yum update -y
 yum --releasever=7 update && yum install -y libunwind libicu dotnet-sdk-5.0
 
 LIBOSMESA=$(find / -name 'libOSMesa*' -type f)
-ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
+ln -fs $LIBOSMESA /opt/google/chrome/libosmesa.so
 echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
 grubby --args=namespace.unpriv_enable=1 --update-kernel=$(grubby --default-kernel)
 
@@ -88,7 +98,7 @@ mkdir /opt/nvm && chown 1001:1001 /opt/nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash
 
 git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv
-ln -s /opt/tfenv/bin/* /bin
+ln -fs /opt/tfenv/bin/* /bin
 
 yum install -y unzip
 
