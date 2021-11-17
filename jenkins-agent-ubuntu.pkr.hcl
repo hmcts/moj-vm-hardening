@@ -133,7 +133,7 @@ source "azure-arm" "azure-sig-publish" {
      subscription        = var.subscription_id
      resource_group      = var.resource_group_name
      gallery_name        = "hmcts"
-     image_name          = "jenkins-agent"
+     image_name          = "jenkins-ubuntu"
      image_version       = var.azure_image_version
      replication_regions = ["UK South"]
    }

@@ -58,25 +58,76 @@ variable "jenkins_ssh_key" {
   default = ""
 }
 
-source "azure-arm" "azure-os-image" {
+variable "image_offer" {
+  type = string
+  default = "Centos"
+}
+
+variable "image_publisher" {
+  type = string
+  default = "openlogic"
+}
+
+variable "image_sku" {
+  type = string
+  default = "7_9"
+}
+
+variable "image_name" {
+  type = string
+  default = "jenkins-centos"
+}
+
+variable "os_type" {
+  type = string
+  default = "Linux"
+}
+
+variable "vm_size" {
+  type = string
+  default = "Standard_A2_v2"
+}
+
+source "azure-arm" "azure-no-sig" {
   azure_tags = {
-    imagetype = "centos-jenkins-agent79"
+    imagetype = var.image_name
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
   }
   client_id                         = var.client_id
   client_secret                     = var.client_secret
-  image_offer                       = "CentOS"
-  image_publisher                   = "openlogic"
-  image_sku                         = "7_9"
+  image_publisher                   = var.image_publisher
+  image_offer                       = var.image_offer
+  image_sku                         = var.image_sku
   location                          = var.azure_location
-  managed_image_name                = "cnp-jenkins-agent79-${formatdate("YYYYMMDDhhmmss",timestamp())}"
+  managed_image_name                = "${var.image_name}-${formatdate("YYYYMMDDhhmmss",timestamp())}"
   managed_image_resource_group_name = var.resource_group_name
-  os_type                           = "Linux"
+  os_type                           = var.os_type
   ssh_pty                           = "true"
   ssh_username                      = var.ssh_user
   subscription_id                   = var.subscription_id
   tenant_id                         = var.tenant_id
-  vm_size                           = "Standard_A2_v2"
+  vm_size                           = var.vm_size
+}
+
+source "azure-arm" "azure-sig-publish" {
+  azure_tags = {
+    imagetype = var.image_name
+    timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
+  }
+  client_id                         = var.client_id
+  client_secret                     = var.client_secret
+  image_publisher                   = var.image_publisher
+  image_offer                       = var.image_offer
+  image_sku                         = var.image_sku
+  location                          = var.azure_location
+  managed_image_name                = "${var.image_name}-${formatdate("YYYYMMDDhhmmss",timestamp())}"
+  managed_image_resource_group_name = var.resource_group_name
+  os_type                           = var.os_type
+  ssh_pty                           = "true"
+  ssh_username                      = var.ssh_user
+  subscription_id                   = var.subscription_id
+  tenant_id                         = var.tenant_id
+  vm_size                           = var.vm_size
 
   shared_image_gallery_destination {
     subscription        = var.subscription_id
@@ -89,7 +140,7 @@ source "azure-arm" "azure-os-image" {
 }
 
 build {
-  sources = ["source.azure-arm.azure-os-image"]
+  sources = ["source.azure-arm.azure-no-sig","source.azure-arm.azure-sig-publish"]
 
   provisioner "file" {
       source = "repos/"
