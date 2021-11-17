@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash -x
 echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
@@ -15,7 +15,7 @@ pip3 install --upgrade setuptools
 pip3 install --upgrade pip
 pip3 install --upgrade docker-compose
 
-curl --location https://rpm.nodesource.com/setup_12.x
+curl --location https://rpm.nodesource.com/setup_12.x | bash -
 rpm --import https://repo.ius.io/RPM-GPG-KEY-IUS-7
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 

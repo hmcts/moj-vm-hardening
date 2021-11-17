@@ -75,7 +75,7 @@ variable "image_sku" {
 
 variable "image_name" {
   type = string
-  default = "jenkins-centos"
+  default = "jenkins-agent"
 }
 
 variable "os_type" {
