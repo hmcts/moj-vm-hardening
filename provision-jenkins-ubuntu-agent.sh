@@ -10,7 +10,7 @@ pip3 install --upgrade setuptools
 pip3 install --upgrade pip
 pip3 install --upgrade docker-compose
 
-curl -fsSL https://deb.nodesource.com/setup_14.x
+curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 apt install -y nodejs
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg

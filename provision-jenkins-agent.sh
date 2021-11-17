@@ -3,8 +3,6 @@ echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
-mv /tmp/*.repo /etc/yum.repos.d/
-
 rm -rf /etc/yum.repos.d/epel*
 
 yum install -y deltarpm rsync yum-utils
@@ -17,7 +15,7 @@ pip3 install --upgrade setuptools
 pip3 install --upgrade pip
 pip3 install --upgrade docker-compose
 
-curl --location https://rpm.nodesource.com/setup_12.x | sudo bash -
+curl --location https://rpm.nodesource.com/setup_12.x
 rpm --import https://repo.ius.io/RPM-GPG-KEY-IUS-7
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
@@ -35,7 +33,7 @@ name=Azure CLI
 baseurl=https://packages.microsoft.com/yumrepos/azure-cli
 enabled=1
 gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/azure-cli.repo
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | tee /etc/yum.repos.d/azure-cli.repo
 
 yum install -y \
   java-11-openjdk-devel \
@@ -63,9 +61,9 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 yum localinstall -y google-chrome-stable_current_x86_64.rpm
 
 curl https://packages.microsoft.com/config/rhel/7/prod.repo > ./microsoft-prod.repo
-sudo cp ./microsoft-prod.repo /etc/yum.repos.d/
+cp ./microsoft-prod.repo /etc/yum.repos.d/
 yum update -y
-yum --releasever=7 update && sudo yum install -y libunwind libicu dotnet-sdk-5.0
+yum --releasever=7 update && yum install -y libunwind libicu dotnet-sdk-5.0
 
 LIBOSMESA=$(find / -name 'libOSMesa*' -type f)
 ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
