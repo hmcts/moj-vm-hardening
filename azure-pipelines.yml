@@ -28,10 +28,10 @@ steps:
 
 
   - task: riezebosch.Packer.Packer.Packer@1
-    displayName: 'Build Jenkins Agent for ${{ matrix.os }}'
+    displayName: 'Build Jenkins Agent for $(os)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
-      templatePath: ${{ matrix.templatePath }}
+      templatePath: $(templatePath)
       variables: |
           jenkins_ssh_key=$(JENKINS_SSH_KEY)
       command: build
@@ -39,10 +39,10 @@ steps:
       options: --only=azure-arm.azure-no-sig
 
   - task: riezebosch.Packer.Packer.Packer@1
-    displayName: 'Build Jenkins Agent for ${{ matrix.os }}'
+    displayName: 'Build Jenkins Agent for $(os)'
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
-      templatePath: ${{ matrix.templatePath }}
+      templatePath: $(templatePath)
       variables: |
           jenkins_ssh_key=$(JENKINS_SSH_KEY)
       command: build
