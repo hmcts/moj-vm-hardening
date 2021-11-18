@@ -36,7 +36,7 @@ steps:
           jenkins_ssh_key=$(JENKINS_SSH_KEY)
       command: build
       azureSubscription: dts-management-prod-intsvc
-      options: --only=azure-arm.azure-no-sig
+      options: --only=azure-arm.no-publish
 
   - task: riezebosch.Packer.Packer.Packer@1
     displayName: 'Build and publish'
@@ -47,4 +47,4 @@ steps:
           jenkins_ssh_key=$(JENKINS_SSH_KEY)
       command: build
       azureSubscription: dts-management-prod-intsvc
-      options: --only=azure-arm.azure-sig-publish
+      options: --only=azure-arm.build-and-publish

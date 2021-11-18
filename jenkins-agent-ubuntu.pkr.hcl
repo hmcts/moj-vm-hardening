@@ -88,7 +88,7 @@ variable "vm_size" {
   default = "Standard_A2_v2"
 }
 
-source "azure-arm" "azure-no-sig" {
+source "azure-arm" "no-publish" {
   azure_tags = {
     imagetype = var.image_name
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
@@ -109,7 +109,7 @@ source "azure-arm" "azure-no-sig" {
   vm_size                           = var.vm_size
 }
 
-source "azure-arm" "azure-sig-publish" {
+source "azure-arm" "build-and-publish" {
   azure_tags = {
     imagetype = var.image_name
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
@@ -140,7 +140,7 @@ source "azure-arm" "azure-sig-publish" {
 }
 
 build {
-  sources = ["source.azure-arm.azure-no-sig","source.azure-arm.azure-sig-publish"]
+  sources = ["source.azure-arm.no-publish","source.azure-arm.build-and-publish"]
 
   provisioner "file" {
     source = "repos/"
