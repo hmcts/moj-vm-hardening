@@ -1,46 +1,50 @@
 name: Jenkins Agent Packer
-jobs:
-  - job: Ubuntu1804
-    pool:
-      vmImage: 'ubuntu-18.04'
 
-    steps:
-      - checkout: self
-      - task: riezebosch.Packer.PackerTool.PackerTool@0
-        displayName: 'Install Packer'
-        inputs:
-          version: 1.7.4
+strategy:
+  matrix:
+    Ubuntu:
+      os: Ubuntu
+      templatePath: jenkins-agent-ubuntu.pkr.hcl
+    CentOS:
+      os: CentOS
+      templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
 
-      - task: riezebosch.Packer.Packer.Packer@1
-        displayName: 'Validate Jenkins Agent for Ubuntu'
-        inputs:
-          templatePath: jenkins-agent-ubuntu.pkr.hcl
-          command: validate
-          azureSubscription: dts-management-prod-intsvc
+pool:
+  vmImage: 'ubuntu-latest'
 
-      - task: riezebosch.Packer.Packer.Packer@1
-        displayName: 'Build Jenkins Agent for Ubuntu'
-        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
-        inputs:
-          templatePath: jenkins-agent-ubuntu.pkr.hcl
-          variables: |
-              jenkins_ssh_key=$(JENKINS_SSH_KEY)
-          command: build
-          azureSubscription: dts-management-prod-intsvc
+steps:
+  - checkout: self
+  - task: riezebosch.Packer.PackerTool.PackerTool@0
+    displayName: 'Install Packer'
+    inputs:
+      version: 1.7.4
 
-      - task: riezebosch.Packer.Packer.Packer@1
-        displayName: 'Validate Jenkins Agent for CentOs'
-        inputs:
-          templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
-          command: validate
-          azureSubscription: dts-management-prod-intsvc
+  - task: riezebosch.Packer.Packer.Packer@1
+    displayName: 'Validate'
+    inputs:
+      templatePath: $(templatePath)
+      command: validate
+      azureSubscription: dts-management-prod-intsvc
 
-      - task: riezebosch.Packer.Packer.Packer@1
-        displayName: 'Build Jenkins Agent for CentOs'
-        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
-        inputs:
-          templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
-          variables: |
-              jenkins_ssh_key=$(JENKINS_SSH_KEY)
-          command: build
-          azureSubscription: dts-management-prod-intsvc
+
+  - task: riezebosch.Packer.Packer.Packer@1
+    displayName: 'PR Build'
+    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      templatePath: $(templatePath)
+      variables: |
+          jenkins_ssh_key=$(JENKINS_SSH_KEY)
+      command: build
+      azureSubscription: dts-management-prod-intsvc
+      options: --only=azure-arm.no-publish
+
+  - task: riezebosch.Packer.Packer.Packer@1
+    displayName: 'Build and publish'
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      templatePath: $(templatePath)
+      variables: |
+          jenkins_ssh_key=$(JENKINS_SSH_KEY)
+      command: build
+      azureSubscription: dts-management-prod-intsvc
+      options: --only=azure-arm.build-and-publish
