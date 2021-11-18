@@ -28,7 +28,7 @@ steps:
 
 
   - task: riezebosch.Packer.Packer.Packer@1
-    displayName: 'Build Jenkins Agent for $(os) - No SIG'
+    displayName: 'PR Build'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       templatePath: $(templatePath)
