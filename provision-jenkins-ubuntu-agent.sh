@@ -28,6 +28,11 @@ apt remove docker docker-engine docker.io containerd runc -y && apt autoremove -
 apt-get update
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
+# Playwright dependencies. Generated with: npx playwright install-deps --dry-run chrome.
+apt-get install -y --no-install-recommends xvfb fonts-noto-color-emoji ttf-unifont libfontconfig \
+  libfreetype6 xfonts-cyrillic xfonts-scalable fonts-liberation fonts-ipafont-gothic fonts-wqy-zenhei \
+  fonts-tlwg-loma-otf ttf-ubuntu-font-family
+
 apt install -y \
   ca-certificates \
   curl \
