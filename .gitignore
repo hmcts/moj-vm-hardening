@@ -10,3 +10,5 @@
 ansible-hardening/
 ansible-role-clamav/
 cnp-hardening-ansible/
+
+.idea/

@@ -10,7 +10,7 @@ variable "client_secret" {
 
 variable "azure_image_version" {
   type    = string
-  default = "1.0.3"
+  default = "1.0.5"
 }
 
 variable "azure_location" {
