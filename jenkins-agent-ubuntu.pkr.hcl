@@ -141,12 +141,7 @@ source "azure-arm" "build-and-publish" {
 
 build {
   sources = ["source.azure-arm.no-publish","source.azure-arm.build-and-publish"]
-
-  provisioner "file" {
-    source = "repos/"
-    destination = "/tmp/"
-  }
-
+  
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E bash '{{ .Path }}'"
     script          = "provision-jenkins-ubuntu-agent.sh"
