@@ -10,7 +10,7 @@ variable "client_secret" {
 
 variable "azure_image_version" {
   type    = string
-  default = "1.0.6"
+  default = "1.1.0"
 }
 
 variable "azure_location" {
@@ -141,7 +141,7 @@ source "azure-arm" "build-and-publish" {
 
 build {
   sources = ["source.azure-arm.no-publish","source.azure-arm.build-and-publish"]
-  
+
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E bash '{{ .Path }}'"
     script          = "provision-jenkins-ubuntu-agent.sh"
