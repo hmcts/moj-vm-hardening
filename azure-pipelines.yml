@@ -5,9 +5,6 @@ strategy:
     Ubuntu:
       os: Ubuntu
       templatePath: jenkins-agent-ubuntu.pkr.hcl
-    CentOS:
-      os: CentOS
-      templatePath: jenkins-agent-centos-7.9-x86_64.pkr.hcl
 
 pool:
   vmImage: 'ubuntu-latest'

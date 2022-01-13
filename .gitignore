@@ -6,9 +6,4 @@
 .terraform/
 *.swp
 
-# 3rd party ansible roles
-ansible-hardening/
-ansible-role-clamav/
-cnp-hardening-ansible/
-
 .idea/
