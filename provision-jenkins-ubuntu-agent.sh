@@ -46,6 +46,7 @@ apt install -y \
   gnupg \
   lsb-release \
   openjdk-11-jdk \
+  openjdk-17-jdk \
   git \
   azure-cli \
   docker-ce \
@@ -64,6 +65,8 @@ apt install -y \
   libgtk-3-0 \
   libxss1 \
   wget
+
+update-alternatives  --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 apt install -y ./google-chrome-stable_current_amd64.deb
@@ -113,7 +116,7 @@ apt install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java make node npm psql rsync terraform tfenv yarn wget )
+packages=( az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql rsync terraform tfenv yarn wget )
 
 for i in "${packages[@]}"
 
