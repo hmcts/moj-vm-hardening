@@ -116,7 +116,7 @@ apt install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy cloud-init docker dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql rsync terraform tfenv yarn wget )
+packages=( az azcopy cloud-init docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql rsync terraform tfenv yarn wget )
 
 for i in "${packages[@]}"
 
