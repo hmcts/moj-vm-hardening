@@ -129,3 +129,21 @@ do
      exit 1
   fi
 done
+
+python_modules=( venv )
+
+installed_modules=$(python3 -c 'help("modules")')
+
+for p in "${python_modules[@]}"
+
+do
+ if grep -w "$p" <<< "$installed_modules"; then
+    echo "$p is installed"
+  else
+    echo "$p is missing!"
+    exit 1
+  fi
+done
+
+
+
