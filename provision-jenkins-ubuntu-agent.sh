@@ -117,7 +117,7 @@ apt install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy cloud-init docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql rsync terraform tfenv yarn wget )
+packages=( az azcopy cloud-init docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql rsync terraform tfenv virtualenv yarn wget )
 
 for i in "${packages[@]}"
 
@@ -127,21 +127,6 @@ do
   else
      echo "${i} is missing!"
      exit 1
-  fi
-done
-
-python_modules=( venv )
-
-installed_modules=$(python3 -c 'help("modules")')
-
-for p in "${python_modules[@]}"
-
-do
- if grep -w "$p" <<< "$installed_modules"; then
-    echo "$p is installed"
-  else
-    echo "$p is missing!"
-    exit 1
   fi
 done
 
