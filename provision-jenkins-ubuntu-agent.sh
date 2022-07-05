@@ -5,7 +5,6 @@ echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 apt update -y
 apt install -y python3-pip
-apt install -y python3.8-venv
 apt install -y python3-testresources
 apt install -y python2
 pip3 install --upgrade setuptools
