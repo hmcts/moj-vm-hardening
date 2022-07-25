@@ -72,6 +72,10 @@ update-alternatives  --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 apt install -y ./google-chrome-stable_current_amd64.deb
 
+TFCMT_VERSION=v3.2.1
+curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/$TFCMT_VERSION/tfcmt_linux_amd64.tar.gz
+tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
+
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
 apt update
@@ -117,7 +121,7 @@ apt install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy cloud-init docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql rsync terraform tfenv virtualenv yarn wget )
+packages=( az azcopy cloud-init docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql rsync terraform tfcmt tfenv virtualenv yarn wget )
 
 for i in "${packages[@]}"
 
