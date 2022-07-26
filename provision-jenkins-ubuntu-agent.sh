@@ -1,9 +1,19 @@
-#! /bin/bash -xe
+#!/bin/bash
+
+set -xe
+
 echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 apt update -y
+
+
+## debugging why python3-pip sometime can't be found
+cat /etc/apt/sources.list
+apt-cache policy python3-pip
+## end debug
+
 apt install -y python3-pip
 apt install -y python3-testresources
 apt install -y python2
