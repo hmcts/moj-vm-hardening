@@ -49,6 +49,7 @@ apt install -y \
   openjdk-11-jdk \
   openjdk-17-jdk \
   git \
+  gnupg2 \
   azure-cli \
   docker-ce \
   docker-ce-cli \
@@ -71,9 +72,12 @@ update-alternatives  --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
 
 #### RVM
 
-gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+# uses non default server due to firewall blocking the default
+# https://serverfault.com/a/1088077/385948
+gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
 
+source /usr/local/rvm/scripts/rvm
 # install common ruby versions to make CI faster
 rvm install 2.7.6
 
@@ -131,7 +135,7 @@ apt install -y unzip
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy cloud-init docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql rsync terraform tfcmt tfenv virtualenv yarn wget )
+packages=( az azcopy cloud-init docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql ruby rsync terraform tfcmt tfenv virtualenv yarn wget )
 
 for i in "${packages[@]}"
 
