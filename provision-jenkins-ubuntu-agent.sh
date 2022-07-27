@@ -74,6 +74,7 @@ apt-get update && apt-get install -y \
   libgtk-3-0 \
   libxss1 \
   rsync \
+  libpq-dev \
   postgresql \
   postgresql-contrib \
   apt-transport-https \
