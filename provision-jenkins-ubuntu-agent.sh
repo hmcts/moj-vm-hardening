@@ -150,7 +150,10 @@ ln -s /opt/tfenv/bin/* /bin
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql ruby rsync terraform tfcmt tfenv virtualenv yarn wget )
+# install flux cli
+curl -s https://fluxcd.io/install.sh | bash
+
+packages=( az azcopy docker docker-compose dotnet eslint flux gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql ruby rsync terraform tfcmt tfenv virtualenv yarn wget )
 
 for i in "${packages[@]}"
 
