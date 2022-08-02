@@ -1,5 +1,15 @@
 name: Jenkins Agent Packer
 
+trigger:
+  branches:
+    include:
+      - master
+
+pr:
+  branches:
+    include:
+      - master
+
 strategy:
   matrix:
     Ubuntu:
