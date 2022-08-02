@@ -100,7 +100,7 @@ source "azure-arm" "no-publish" {
   image_offer                       = var.image_offer
   image_sku                         = var.image_sku
   location                          = var.azure_location
-  managed_image_name                = "${var.image_name}-${formatdate("YYYYMMDDhhmmss",timestamp())}"
+  managed_image_name                = "${var.image_name}-${formatdate("YYYYMMDDhhmmss",timestamp())}-${var.azure_image_version}"
   managed_image_resource_group_name = var.resource_group_name
   os_type                           = var.os_type
   ssh_pty                           = "true"
