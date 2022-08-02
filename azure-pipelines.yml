@@ -76,8 +76,8 @@ steps:
       scriptLocation: inlineScript
       inlineScript: |
         echo $(prbuild.DeploymentName)
-        # resource_group_name=$(PR_Build.$DeploymentName) | sed 's/pkrdp//')
-        # az group show --name $resource_group_name
+        resource_group_name=$(prbuild.DeploymentName) | sed 's/pkrdp//')
+        az group show --name $resource_group_name
 
   - task: riezebosch.Packer.Packer.Packer@1
     displayName: 'Build and publish'
