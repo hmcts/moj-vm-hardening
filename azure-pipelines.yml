@@ -56,7 +56,7 @@ steps:
 
   - task: riezebosch.Packer.Packer.Packer@1
     displayName: 'PR Build'
-    name: pr_build
+    name: prbuild
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       templatePath: $(templatePath)
@@ -75,7 +75,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        echo $(pr_build.$DeploymentName)
+        echo $(prbuild.$DeploymentName)
         # resource_group_name=$(PR_Build.$DeploymentName) | sed 's/pkrdp//')
         # az group show --name $resource_group_name
 
