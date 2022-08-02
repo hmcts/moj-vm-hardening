@@ -68,6 +68,7 @@ steps:
   
   - task: AzureCLI@2
     displayName: Cleanup resources on fail
+    condition: failed()
     inputs:
       azureSubscription: dts-management-prod-intsvc
       scriptType: bash
@@ -75,7 +76,6 @@ steps:
       inlineScript: |
         resource_group_name=$($DeploymentName | sed 's/pkrdp//')
         az group show --name $resource_group_name
-      condition: failed()
 
   - task: riezebosch.Packer.Packer.Packer@1
     displayName: 'Build and publish'
