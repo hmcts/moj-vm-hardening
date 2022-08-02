@@ -21,7 +21,7 @@ steps:
     displayName: Get azure image version
     inputs:
       azureSubscription: dts-management-prod-intsvc
-      scriptType: ps
+      scriptType: pwsh
       scriptLocation: inlineScript
       inlineScript: |
         AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition jenkins-ubuntu --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -nr | head -n1)
