@@ -8,6 +8,9 @@ echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 apt-get remove docker docker-engine docker.io containerd runc -y && apt autoremove -y
 
+# deliberately exit here for testing
+exit 1
+
 apt-get update -y && apt-get install -y \
   ca-certificates \
   curl \

@@ -77,3 +77,14 @@ steps:
       command: build
       azureSubscription: dts-management-prod-intsvc
       options: --only=azure-arm.build-and-publish
+
+  - task: AzureCLI@2
+    displayName: Cleanup resources on fail
+    inputs:
+      azureSubscription: dts-management-prod-intsvc
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        resource_group_name=$($DeploymentName | sed 's/pkrdp//')
+        az group show --name $resource_group_name
+      condition: failed()
