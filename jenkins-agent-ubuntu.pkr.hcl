@@ -10,7 +10,8 @@ variable "client_secret" {
 
 variable "azure_image_version" {
   type    = string
-  default = null
+  default = "0.0.1"
+  description = "This is the version of the image definition in the Azure Compute Gallery. Ignore the default value set here as this will be computed in the pipeline to ensure it is automatically incremented"
 }
 
 variable "azure_location" {

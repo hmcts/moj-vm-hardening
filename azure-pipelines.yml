@@ -28,7 +28,7 @@ steps:
   - checkout: self
 
   - task: AzureCLI@2
-    displayName: Get azure image version
+    displayName: Get latest azure image version
     inputs:
       azureSubscription: dts-management-prod-intsvc
       scriptType: bash
