@@ -75,7 +75,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        echo $(prbuild.$DeploymentName)
+        echo $(prbuild.DeploymentName)
         # resource_group_name=$(PR_Build.$DeploymentName) | sed 's/pkrdp//')
         # az group show --name $resource_group_name
 
