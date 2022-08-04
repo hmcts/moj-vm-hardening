@@ -141,6 +141,16 @@ tar -xvf downloadazcopy-v10-linux
 #Move AzCopy to the destination you want to store it
 cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
 
+# see https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
+SONAR_SCANNER_VERSION=4.7.0.2747
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
+  -O /opt/sonar-scanner-cli.zip
+unzip /opt/sonar-scanner-cli.zip -d /opt
+
+ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-scanner
+
+rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
+
 mkdir /opt/nvm && chown 1001:1001 /opt/nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash
 
@@ -150,10 +160,7 @@ ln -s /opt/tfenv/bin/* /bin
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-# install flux cli
-curl -s https://fluxcd.io/install.sh | bash
-
-packages=( az azcopy docker docker-compose dotnet eslint flux gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql ruby rsync terraform tfcmt tfenv virtualenv yarn wget )
+packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget )
 
 for i in "${packages[@]}"
 
