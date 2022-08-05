@@ -160,6 +160,20 @@ ln -s /opt/tfenv/bin/* /bin
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
+# tfcmt version
+TFCMT_VERSION=v3.2.1
+
+# download tfcmt
+curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/$TFCMT_VERSION/tfcmt_linux_amd64.tar.gz
+
+# install tfcmt
+if command -v sudo &> /dev/null
+then
+    sudo tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
+else
+  tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
+fi
+
 packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget )
 
 for i in "${packages[@]}"
