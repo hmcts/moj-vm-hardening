@@ -82,7 +82,8 @@ apt-get update && apt-get install -y \
   apt-transport-https \
   aspnetcore-runtime-5.0 \
   unzip \
-  wget
+  wget \
+  jq
 
 pip3 install --upgrade setuptools pip docker-compose virtualenv
 
