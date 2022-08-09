@@ -82,7 +82,8 @@ apt-get update && apt-get install -y \
   apt-transport-https \
   aspnetcore-runtime-5.0 \
   unzip \
-  wget
+  wget \
+  jq
 
 pip3 install --upgrade setuptools pip docker-compose virtualenv
 
@@ -160,7 +161,7 @@ ln -s /opt/tfenv/bin/* /bin
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java make node npm psql ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget )
+packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget)
 
 for i in "${packages[@]}"
 
