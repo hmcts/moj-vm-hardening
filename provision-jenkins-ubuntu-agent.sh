@@ -81,7 +81,7 @@ apt-get update && apt-get install -y \
   dotnet-sdk-5.0 \
   apt-transport-https \
   aspnetcore-runtime-5.0 \
-  zip
+  zip \
   unzip \
   wget \
   jq
