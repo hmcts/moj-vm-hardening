@@ -161,7 +161,7 @@ ln -s /opt/tfenv/bin/* /bin
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
-packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget)
+packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip)
 
 for i in "${packages[@]}"
 
