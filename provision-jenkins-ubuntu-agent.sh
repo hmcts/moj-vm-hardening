@@ -48,6 +48,10 @@ apt-get install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugi
   libfontconfig xfonts-cyrillic xfonts-scalable fonts-liberation fonts-ipafont-gothic fonts-wqy-zenhei \
   fonts-tlwg-loma-otf ttf-ubuntu-font-family
 
+# Required to avoid being prompted to restart services while installing pyenv pre-requisites
+export NEEDRESTART_SUSPEND=1
+export DEBIAN_FRONTEND=noninteractive
+
 apt-get update && apt-get install -y \
   python3-pip \
   python3-testresources \
@@ -84,7 +88,20 @@ apt-get update && apt-get install -y \
   zip \
   unzip \
   wget \
-  jq
+  jq \
+  libssl-dev \
+  zlib1g-dev \
+  libbz2-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  llvm \
+  libncursesw5-dev \
+  xz-utils \
+  tk-dev \
+  libxml2-dev \
+  libxmlsec1-dev \
+  libffi-dev \
+  liblzma-dev
 
 pip3 install --upgrade setuptools pip docker-compose virtualenv
 
@@ -165,6 +182,7 @@ tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 export PYENV_ROOT=/opt/.pyenv
 curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
+chown -R 1001:1001 /opt/.pyenv
 
 packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip)
 
