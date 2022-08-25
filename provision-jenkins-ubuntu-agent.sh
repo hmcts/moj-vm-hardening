@@ -162,13 +162,9 @@ ln -s /opt/tfenv/bin/* /bin
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
+export PYENV_ROOT=/opt/.pyenv
 curl https://pyenv.run | bash
-
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
-
-exec $SHELL
+ln -s /opt/.pyenv/bin/* /bin
 
 packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip)
 
