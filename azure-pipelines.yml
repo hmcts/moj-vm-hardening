@@ -1,8 +1,9 @@
 name: Jenkins Agent Packer
 
 schedules:
-- cron: '15 14 * * 1'  # Every monday at 2am UTC
-  displayName: Test scheduled build # friendly name given to a specific schedule
+# Run once a week
+- cron: '0 2 * * 1'  # Every monday at 2am UTC
+  displayName: Weekly scheduled build # friendly name given to a specific schedule
   branches:
     include:
     - DTSPO-9917
