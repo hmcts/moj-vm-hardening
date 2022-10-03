@@ -25,6 +25,11 @@ strategy:
       os: Ubuntu
       templatePath: jenkins-agent-ubuntu.pkr.hcl
 
+parameters:
+  - name: azure_image_version
+    type: string
+    default: ''
+
 pool:
   vmImage: 'ubuntu-latest'
 
