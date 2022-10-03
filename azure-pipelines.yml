@@ -6,7 +6,7 @@ schedules:
   displayName: Weekly scheduled build # friendly name given to a specific schedule
   branches:
     include:
-    - DTSPO-9917
+    - master
   always: true
 
 trigger:
