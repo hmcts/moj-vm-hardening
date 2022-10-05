@@ -31,7 +31,7 @@ pool:
 steps:
   - checkout: self
 
-  - task: AzureCLI@2
+  - task: AzureCLI@2.208.0
     displayName: Get latest azure image version
     name: get_azure_image_version
     inputs:
@@ -71,7 +71,7 @@ steps:
       azureSubscription: dts-management-prod-intsvc
       options: --only=azure-arm.no-publish
 
-  - task: AzureCLI@2
+  - task: AzureCLI@2.208.0
     displayName: Cleanup resources on fail
     condition: failed()
     inputs:
