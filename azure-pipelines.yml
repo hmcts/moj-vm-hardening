@@ -93,7 +93,7 @@ steps:
       azureSubscription: dts-management-prod-intsvc
       options: --only=azure-arm.build-and-publish
 
-  - task: GitHubRelease@0
+  - task: GitHubRelease@0.211.0
     displayName: Create GitHubRelease
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
