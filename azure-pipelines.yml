@@ -39,7 +39,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition jenkins-ubuntu --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -nr | head -n1)
+        AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition jenkins-ubuntu --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -V | tail -n1)
         IFS=. read -r major minor patch <<<"$AZURE_IMAGE_VERSION"
         ((patch++))
         printf -v AZURE_IMAGE_VERSION '%d.%d.%d' "$major" "$minor" "$((patch))"
