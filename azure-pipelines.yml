@@ -105,6 +105,7 @@ steps:
       tagSource: 'userSpecifiedTag'
       tag: '$(get_azure_image_version.azure_image_version)'
       title: '$(get_azure_image_version.azure_image_version)'
+      releaseNotesSource: inline
       releaseNotesInline: 'Regular maintenance updates for non-pinned packages'
       addChangeLog: true
       compareWith: 'lastFullRelease'
