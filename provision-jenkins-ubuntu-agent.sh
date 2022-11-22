@@ -96,6 +96,7 @@ apt-get update && apt-get install -y \
   libsqlite3-dev \
   llvm \
   libncursesw5-dev \
+  libncurses5-dbg \
   xz-utils \
   tk-dev \
   libxml2-dev \
