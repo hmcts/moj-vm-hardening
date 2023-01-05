@@ -69,9 +69,7 @@ steps:
           azure_image_version=$(get_azure_image_version.azure_image_version)
       command: build
       azureSubscription: dts-management-prod-intsvc
-      options: | 
-          --only=azure-arm.no-publish
-          --on-error=abort
+      options: --only=azure-arm.no-publish --on-error=abort
 
   - task: AzureCLI@2.208.0
     displayName: Cleanup resources on fail
