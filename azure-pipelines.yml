@@ -80,7 +80,7 @@ steps:
       scriptLocation: inlineScript
       inlineScript: |
         resource_group_name=$(echo $(prbuild.DeploymentName) | sed 's/pkrdp//')
-        az group delete --name "pkr-Resource-Group-${resource_group_name}"
+        az group delete --name "pkr-Resource-Group-${resource_group_name}" --yes
 
   - task: riezebosch.Packer.Packer.Packer@1
     displayName: 'Build and publish'
