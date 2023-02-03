@@ -164,7 +164,7 @@ cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
 SONAR_SCANNER_VERSION=4.7.0.2747
 wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
   -O /opt/sonar-scanner-cli.zip
-unzip /opt/sonar-scanner-cli.zip -d /opt
+unzip -o /opt/sonar-scanner-cli.zip -d /opt
 
 ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-scanner
 
