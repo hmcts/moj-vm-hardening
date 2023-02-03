@@ -180,6 +180,7 @@ ln -s /opt/tfenv/bin/* /bin
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
+rm -rf /opt/.pyenv
 export PYENV_ROOT=/opt/.pyenv
 curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
