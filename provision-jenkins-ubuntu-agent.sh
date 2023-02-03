@@ -2,10 +2,6 @@
 
 set -xe
 
-echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
-echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
-echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
-
 apt-get remove docker docker-engine docker.io containerd runc -y && apt autoremove -y
 
 apt-get update -y && apt-get install -y \
@@ -103,7 +99,11 @@ apt-get update && apt-get install -y \
   libffi-dev \
   liblzma-dev
 
-pip3 install --upgrade setuptools pip docker-compose virtualenv
+pip3 install --upgrade docker-compose pip pip-check pyopenssl setuptools virtualenv
+
+USER=$(whoami)
+
+PATH=$PATH:/home/$USER/.local/bin
 
 npm install npm@latest minimatch@latest graceful-fs@latest -g
 npm install --global \
@@ -166,6 +166,7 @@ wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scann
   -O /opt/sonar-scanner-cli.zip
 unzip -o /opt/sonar-scanner-cli.zip -d /opt
 
+rm -rf /bin/sonar-scanner
 ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-scanner
 
 rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
@@ -184,15 +185,22 @@ curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
 chown -R 1001:1001 /opt/.pyenv
 
-packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip)
+packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
 
 for i in "${packages[@]}"
 
 do
-  if command -v "${i}"; then
-     echo -n "${i} is installed. Version is "; ${i} --version
-  else
-     echo "${i} is missing!"
-     exit 1
-  fi
+    installed=$(which ${i} > /dev/null &&  echo 0 || echo 1)
+    if [ $installed = 1 ]; then
+        echo "${i} is missing. Please install ${i} before continuing"
+        exit 1
+    else
+      echo "${i} is installed"
+    fi
 done
+
+printf "Package installed via pip are listed below with their versions\n"
+pip-check
+
+printf "Packages installed via apt are listed below with their versions`\n"
+dpkg -l | grep "^ii"
