@@ -19,93 +19,108 @@ pr:
     include:
       - master
 
-strategy:
-  matrix:
-    Ubuntu:
-      os: Ubuntu
-      templatePath: jenkins-agent-ubuntu.pkr.hcl
+jobs:
+  - job: build_image
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      matrix:
+        Ubuntu:
+          os: Ubuntu
+          templatePath: jenkins-agent-ubuntu.pkr.hcl
+    timeoutInMinutes: "120"
+    steps:
+      - checkout: self
 
-pool:
-  vmImage: 'ubuntu-latest'
+      - task: AzureCLI@2.208.0
+        displayName: Get latest azure image version
+        name: get_azure_image_version
+        inputs:
+          azureSubscription: dts-management-prod-intsvc
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition jenkins-ubuntu --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -V | tail -n1)
+            IFS=. read -r major minor patch <<<"$AZURE_IMAGE_VERSION"
+            ((patch++))
+            printf -v AZURE_IMAGE_VERSION '%d.%d.%d' "$major" "$minor" "$((patch))"
+            echo $AZURE_IMAGE_VERSION
+            echo "##vso[task.setvariable variable=azure_image_version;isoutput=true]$AZURE_IMAGE_VERSION"
 
-steps:
-  - checkout: self
+      - task: AzureCLI@2.208.0
+        displayName: Delete any lingering packer resource groups
+        name: delete_packer_resource_groups
+        inputs:
+          azureSubscription: dts-management-prod-intsvc
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            groups=$(az group list --tag 'imagetype=jenkins-ubuntu' | jq -r '.[].name')
+            for group in ${groups[@]}; do
+            echo "deleting resource group $group"
+            az group delete --name $group --yes
+            done
 
-  - task: AzureCLI@2.208.0
-    displayName: Get latest azure image version
-    name: get_azure_image_version
-    inputs:
-      azureSubscription: dts-management-prod-intsvc
-      scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition jenkins-ubuntu --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -V | tail -n1)
-        IFS=. read -r major minor patch <<<"$AZURE_IMAGE_VERSION"
-        ((patch++))
-        printf -v AZURE_IMAGE_VERSION '%d.%d.%d' "$major" "$minor" "$((patch))"
-        echo $AZURE_IMAGE_VERSION
-        echo "##vso[task.setvariable variable=azure_image_version;isoutput=true]$AZURE_IMAGE_VERSION"
+      - task: riezebosch.Packer.PackerTool.PackerTool@0
+        displayName: 'Install Packer'
+        inputs:
+          version: 1.7.4
 
-  - task: riezebosch.Packer.PackerTool.PackerTool@0
-    displayName: 'Install Packer'
-    inputs:
-      version: 1.7.4
+      - task: riezebosch.Packer.Packer.Packer@1
+        displayName: 'Validate'
+        inputs:
+          templatePath: $(templatePath)
+          command: validate
+          azureSubscription: dts-management-prod-intsvc
 
-  - task: riezebosch.Packer.Packer.Packer@1
-    displayName: 'Validate'
-    inputs:
-      templatePath: $(templatePath)
-      command: validate
-      azureSubscription: dts-management-prod-intsvc
+      - task: riezebosch.Packer.Packer.Packer@1
+        displayName: 'PR Build'
+        name: prbuild
+        condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+        inputs:
+          templatePath: $(templatePath)
+          variables: |
+              jenkins_ssh_key=$(JENKINS_SSH_KEY)
+              azure_image_version=$(get_azure_image_version.azure_image_version)
+          command: build
+          azureSubscription: dts-management-prod-intsvc
+          options: --only=azure-arm.no-publish
 
-  - task: riezebosch.Packer.Packer.Packer@1
-    displayName: 'PR Build'
-    name: prbuild
-    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    inputs:
-      templatePath: $(templatePath)
-      variables: |
-          jenkins_ssh_key=$(JENKINS_SSH_KEY)
-          azure_image_version=$(get_azure_image_version.azure_image_version)
-      command: build
-      azureSubscription: dts-management-prod-intsvc
-      options: --only=azure-arm.no-publish
+      - task: AzureCLI@2.208.0
+        displayName: Cleanup resources on fail
+        condition: failed()
+        inputs:
+          azureSubscription: dts-management-prod-intsvc
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            resource_group_name=$(echo $(prbuild.DeploymentName) | sed 's/pkrdp//')
+            az group delete --name "pkr-Resource-Group-${resource_group_name}" --yes
 
-  - task: AzureCLI@2.208.0
-    displayName: Cleanup resources on fail
-    condition: failed()
-    inputs:
-      azureSubscription: dts-management-prod-intsvc
-      scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        resource_group_name=$(echo $(prbuild.DeploymentName) | sed 's/pkrdp//')
-        az group delete --name "pkr-Resource-Group-${resource_group_name}" --yes
+      - task: riezebosch.Packer.Packer.Packer@1
+        displayName: 'Build and publish'
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
+        inputs:
+          templatePath: $(templatePath)
+          variables: |
+              jenkins_ssh_key=$(JENKINS_SSH_KEY)
+              azure_image_version=$(get_azure_image_version.azure_image_version)
+          command: build
+          azureSubscription: dts-management-prod-intsvc
+          options: --only=azure-arm.build-and-publish
 
-  - task: riezebosch.Packer.Packer.Packer@1
-    displayName: 'Build and publish'
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
-    inputs:
-      templatePath: $(templatePath)
-      variables: |
-          jenkins_ssh_key=$(JENKINS_SSH_KEY)
-          azure_image_version=$(get_azure_image_version.azure_image_version)
-      command: build
-      azureSubscription: dts-management-prod-intsvc
-      options: --only=azure-arm.build-and-publish
-
-  - task: GitHubRelease@1
-    displayName: Create GitHubRelease
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
-    inputs:
-      gitHubConnection: 'GitHub Management - Full Repo Access'
-      repositoryName: '$(Build.Repository.Name)'
-      action: 'create'
-      target: '$(Build.SourceVersion)'
-      tagSource: 'userSpecifiedTag'
-      tag: '$(get_azure_image_version.azure_image_version)'
-      title: '$(get_azure_image_version.azure_image_version)'
-      releaseNotesSource: inline
-      releaseNotesInline: 'Regular maintenance updates for non-pinned packages'
-      addChangeLog: true
-      compareWith: 'lastFullRelease'
+      - task: GitHubRelease@1
+        displayName: Create GitHubRelease
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
+        inputs:
+          gitHubConnection: 'GitHub Management - Full Repo Access'
+          repositoryName: '$(Build.Repository.Name)'
+          action: 'create'
+          target: '$(Build.SourceVersion)'
+          tagSource: 'userSpecifiedTag'
+          tag: '$(get_azure_image_version.azure_image_version)'
+          title: '$(get_azure_image_version.azure_image_version)'
+          releaseNotesSource: inline
+          releaseNotesInline: 'Regular maintenance updates for non-pinned packages'
+          addChangeLog: true
+          compareWith: 'lastFullRelease'

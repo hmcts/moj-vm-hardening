@@ -6,9 +6,22 @@ echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
-apt-get remove docker docker-engine docker.io containerd runc -y && apt autoremove -y
+remove_packages=( docker docker-engine docker.io runc )
 
-apt-get update -y && apt-get install -y \
+for i in "${remove_packages[@]}"
+
+do
+    installed=$(which ${i} > /dev/null &&  echo 0 || echo 1)
+    if [ $installed = 0 ]; then
+      apt remove ${i} -y
+    fi
+done
+
+apt autoremove -y
+
+apt update
+
+apt install -y \
   ca-certificates \
   curl \
   gnupg \
@@ -33,11 +46,17 @@ echo \
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 curl https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -o packages-microsoft-prod.deb
-apt-get install ./packages-microsoft-prod.deb
+apt install ./packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
+# Required to avoid being prompted to restart services while installing pyenv pre-requisites
+export NEEDRESTART_SUSPEND=1
+export DEBIAN_FRONTEND=noninteractive
+
+apt update
+
 # Playwright dependencies. Generated with: npx playwright install-deps
-apt-get install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-bad gstreamer1.0-plugins-base \
+apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-bad gstreamer1.0-plugins-base \
   gstreamer1.0-plugins-good libatk-bridge2.0-0 libatk1.0-0 libcairo2 libegl1 libenchant1c2a libepoxy0 libevdev2 \
   libfontconfig1 libfreetype6 libgdk-pixbuf2.0-0 libgl1 libgles2 libglib2.0-0 libgstreamer-gl1.0-0 libgstreamer1.0-0 \
   libgtk-3-0 libharfbuzz-icu0 libharfbuzz0b libhyphen0 libicu66 libjpeg-turbo8 libnotify4 libopenjp2-7 libopus0 \
@@ -48,11 +67,9 @@ apt-get install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugi
   libfontconfig xfonts-cyrillic xfonts-scalable fonts-liberation fonts-ipafont-gothic fonts-wqy-zenhei \
   fonts-tlwg-loma-otf ttf-ubuntu-font-family
 
-# Required to avoid being prompted to restart services while installing pyenv pre-requisites
-export NEEDRESTART_SUSPEND=1
-export DEBIAN_FRONTEND=noninteractive
+sleep 10
 
-apt-get update && apt-get install -y \
+apt install -y \
   python3-pip \
   python3-testresources \
   python2 \
@@ -103,7 +120,11 @@ apt-get update && apt-get install -y \
   libffi-dev \
   liblzma-dev
 
-pip3 install --upgrade setuptools pip docker-compose virtualenv
+pip3 install --upgrade docker-compose pip pip-check pyopenssl setuptools virtualenv
+
+USER=$(whoami)
+
+PATH=$PATH:/home/$USER/.local/bin
 
 npm install npm@latest minimatch@latest graceful-fs@latest -g
 npm install --global \
@@ -127,7 +148,7 @@ rvm install 2.7.6
 ####
 
 curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome-stable_current_amd64.deb
-apt-get install -y ./google-chrome-stable_current_amd64.deb
+apt install -y ./google-chrome-stable_current_amd64.deb
 rm -f google-chrome-stable_current_amd64.deb
 
 TFCMT_VERSION=v3.2.1
@@ -164,8 +185,9 @@ cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
 SONAR_SCANNER_VERSION=4.7.0.2747
 wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
   -O /opt/sonar-scanner-cli.zip
-unzip /opt/sonar-scanner-cli.zip -d /opt
+unzip -o /opt/sonar-scanner-cli.zip -d /opt
 
+rm -rf /bin/sonar-scanner
 ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-scanner
 
 rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
@@ -179,20 +201,29 @@ ln -s /opt/tfenv/bin/* /bin
 
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
+rm -rf /opt/.pyenv
+rm -rf /bin/pyenv
 export PYENV_ROOT=/opt/.pyenv
 curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
 chown -R 1001:1001 /opt/.pyenv
 
-packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip)
+packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
 
 for i in "${packages[@]}"
 
 do
-  if command -v "${i}"; then
-     echo -n "${i} is installed. Version is "; ${i} --version
-  else
-     echo "${i} is missing!"
-     exit 1
-  fi
+    installed=$(which ${i} > /dev/null &&  echo 0 || echo 1)
+    if [ $installed = 1 ]; then
+        echo "${i} is missing. Please install ${i} before continuing"
+        exit 1
+    else
+      echo "${i} is installed"
+    fi
 done
+
+printf "Package installed via pip are listed below with their versions\n"
+pip-check
+
+printf "Packages installed via apt are listed below with their versions\n"
+dpkg -l | grep "^ii"
