@@ -6,7 +6,17 @@ echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
-apt remove docker.io containerd runc -y
+remove_packages=( docker docker-engine docker.io runc )
+
+for i in "${remove_packages[@]}"
+
+do
+    installed=$(which ${i} > /dev/null &&  echo 0 || echo 1)
+    if [ $installed = 0 ]; then
+      apt remove ${i} -y
+    fi
+done
+
 apt autoremove -y
 
 apt update
