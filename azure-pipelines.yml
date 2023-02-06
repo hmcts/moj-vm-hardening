@@ -24,7 +24,8 @@ strategy:
     Ubuntu:
       os: Ubuntu
       templatePath: jenkins-agent-ubuntu.pkr.hcl
-
+      timeoutInMinutes: 120
+      
 pool:
   vmImage: 'ubuntu-latest'
 
