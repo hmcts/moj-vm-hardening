@@ -2,6 +2,10 @@
 
 set -xe
 
+echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
+echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
+echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
+
 apt-get remove docker docker-engine docker.io containerd runc -y && apt autoremove -y
 
 apt-get update -y && apt-get install -y \
@@ -181,6 +185,7 @@ ln -s /opt/tfenv/bin/* /bin
 tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
 
 rm -rf /opt/.pyenv
+rm -rf /bin/pyenv
 export PYENV_ROOT=/opt/.pyenv
 curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
@@ -203,5 +208,5 @@ done
 printf "Package installed via pip are listed below with their versions\n"
 pip-check
 
-printf "Packages installed via apt are listed below with their versions`\n"
+printf "Packages installed via apt are listed below with their versions\n"
 dpkg -l | grep "^ii"
