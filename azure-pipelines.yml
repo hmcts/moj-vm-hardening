@@ -20,7 +20,7 @@ pr:
       - master
 
 jobs:
-  - job: build_ubuntu_image
+  - job: build_image
     pool:
       vmImage: 'ubuntu-latest'
     strategy:
