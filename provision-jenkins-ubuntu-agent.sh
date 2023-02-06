@@ -6,7 +6,7 @@ echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
-apt remove docker docker-engine docker.io containerd runc -y
+apt remove docker.io containerd runc -y
 apt autoremove -y
 
 apt update
