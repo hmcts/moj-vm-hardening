@@ -57,6 +57,7 @@ jobs:
           inlineScript: |
             groups=$(az group list --tag 'imagetype=jenkins-ubuntu' | jq -r '.[].name')
             for group in ${groups[@]}; do
+            echo "deleting resource group $group"
             az group delete --name $group --yes
             done
 
