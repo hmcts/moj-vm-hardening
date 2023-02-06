@@ -6,9 +6,12 @@ echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
-apt-get remove docker docker-engine docker.io containerd runc -y && apt autoremove -y
+apt remove docker docker-engine docker.io containerd runc -y
+apt autoremove -y
 
-apt-get update -y && apt-get install -y \
+apt update
+
+apt install -y \
   ca-certificates \
   curl \
   gnupg \
@@ -33,11 +36,17 @@ echo \
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 curl https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -o packages-microsoft-prod.deb
-apt-get install ./packages-microsoft-prod.deb
+apt install ./packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
+# Required to avoid being prompted to restart services while installing pyenv pre-requisites
+export NEEDRESTART_SUSPEND=1
+export DEBIAN_FRONTEND=noninteractive
+
+apt update
+
 # Playwright dependencies. Generated with: npx playwright install-deps
-apt-get install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-bad gstreamer1.0-plugins-base \
+apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-bad gstreamer1.0-plugins-base \
   gstreamer1.0-plugins-good libatk-bridge2.0-0 libatk1.0-0 libcairo2 libegl1 libenchant1c2a libepoxy0 libevdev2 \
   libfontconfig1 libfreetype6 libgdk-pixbuf2.0-0 libgl1 libgles2 libglib2.0-0 libgstreamer-gl1.0-0 libgstreamer1.0-0 \
   libgtk-3-0 libharfbuzz-icu0 libharfbuzz0b libhyphen0 libicu66 libjpeg-turbo8 libnotify4 libopenjp2-7 libopus0 \
@@ -48,11 +57,9 @@ apt-get install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugi
   libfontconfig xfonts-cyrillic xfonts-scalable fonts-liberation fonts-ipafont-gothic fonts-wqy-zenhei \
   fonts-tlwg-loma-otf ttf-ubuntu-font-family
 
-# Required to avoid being prompted to restart services while installing pyenv pre-requisites
-export NEEDRESTART_SUSPEND=1
-export DEBIAN_FRONTEND=noninteractive
+sleep 10
 
-apt-get update && apt-get install -y \
+apt install -y \
   python3-pip \
   python3-testresources \
   python2 \
@@ -131,7 +138,7 @@ rvm install 2.7.6
 ####
 
 curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome-stable_current_amd64.deb
-apt-get install -y ./google-chrome-stable_current_amd64.deb
+apt install -y ./google-chrome-stable_current_amd64.deb
 rm -f google-chrome-stable_current_amd64.deb
 
 TFCMT_VERSION=v3.2.1
