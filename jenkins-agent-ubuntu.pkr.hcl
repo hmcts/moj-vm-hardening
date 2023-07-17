@@ -71,7 +71,7 @@ variable "image_publisher" {
 
 variable "image_sku" {
   type = string
-  default = "20_04-lts"
+  default = "22_04-lts"
 }
 
 variable "image_name" {
@@ -86,7 +86,7 @@ variable "os_type" {
 
 variable "vm_size" {
   type = string
-  default = "Standard_A2_v2"
+  default = "Standard_D4ds_v5"
 }
 
 source "azure-arm" "no-publish" {
