@@ -46,7 +46,7 @@ echo \
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 curl https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -o packages-microsoft-prod.deb
-apt install ./packages-microsoft-prod.deb
+apt install -y ./packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
 # Required to avoid being prompted to restart services while installing pyenv pre-requisites
@@ -69,9 +69,9 @@ apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-b
 
 sleep 10
 
-wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb -o libssl.deb
-dpkg -i ./libssl.deb
-rm libssl.deb
+wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+apt install -y ./libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+rm libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 
 apt install -y \
   python3-pip \
