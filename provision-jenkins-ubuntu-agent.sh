@@ -57,7 +57,7 @@ apt update
 
 # Playwright dependencies. Generated with: npx playwright install-deps
 apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-bad gstreamer1.0-plugins-base \
-  gstreamer1.0-plugins-good libatk-bridge2.0-0 libatk1.0-0 libcairo2 libegl1 libenchant2-dev libepoxy0 libevdev2 \
+  gstreamer1.0-plugins-good libatk-bridge2.0-0 libatk1.0-0 libcairo2 libegl1 libenchant-2-dev libepoxy0 libevdev2 \
   libfontconfig1 libfreetype6 libgdk-pixbuf2.0-0 libgl1 libgles2 libglib2.0-0 libgstreamer-gl1.0-0 libgstreamer1.0-0 \
   libgtk-3-0 libharfbuzz-icu0 libharfbuzz0b libhyphen0 libjpeg-turbo8 libnotify4 libopenjp2-7 libopus0 \
   libpango-1.0-0 libpng16-16 libsecret-1-0 libsoup2.4-1 libwayland-client0 libwayland-egl1 libwayland-server0 \
