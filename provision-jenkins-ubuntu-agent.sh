@@ -126,14 +126,14 @@ export FLUX_VERSION=0.38.3
 export KUBECTL_VERSION=1.26.0
 export HELM_VERSION=3.10.3
 
-wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz -O -  | tar xz
+wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz -O - | tar xz
 mv flux /usr/local/bin/flux
 
 wget https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
 
 wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz -O - | tar xz
-mv /linux-amd64/helm /usr/local/bin/helm
-rm -rf /linux-amd64
+mv linux-amd64/helm /usr/local/bin/helm
+rm -rf linux-amd64
 chmod +x /usr/local/bin/kubectl
 
 pip3 install --upgrade docker-compose pip pip-check pyopenssl setuptools virtualenv
