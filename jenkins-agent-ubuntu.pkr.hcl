@@ -61,7 +61,7 @@ variable "jenkins_ssh_key" {
 
 variable "image_offer" {
   type = string
-  default = "0001-com-ubuntu-server-focal"
+  default = "0001-com-ubuntu-server-jammy"
 }
 
 variable "image_publisher" {
