@@ -70,7 +70,7 @@ apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-b
 sleep 10
 
 wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb -o libssl.deb
-dpkg -i install ./libssl.deb
+dpkg -i ./libssl.deb
 rm libssl.deb
 
 apt install -y \
