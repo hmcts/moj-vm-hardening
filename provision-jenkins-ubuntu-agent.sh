@@ -1,5 +1,15 @@
 #!/bin/bash
 
+## all versions are set here so they are together
+export FLUX_VERSION=0.38.3
+export HELM_VERSION=3.10.3
+export KUBECTL_VERSION=1.26.0
+export LIBSSL_VERSION=1.1_1.1.1f
+export RUBY_VERSION=3.2.2
+export SONAR_SCANNER_VERSION=4.7.0.2747
+export TF_VERSION=0.13.5
+export TFCMT_VERSION=v3.2.1
+
 set -xe
 
 echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
@@ -70,9 +80,9 @@ apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-b
 
 sleep 10
 
-wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
-apt install -y ./libssl1.1_1.1.1f-1ubuntu2_amd64.deb --allow-downgrades
-rm libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb
+apt install -y ./libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb --allow-downgrades
+rm libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb
 
 apt update
 
@@ -126,10 +136,6 @@ apt install -y \
   gettext \
   libncurses-dev
 
-export FLUX_VERSION=0.38.3
-export KUBECTL_VERSION=1.26.0
-export HELM_VERSION=3.10.3
-
 wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz -O - | tar xz
 mv flux /usr/local/bin/flux
 
@@ -163,7 +169,7 @@ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A170311
 
 source /usr/local/rvm/scripts/rvm
 # install common ruby versions to make CI faster
-rvm install 3.2.2
+rvm install ${RUBY_VERSION}
 
 ####
 
@@ -171,7 +177,6 @@ curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -
 apt install -y ./google-chrome-stable_current_amd64.deb
 rm -f google-chrome-stable_current_amd64.deb
 
-TFCMT_VERSION=v3.2.1
 curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/$TFCMT_VERSION/tfcmt_linux_amd64.tar.gz
 tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
 
@@ -202,7 +207,6 @@ tar -xvf downloadazcopy-v10-linux
 cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
 
 # see https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
-SONAR_SCANNER_VERSION=4.7.0.2747
 wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
   -O /opt/sonar-scanner-cli.zip
 unzip -o /opt/sonar-scanner-cli.zip -d /opt
@@ -219,7 +223,7 @@ rm -rf /opt/tfenv /bin/terraform /bin/tfenv
 git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv
 ln -s /opt/tfenv/bin/* /bin
 
-tfenv install 0.13.5 && chown -R 1001:1001 /opt/tfenv
+tfenv install ${TF_VERSION} && chown -R 1001:1001 /opt/tfenv
 
 rm -rf /opt/.pyenv
 rm -rf /bin/pyenv
