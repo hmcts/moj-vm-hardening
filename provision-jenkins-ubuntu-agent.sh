@@ -10,6 +10,7 @@ export RUBY_VERSION=3.2.2
 export SONAR_SCANNER_VERSION=4.7.0.2747
 export TF_VERSION=0.13.5
 export TFCMT_VERSION=v3.2.1
+export TFENV_VERSION=v2.2.3
 
 set -xe
 
@@ -221,7 +222,7 @@ mkdir /opt/nvm && chown 1001:1001 /opt/nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
 
 rm -rf /opt/tfenv /bin/terraform /bin/tfenv
-git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv
+git clone ${TFENV_VERSION} https://github.com/tfutils/tfenv.git /opt/tfenv
 ln -s /opt/tfenv/bin/* /bin
 
 tfenv install ${TF_VERSION} && chown -R 1001:1001 /opt/tfenv
