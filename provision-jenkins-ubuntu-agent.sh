@@ -106,7 +106,6 @@ apt install -y \
   postgresql-contrib \
   apt-transport-https \
   apt-transport-https \
-  aspnetcore-runtime-5.0 \
   zip \
   unzip \
   wget \
