@@ -224,7 +224,7 @@ mkdir /opt/nvm && chown 1001:1001 /opt/nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
 
 rm -rf /opt/tfenv /bin/terraform /bin/tfenv
-git clone ${TFENV_VERSION} https://github.com/tfutils/tfenv.git /opt/tfenv
+git clone -b ${TFENV_VERSION} https://github.com/tfutils/tfenv.git /opt/tfenv
 ln -s /opt/tfenv/bin/* /bin
 
 tfenv install ${TF_VERSION} && chown -R 1001:1001 /opt/tfenv
