@@ -163,7 +163,7 @@ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A170311
 
 source /usr/local/rvm/scripts/rvm
 # install common ruby versions to make CI faster
-rvm install 2.7.7
+rvm install 3.2.2
 
 ####
 
