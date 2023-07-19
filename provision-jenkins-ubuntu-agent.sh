@@ -78,6 +78,8 @@ wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubun
 apt install -y ./libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 rm libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 
+apt update
+
 apt install -y \
   python3-pip \
   python3-testresources \
