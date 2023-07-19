@@ -6,7 +6,7 @@ export HELM_VERSION=3.10.3
 export KUBECTL_VERSION=1.26.0
 export LIBSSL_VERSION=1.1_1.1.1f
 export NVM_VERSION=v0.34.0
-export RUBY_VERSION=3.2.2
+export RUBY_VERSION=2.7.7
 export SONAR_SCANNER_VERSION=4.7.0.2747
 export TF_VERSION=0.13.5
 export TFCMT_VERSION=v3.2.1
@@ -45,8 +45,8 @@ cat /etc/apt/sources.list
 apt-cache policy python3-pip
 ## end debug
 
-curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
+echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 apt purge nodejs -y
 
@@ -60,9 +60,7 @@ rm -rf /etc/apt/keyrings/docker.gpg
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 chmod a+r /etc/apt/keyrings/docker.gpg
 
-echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
