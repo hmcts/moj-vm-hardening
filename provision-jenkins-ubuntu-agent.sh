@@ -50,7 +50,7 @@ echo \
 
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
-curl https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -o packages-microsoft-prod.deb
+curl https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -o packages-microsoft-prod.deb
 apt install -y ./packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
