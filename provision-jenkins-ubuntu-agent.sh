@@ -2,9 +2,9 @@
 
 set -xe
 
-echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
-echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
-echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
+# echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
+# echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
+# echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
 remove_packages=( docker docker-engine docker.io runc )
 
@@ -35,8 +35,13 @@ apt-cache policy python3-pip
 
 curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
-curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 
+apt purge nodejs -y
+
+curl -fsSL https://deb.nodesource.com/setup_14.x | bash
+
+apt update
+apt install -y nodejs
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --batch --yes --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo \
@@ -45,7 +50,7 @@ echo \
 
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
-curl https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -o packages-microsoft-prod.deb
+curl https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -o packages-microsoft-prod.deb
 apt install -y ./packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
@@ -77,7 +82,6 @@ apt install -y \
   python3-pip \
   python3-testresources \
   python2 \
-  nodejs \
   lsb-release \
   openjdk-11-jdk \
   openjdk-17-jdk \
