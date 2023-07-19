@@ -50,10 +50,6 @@ echo \
 
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
-curl https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -o packages-microsoft-prod.deb
-apt install -y ./packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
-
 # Required to avoid being prompted to restart services while installing pyenv pre-requisites
 export NEEDRESTART_SUSPEND=1
 export DEBIAN_FRONTEND=noninteractive
@@ -75,7 +71,7 @@ apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-b
 sleep 10
 
 wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
-apt install -y ./libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+apt install -y ./libssl1.1_1.1.1f-1ubuntu2_amd64.deb --allow-downgrades
 rm libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 
 apt update
@@ -109,7 +105,6 @@ apt install -y \
   postgresql \
   postgresql-contrib \
   apt-transport-https \
-  dotnet-sdk-5.0 \
   apt-transport-https \
   aspnetcore-runtime-5.0 \
   zip \
@@ -234,7 +229,7 @@ curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
 chown -R 1001:1001 /opt/.pyenv
 
-packages=( az azcopy docker docker-compose dotnet eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
+packages=( az azcopy docker docker-compose eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
 
 for i in "${packages[@]}"
 
