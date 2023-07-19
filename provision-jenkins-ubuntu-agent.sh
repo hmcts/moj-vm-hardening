@@ -5,6 +5,7 @@ export FLUX_VERSION=0.38.3
 export HELM_VERSION=3.10.3
 export KUBECTL_VERSION=1.26.0
 export LIBSSL_VERSION=1.1_1.1.1f
+export NVM_VERSION=v0.34.0
 export RUBY_VERSION=3.2.2
 export SONAR_SCANNER_VERSION=4.7.0.2747
 export TF_VERSION=0.13.5
@@ -217,7 +218,7 @@ ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-s
 rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
 
 mkdir /opt/nvm && chown 1001:1001 /opt/nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | NVM_DIR=/opt/nvm bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
 
 rm -rf /opt/tfenv /bin/terraform /bin/tfenv
 git clone -b v2.0.0-alpha3 https://github.com/tfutils/tfenv.git /opt/tfenv
