@@ -64,7 +64,7 @@ jobs:
       - task: riezebosch.Packer.PackerTool.PackerTool@0
         displayName: 'Install Packer'
         inputs:
-          version: 1.7.4
+          version: 1.9.1
 
       - task: riezebosch.Packer.Packer.Packer@1
         displayName: 'Validate'

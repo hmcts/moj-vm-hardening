@@ -86,7 +86,7 @@ variable "os_type" {
 
 variable "vm_size" {
   type = string
-  default = "Standard_A2_v2"
+  default = "Standard_D4ds_v5"
 }
 
 source "azure-arm" "no-publish" {
