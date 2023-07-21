@@ -4,25 +4,25 @@
 ## the renovate comments enable renovatebot to update these dynamically via GitHub pull requests
 
 #renovate: datasource=github-tags depName=fluxcd/flux2
-export FLUX_VERSION=v0.38.3
+export FLUX_VERSION=$(echo v0.38.3 | tr -d 'v')
 #renovate: datasource=github-tags depName=helm/helm
-export HELM_VERSION=v3.10.3
+export HELM_VERSION=$(echo v3.10.3 | tr -d 'v')
 #renovate: datasource=github-tags depName=kubernetes/kubectl
-export KUBECTL_VERSION=v1.26.0
+export KUBECTL_VERSION=$(echo v1.26.0 | tr -d 'v')
 #renovate: datasource=endoflife-date depName=node
-export NODE_VERSION=v14
+export NODE_VERSION=$(echo v14 | tr -d 'v')
 #renovate: datasource=github-tags depName=nvm-sh/nvm
-export NVM_VERSION=v0.34.0
+export NVM_VERSION=$(echo v0.34.0 | tr -d 'v')
 #renovate: datasource=endoflife-date depName=ruby
-export RUBY_VERSION=v2.7.7
+export RUBY_VERSION=$(echo v2.7.7 | tr -d 'v')
 #renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=build
-export SONAR_SCANNER_VERSION=v4.7.0.2747
+export SONAR_SCANNER_VERSION=$(echo v4.7.0.2747 | tr -d 'v')
 #renovate: datasource=github-tags depName=hashicorp/terraform
-export TF_VERSION=v0.13.5
+export TF_VERSION=$(echo v0.13.5 | tr -d 'v')
 #renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt
-export TFCMT_VERSION=v3.2.1
+export TFCMT_VERSION=$(echo v3.2.1 | tr -d 'v')
 #renovate: datasource=github-tags depName=tfutils/tfenv
-export TFENV_VERSION=v2.2.3
+export TFENV_VERSION=$(echo v2.2.3 | tr -d 'v')
 
 set -xe
 
@@ -149,12 +149,12 @@ apt install -y \
   gettext \
   libncurses-dev
 
-wget https://github.com/fluxcd/flux2/releases/download/${FLUX_VERSION}/$(echo flux_${FLUX_VERSION} | tr -d 'v')_linux_amd64.tar.gz -O - | tar xz
+wget https://github.com/fluxcd/flux2/releases/download/${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz -O - | tar xz
 mv flux /usr/local/bin/flux
 
-wget https://dl.k8s.io/release/$(echo ${KUBECTL_VERSION} | tr -d 'v')/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
+wget https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
 
-wget https://get.helm.sh/helm-$(echo ${HELM_VERSION}| tr -d 'v')-linux-amd64.tar.gz -O - | tar xz
+wget https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar xz
 mv linux-amd64/helm /usr/local/bin/helm
 rm -rf linux-amd64
 chmod +x /usr/local/bin/kubectl
@@ -182,7 +182,7 @@ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A170311
 
 source /usr/local/rvm/scripts/rvm
 # install common ruby versions to make CI faster
-rvm install $(echo ${RUBY_VERSION} | tr -d 'v')
+rvm install ${RUBY_VERSION}
 
 ####
 
@@ -190,7 +190,7 @@ curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -
 apt install -y ./google-chrome-stable_current_amd64.deb
 rm -f google-chrome-stable_current_amd64.deb
 
-curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/$(echo ${TFCMT_VERSION} | tr -d 'v')/tfcmt_linux_amd64.tar.gz
+curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/${TFCMT_VERSION}/tfcmt_linux_amd64.tar.gz
 tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
 
 [ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
@@ -220,23 +220,23 @@ tar -xvf downloadazcopy-v10-linux
 cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
 
 # see https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
-wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-{SONAR_SCANNER_VERSION}.zip \
   -O /opt/sonar-scanner-cli.zip
 unzip -o /opt/sonar-scanner-cli.zip -d /opt
 
 rm -rf /bin/sonar-scanner
-ln -s /opt/sonar-scanner-$(echo ${SONAR_SCANNER_VERSION} | tr -d 'v')/bin/sonar-scanner /bin/sonar-scanner
+ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-scanner
 
-rm -f /opt/sonar-scanner-cli-$(echo ${SONAR_SCANNER_VERSION} | tr -d 'v').zip
+rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
 
 mkdir /opt/nvm && chown 1001:1001 /opt/nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$(echo ${NVM_VERSION} | tr -d 'v')/install.sh | NVM_DIR=/opt/nvm bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
 
 rm -rf /opt/tfenv /bin/terraform /bin/tfenv
 git clone -b ${TFENV_VERSION} https://github.com/tfutils/tfenv.git /opt/tfenv
 ln -s /opt/tfenv/bin/* /bin
 
-tfenv install $(echo ${TF_VERSION} | tr -d 'v') && chown -R 1001:1001 /opt/tfenv
+tfenv install ${TF_VERSION} && chown -R 1001:1001 /opt/tfenv
 
 rm -rf /opt/.pyenv
 rm -rf /bin/pyenv
