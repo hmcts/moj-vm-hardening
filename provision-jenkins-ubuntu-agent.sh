@@ -154,7 +154,7 @@ mv flux /usr/local/bin/flux
 
 wget https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
 
-wget https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar xz
+wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz -O - | tar xz
 mv linux-amd64/helm /usr/local/bin/helm
 rm -rf linux-amd64
 chmod +x /usr/local/bin/kubectl
