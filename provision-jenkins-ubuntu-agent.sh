@@ -190,7 +190,7 @@ curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -
 apt install -y ./google-chrome-stable_current_amd64.deb
 rm -f google-chrome-stable_current_amd64.deb
 
-curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/${TFCMT_VERSION}/tfcmt_linux_amd64.tar.gz
+curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/v${TFCMT_VERSION}/tfcmt_linux_amd64.tar.gz
 tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
 
 [ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
@@ -230,10 +230,10 @@ ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-s
 rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
 
 mkdir /opt/nvm && chown 1001:1001 /opt/nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
 
 rm -rf /opt/tfenv /bin/terraform /bin/tfenv
-git clone -b ${TFENV_VERSION} https://github.com/tfutils/tfenv.git /opt/tfenv
+git clone -b v${TFENV_VERSION} https://github.com/tfutils/tfenv.git /opt/tfenv
 ln -s /opt/tfenv/bin/* /bin
 
 tfenv install ${TF_VERSION} && chown -R 1001:1001 /opt/tfenv
