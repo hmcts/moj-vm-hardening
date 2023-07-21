@@ -97,10 +97,6 @@ apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-b
 
 sleep 10
 
-wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb
-apt install -y ./libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb --allow-downgrades
-rm libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb
-
 apt update
 
 apt install -y \
