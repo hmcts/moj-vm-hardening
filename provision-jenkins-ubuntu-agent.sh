@@ -1,16 +1,28 @@
 #!/bin/bash
 
-## all versions are set here so they are together
-export FLUX_VERSION=0.38.3
-export HELM_VERSION=3.10.3
-export KUBECTL_VERSION=1.26.0
-export LIBSSL_VERSION=1.1_1.1.1f
-export NVM_VERSION=v0.34.0
-export RUBY_VERSION=2.7.7
-export SONAR_SCANNER_VERSION=4.7.0.2747
-export TF_VERSION=0.13.5
-export TFCMT_VERSION=v3.2.1
-export TFENV_VERSION=v2.2.3
+## all versions of utilities are set here
+## the renovate comments enable renovatebot to update these dynamically via GitHub pull requests
+
+#renovate: datasource=github-tags depName=fluxcd/flux2
+export FLUX_VERSION=$(echo v0.38.3 | tr -d 'v')
+#renovate: datasource=github-tags depName=helm/helm
+export HELM_VERSION=$(echo v3.10.3 | tr -d 'v')
+#renovate: datasource=github-tags depName=kubernetes/kubectl
+export KUBECTL_VERSION=$(echo v1.26.0 | tr -d 'v')
+#renovate: datasource=endoflife-date depName=node
+export NODE_VERSION=$(echo v14 | tr -d 'v')
+#renovate: datasource=github-tags depName=nvm-sh/nvm
+export NVM_VERSION=$(echo v0.34.0 | tr -d 'v')
+#renovate: datasource=endoflife-date depName=ruby
+export RUBY_VERSION=$(echo v2.7.7 | tr -d 'v')
+#renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=build
+export SONAR_SCANNER_VERSION=$(echo v4.7.0.2747 | tr -d 'v')
+#renovate: datasource=github-tags depName=hashicorp/terraform
+export TF_VERSION=$(echo v0.13.5 | tr -d 'v')
+#renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt
+export TFCMT_VERSION=$(echo v3.2.1 | tr -d 'v')
+#renovate: datasource=github-tags depName=tfutils/tfenv
+export TFENV_VERSION=$(echo v2.2.3 | tr -d 'v')
 
 set -xe
 
@@ -49,8 +61,9 @@ echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" 
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 apt purge nodejs -y
+rm -rf /etc/apt/sources.list.d/nodesource.list
 
-curl -fsSL https://deb.nodesource.com/setup_14.x | bash
+curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash
 
 apt update
 apt install -y nodejs
@@ -83,10 +96,6 @@ apt install -y --no-install-recommends gstreamer1.0-libav gstreamer1.0-plugins-b
   fonts-tlwg-loma-otf
 
 sleep 10
-
-wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb
-apt install -y ./libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb --allow-downgrades
-rm libssl${LIBSSL_VERSION}-1ubuntu2_amd64.deb
 
 apt update
 
@@ -181,7 +190,7 @@ curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -
 apt install -y ./google-chrome-stable_current_amd64.deb
 rm -f google-chrome-stable_current_amd64.deb
 
-curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/$TFCMT_VERSION/tfcmt_linux_amd64.tar.gz
+curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/v${TFCMT_VERSION}/tfcmt_linux_amd64.tar.gz
 tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
 
 [ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
@@ -221,10 +230,10 @@ ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-s
 rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
 
 mkdir /opt/nvm && chown 1001:1001 /opt/nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
 
 rm -rf /opt/tfenv /bin/terraform /bin/tfenv
-git clone -b ${TFENV_VERSION} https://github.com/tfutils/tfenv.git /opt/tfenv
+git clone -b v${TFENV_VERSION} https://github.com/tfutils/tfenv.git /opt/tfenv
 ln -s /opt/tfenv/bin/* /bin
 
 tfenv install ${TF_VERSION} && chown -R 1001:1001 /opt/tfenv
