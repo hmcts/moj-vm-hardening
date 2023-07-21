@@ -220,7 +220,7 @@ tar -xvf downloadazcopy-v10-linux
 cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
 
 # see https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
-wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-{SONAR_SCANNER_VERSION}.zip \
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
   -O /opt/sonar-scanner-cli.zip
 unzip -o /opt/sonar-scanner-cli.zip -d /opt
 
