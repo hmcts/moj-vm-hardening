@@ -3,23 +3,25 @@
 ## all versions of utilities are set here
 ## the renovate comments enable renovatebot to update these dynamically via GitHub pull requests
 
-#renovate: datasource=github-tags depName=fluxcd/flux2 versioning=semver
+#renovate: datasource=github-tags depName=fluxcd/flux2
 export FLUX_VERSION=v0.38.3
-#renovate: datasource=github-tags depName=helm/helm versioning=semver
+#renovate: datasource=github-tags depName=helm/helm
 export HELM_VERSION=3.10.3
-#renovate: datasource=github-tags depName=kubernetes/kubectl versioning=semver
+#renovate: datasource=github-tags depName=kubernetes/kubectl
 export KUBECTL_VERSION=1.26.0
-#renovate: datasource=github-tags depName=nvm-sh/nvm versioning=semver
+#renovate: datasource=endoflife-date depName=node
+export NODE_VERSION=14
+#renovate: datasource=github-tags depName=nvm-sh/nvm
 export NVM_VERSION=v0.34.0
-#renovate: datasource=github-tags depName=ruby/ruby versioning=semver
+#renovate: datasource=endoflife-date depName=ruby
 export RUBY_VERSION=2.7.7
-#renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=semver
+#renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=build
 export SONAR_SCANNER_VERSION=4.7.0.2747
-#renovate: datasource=github-tags depName=hashicorp/terraform versioning=semver
+#renovate: datasource=github-tags depName=hashicorp/terraform
 export TF_VERSION=0.13.5
-#renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt versioning=semver
+#renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt
 export TFCMT_VERSION=v3.2.1
-#renovate: datasource=github-tags depName=tfutils/tfenv versioning=semver
+#renovate: datasource=github-tags depName=tfutils/tfenv
 export TFENV_VERSION=v2.2.3
 
 set -xe
@@ -59,8 +61,9 @@ echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" 
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 apt purge nodejs -y
+rm -rf /etc/apt/sources.list.d/nodesource.list
 
-curl -fsSL https://deb.nodesource.com/setup_14.x | bash
+curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash
 
 apt update
 apt install -y nodejs
