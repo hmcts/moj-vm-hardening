@@ -1,15 +1,25 @@
 #!/bin/bash
 
-## all versions are set here so they are together
-export FLUX_VERSION=0.38.3
+## all versions of utilities are set here
+## the renovate comments enable renovatebot to update these dynamically via GitHub pull requests
+
+#renovate: datasource=github-tags depName=fluxcd/flux2 versioning=semver
+export FLUX_VERSION=v0.38.3
+#renovate: datasource=github-tags depName=helm/helm versioning=semver
 export HELM_VERSION=3.10.3
+#renovate: datasource=github-tags depName=kubernetes/kubectl versioning=semver
 export KUBECTL_VERSION=1.26.0
-export LIBSSL_VERSION=1.1_1.1.1f
+#renovate: datasource=github-tags depName=nvm-sh/nvm versioning=semver
 export NVM_VERSION=v0.34.0
+#renovate: datasource=github-tags depName=ruby/ruby versioning=semver
 export RUBY_VERSION=2.7.7
+#renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=semver
 export SONAR_SCANNER_VERSION=4.7.0.2747
+#renovate: datasource=github-tags depName=hashicorp/terraform versioning=semver
 export TF_VERSION=0.13.5
+#renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt versioning=semver
 export TFCMT_VERSION=v3.2.1
+#renovate: datasource=github-tags depName=tfutils/tfenv versioning=semver
 export TFENV_VERSION=v2.2.3
 
 set -xe
@@ -140,7 +150,7 @@ apt install -y \
   gettext \
   libncurses-dev
 
-wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz -O - | tar xz
+wget https://github.com/fluxcd/flux2/releases/download/${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz -O - | tar xz
 mv flux /usr/local/bin/flux
 
 wget https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
