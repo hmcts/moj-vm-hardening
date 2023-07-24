@@ -18,7 +18,7 @@ export RUBY_VERSION=$(echo 2.7.8 | tr -d 'v')
 #renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=build
 export SONAR_SCANNER_VERSION=$(echo v4.7.0.2747 | tr -d 'v')
 #renovate: datasource=github-tags depName=hashicorp/terraform
-export TF_VERSION=$(echo v0.13.5 | tr -d 'v')
+export TF_VERSION=$(echo v0.15.5 | tr -d 'v')
 #renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt
 export TFCMT_VERSION=$(echo v3.4.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=tfutils/tfenv
