@@ -15,15 +15,13 @@
   ],
   "packageRules": [
     {
-      "matchDatasources": ["endoflife-date"],
+      "groupName": "node",
       "matchPackageNames": ["node"],
-      "extractVersion": "^(?<version>\\d+)",
-      "versioning": "regex:^(?<major>\\d+)$"
+      "separateMultipleMajor": true
     },
     {
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["SonarSource/sonar-scanner-cli"],
-      "extractVersion": "^(?<version>\\d+.\\d+.\\d+.\\d+)",
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)$"
     }
   ]
