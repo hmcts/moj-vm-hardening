@@ -16,7 +16,7 @@ This will update the versions of tools and utilities in the provisioning script 
 
 ## Adding new packages to be updated by renovate
 
-If you add a new package to the [provisioning script](./provision-jenkins-ubuntu-agent.sh) that can't be installed via package manager and should be updated regularly, add it to the block in ./provision-jenkins-ubuntu-agent.sh#L6-L25.
+If you add a new package to the [provisioning script](./provision-jenkins-ubuntu-agent.sh) that can't be installed via package manager and should be updated regularly, add it to the block in the [provisioning script](https://github.com/hmcts/jenkins-packer/blob/master/provision-jenkins-ubuntu-agent.sh#L6-L25).
 
 You will need to add a comment to inform renovate where to search for available versions e.g. on github with `#renovate: datasource=github-tags depName=fluxcd/flux2`
 
