@@ -13,6 +13,11 @@ trigger:
   branches:
     include:
       - master
+  paths:
+    include:
+    - azure-pipelines.yml
+    - jenkins-agent-ubuntu.pkr.hcl
+    - provision-jenkins-ubuntu-agent.sh
 
 pr:
   branches:
