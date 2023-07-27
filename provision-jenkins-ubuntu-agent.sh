@@ -4,23 +4,23 @@
 ## the renovate comments enable renovatebot to update these dynamically via GitHub pull requests
 
 #renovate: datasource=github-tags depName=fluxcd/flux2
-export FLUX_VERSION=$(echo v0.38.3 | tr -d 'v')
+export FLUX_VERSION=$(echo v0.41.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=helm/helm
-export HELM_VERSION=$(echo v3.10.3 | tr -d 'v')
+export HELM_VERSION=$(echo v3.12.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=kubernetes/kubectl
 export KUBECTL_VERSION=$(echo v1.26.0 | tr -d 'v')
 #renovate: datasource=node-version depName=node versioning=node
 export NODE_VERSION=$(echo 14 | tr -d 'v')
 #renovate: datasource=github-tags depName=nvm-sh/nvm
-export NVM_VERSION=$(echo v0.34.0 | tr -d 'v')
+export NVM_VERSION=$(echo v0.39.3 | tr -d 'v')
 #renovate: datasource=ruby-version depName=ruby
 export RUBY_VERSION=$(echo 2.7.7 | tr -d 'v')
 #renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=regex
 export SONAR_SCANNER_VERSION=$(echo 4.7.0.2747 | tr -d 'v')
 #renovate: datasource=github-tags depName=hashicorp/terraform
-export TF_VERSION=$(echo v0.13.5 | tr -d 'v')
+export TF_VERSION=$(echo v0.15.5 | tr -d 'v')
 #renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt
-export TFCMT_VERSION=$(echo v3.2.1 | tr -d 'v')
+export TFCMT_VERSION=$(echo v3.4.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=tfutils/tfenv
 export TFENV_VERSION=$(echo v2.2.3 | tr -d 'v')
 
