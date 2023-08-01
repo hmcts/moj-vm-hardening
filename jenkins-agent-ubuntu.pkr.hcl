@@ -134,7 +134,7 @@ source "azure-arm" "build-and-publish" {
      subscription        = var.subscription_id
      resource_group      = var.resource_group_name
      gallery_name        = "hmcts"
-     image_name          = "jenkins-ubuntu"
+     image_name          = var.image_name
      image_version       = var.azure_image_version
      replication_regions = ["UK South"]
    }
