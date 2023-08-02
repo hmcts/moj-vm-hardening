@@ -190,7 +190,7 @@ if [ ${ARCHITECTURE} = "amd64" ]; then
   apt install -y ./google-chrome-stable_current_${ARCHITECTURE}.deb
   rm -f google-chrome-stable_current_${ARCHITECTURE}.deb
 else
-  apt install -y chromium-browser
+  apt install -y chromium-browser chromium-chromedriver
 fi
 
 
@@ -198,7 +198,7 @@ curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/downl
 tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
 
 [ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
-LIBOSMESA=$(find /usr -name 'libOSMesa*' -type f)
+LIBOSMESA=$(find /usr -name 'libOSMesa*' -type f)M
 ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
 echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
 # grubby --args=namespace.unpriv_enable=1 --update-kernel=$(grubby --default-kernel)
