@@ -92,7 +92,6 @@ jobs:
         inputs:
           templatePath: $(templatePath)
           variables: |
-              architecture=$(architecture)
               azure_image_version=$(get_azure_image_version.azure_image_version)
               image_name=$(image_name)
               jenkins_ssh_key=$(JENKINS_SSH_KEY)
@@ -119,7 +118,6 @@ jobs:
         inputs:
           templatePath: $(templatePath)
           variables: |
-              architecture=$(architecture)
               azure_image_version=$(get_azure_image_version.azure_image_version)
               image_name=$(image_name)
               jenkins_ssh_key=$(JENKINS_SSH_KEY)
