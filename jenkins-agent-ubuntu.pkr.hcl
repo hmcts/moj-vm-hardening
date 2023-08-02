@@ -76,7 +76,7 @@ variable "image_sku" {
 
 variable "image_name" {
   type = string
-  default = "jenkins-ubuntu-arm"
+  default = "jenkins-ubuntu"
 }
 
 variable "os_type" {
@@ -86,7 +86,7 @@ variable "os_type" {
 
 variable "vm_size" {
   type = string
-  default = "Standard_D4pds_v5"
+  default = "Standard_D4ds_v5"
 }
 
 variable "architecture" {
