@@ -71,7 +71,7 @@ variable "image_publisher" {
 
 variable "image_sku" {
   type = string
-  default = "20_04-lts-arm64"
+  default = "20_04-lts"
 }
 
 variable "image_name" {
@@ -87,6 +87,11 @@ variable "os_type" {
 variable "vm_size" {
   type = string
   default = "Standard_D4pds_v5"
+}
+
+variable "architecture" {
+  type = string
+  default = "amd64"
 }
 
 source "azure-arm" "no-publish" {
@@ -146,7 +151,10 @@ build {
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E bash '{{ .Path }}'"
     script          = "provision-jenkins-ubuntu-agent.sh"
-    environment_vars = ["JENKINS_SSH_KEY=${var.jenkins_ssh_key}"]
+    environment_vars = [
+      "JENKINS_SSH_KEY=${var.jenkins_ssh_key}",
+      "ARCHITECTURE=${var.architecture}"
+    ]
     max_retries = 5
   }
 

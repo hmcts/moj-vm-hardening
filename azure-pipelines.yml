@@ -30,9 +30,18 @@ jobs:
       vmImage: 'ubuntu-latest'
     strategy:
       matrix:
-        Ubuntu:
-          os: Ubuntu
+        Ubuntu-x64:
+          architecture: "amd64"
+          image_name: "jenkins-ubuntu"
+          image_sku: 20_04-lts
           templatePath: jenkins-agent-ubuntu.pkr.hcl
+          vm_size: "Standard_D4ds_v5"
+        Ubuntu-Arm64:
+          architecture: "arm64"
+          image_name: "jenkins-ubuntu-arm"
+          image_sku: 20_04-lts-arm64
+          templatePath: jenkins-agent-ubuntu.pkr.hcl
+          vm_size: "Standard_D4pds_v5"
     timeoutInMinutes: "120"
     steps:
       - checkout: self
@@ -45,7 +54,7 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition jenkins-ubuntu --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -V | tail -n1)
+            AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -V | tail -n1)
             IFS=. read -r major minor patch <<<"$AZURE_IMAGE_VERSION"
             ((patch++))
             printf -v AZURE_IMAGE_VERSION '%d.%d.%d' "$major" "$minor" "$((patch))"
@@ -60,7 +69,7 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            groups=$(az group list --tag 'imagetype=jenkins-ubuntu' | jq -r '.[].name')
+            groups=$(az group list --tag 'imagetype=$(image_name)' | jq -r '.[].name')
             for group in ${groups[@]}; do
             echo "deleting resource group $group"
             az group delete --name $group --yes
@@ -85,8 +94,12 @@ jobs:
         inputs:
           templatePath: $(templatePath)
           variables: |
-              jenkins_ssh_key=$(JENKINS_SSH_KEY)
+              architecture=$(architecture)
               azure_image_version=$(get_azure_image_version.azure_image_version)
+              image_name=$(image_name)
+              jenkins_ssh_key=$(JENKINS_SSH_KEY)
+              image_sku=$(image_sku)
+              vm_size=$(vm_size)
           command: build
           azureSubscription: dts-management-prod-intsvc
           options: --only=azure-arm.no-publish
@@ -108,8 +121,12 @@ jobs:
         inputs:
           templatePath: $(templatePath)
           variables: |
-              jenkins_ssh_key=$(JENKINS_SSH_KEY)
+              architecture=$(architecture)
               azure_image_version=$(get_azure_image_version.azure_image_version)
+              image_name=$(image_name)
+              jenkins_ssh_key=$(JENKINS_SSH_KEY)
+              image_sku=$(image_sku)
+              vm_size=$(vm_size)
           command: build
           azureSubscription: dts-management-prod-intsvc
           options: --only=azure-arm.build-and-publish

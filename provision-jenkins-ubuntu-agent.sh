@@ -73,7 +73,7 @@ rm -rf /etc/apt/keyrings/docker.gpg
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 chmod a+r /etc/apt/keyrings/docker.gpg
 
-echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch="$(dpkg --print-ARCHITECTURE)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
@@ -104,7 +104,6 @@ apt install -y \
   python3-testresources \
   python2 \
   lsb-release \
-  openjdk-11-jdk \
   openjdk-17-jdk \
   git \
   azure-cli \
@@ -149,14 +148,14 @@ apt install -y \
   gettext \
   libncurses-dev
 
-wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz -O - | tar xz
+wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_${ARCHITECTURE}.tar.gz -O - | tar xz
 mv flux /usr/local/bin/flux
 
-wget https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
+wget https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/${ARCHITECTURE}/kubectl -O /usr/local/bin/kubectl
 
-wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz -O - | tar xz
-mv linux-amd64/helm /usr/local/bin/helm
-rm -rf linux-amd64
+wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-${ARCHITECTURE}.tar.gz -O - | tar xz
+mv linux-${ARCHITECTURE}/helm /usr/local/bin/helm
+rm -rf linux-${ARCHITECTURE}
 chmod +x /usr/local/bin/kubectl
 
 pip3 install --upgrade docker-compose pip pip-check pyopenssl setuptools virtualenv
@@ -171,7 +170,7 @@ npm install --global \
   eslint \
   yarn
 
-update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+update-alternatives --set java /usr/lib/jvm/java-17-openjdk-${ARCHITECTURE}/bin/java
 
 #### RVM
 
@@ -186,11 +185,16 @@ rvm install ${RUBY_VERSION}
 
 ####
 
-curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome-stable_current_amd64.deb
-apt install -y ./google-chrome-stable_current_amd64.deb
-rm -f google-chrome-stable_current_amd64.deb
+if [ ${ARCHITECTURE} = "amd64" ]; then
+  curl https://dl.google.com/linux/direct/google-chrome-stable_current_${ARCHITECTURE}.deb -o google-chrome-stable_current_${ARCHITECTURE}.deb
+  apt install -y ./google-chrome-stable_current_${ARCHITECTURE}.deb
+  rm -f google-chrome-stable_current_${ARCHITECTURE}.deb
+else
+  apt install -y chromium-browser
+fi
 
-curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/v${TFCMT_VERSION}/tfcmt_linux_amd64.tar.gz
+
+curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/v${TFCMT_VERSION}/tfcmt_linux_${ARCHITECTURE}.tar.gz
 tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
 
 [ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
@@ -211,13 +215,17 @@ if test -f "$FILE"; then
 fi
 
 #Download AzCopy
-wget https://aka.ms/downloadazcopy-v10-linux
+if [ ${ARCHITECTURE} = "amd64" ]; then
+  wget https://aka.ms/downloadazcopy-v10-linux
+else
+  wget -O downloadazcopy-v10-linux https://aka.ms/downloadazcopy-v10-linux-${ARCHITECTURE}
+fi
 
 #Expand Archive
 tar -xvf downloadazcopy-v10-linux
 
 #Move AzCopy to the destination you want to store it
-cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
+cp ./azcopy_linux_${ARCHITECTURE}_*/azcopy /usr/bin/
 
 # see https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
 wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
@@ -245,7 +253,7 @@ curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
 chown -R 1001:1001 /opt/.pyenv
 
-packages=( az azcopy docker docker-compose eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
+packages=( az azcopy docker docker-compose eslint gcc git google-chrome gulp java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
 
 for i in "${packages[@]}"
 
