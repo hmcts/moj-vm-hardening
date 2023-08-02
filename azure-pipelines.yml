@@ -30,13 +30,13 @@ jobs:
       vmImage: 'ubuntu-latest'
     strategy:
       matrix:
-        Ubuntu-x64:
+        Ubuntu-amd64:
           architecture: "amd64"
           image_name: "jenkins-ubuntu"
           image_sku: 20_04-lts
           templatePath: jenkins-agent-ubuntu.pkr.hcl
           vm_size: "Standard_D4ds_v5"
-        Ubuntu-Arm64:
+        Ubuntu-arm64:
           architecture: "arm64"
           image_name: "jenkins-ubuntu-arm"
           image_sku: 20_04-lts-arm64
