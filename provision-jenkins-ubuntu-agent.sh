@@ -104,7 +104,6 @@ apt install -y \
   python3-testresources \
   python2 \
   lsb-release \
-  openjdk-11-jdk \
   openjdk-17-jdk \
   git \
   azure-cli \
@@ -171,7 +170,7 @@ npm install --global \
   eslint \
   yarn
 
-update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
 
 #### RVM
 
@@ -245,7 +244,7 @@ curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
 chown -R 1001:1001 /opt/.pyenv
 
-packages=( az azcopy docker docker-compose eslint gcc git google-chrome gulp java /usr/lib/jvm/java-17-openjdk-amd64/bin/java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
+packages=( az azcopy docker docker-compose eslint gcc git google-chrome gulp java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
 
 for i in "${packages[@]}"
 
