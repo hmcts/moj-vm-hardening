@@ -197,11 +197,13 @@ fi
 curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/v${TFCMT_VERSION}/tfcmt_linux_${ARCHITECTURE}.tar.gz
 tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
 
-[ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
-LIBOSMESA=$(find /usr -name 'libOSMesa*' -type f)M
-ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
-echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
-# grubby --args=namespace.unpriv_enable=1 --update-kernel=$(grubby --default-kernel)
+if [ ${ARCHITECTURE} = "amd64" ]; then
+  [ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
+  LIBOSMESA=$(find /usr -name 'libOSMesa*' -type f)M
+  ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
+  echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
+  # grubby --args=namespace.unpriv_enable=1 --update-kernel=$(grubby --default-kernel)
+fi
 
 mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker
 echo -e '{\n  \live-restore\: true,\n  \group\: \docker\\n}' > /etc/docker/daemon.conf && chown root:root /etc/docker/daemon.conf && chmod 0644 /etc/docker/daemon.conf
