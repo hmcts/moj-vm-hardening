@@ -255,7 +255,13 @@ curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
 chown -R 1001:1001 /opt/.pyenv
 
-packages=( az azcopy docker docker-compose eslint gcc git google-chrome gulp java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
+packages=( az azcopy docker docker-compose eslint gcc git gulp java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
+
+if [ ${ARCHITECTURE} = "amd64" ]; then
+  packages+=('google-chrome')
+else
+  packages+=('chromium')
+fi
 
 for i in "${packages[@]}"
 
