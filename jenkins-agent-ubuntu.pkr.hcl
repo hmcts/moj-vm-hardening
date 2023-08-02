@@ -71,7 +71,7 @@ variable "image_publisher" {
 
 variable "image_sku" {
   type = string
-  default = "20_04-lts"
+  default = "20_04-lts-arm64"
 }
 
 variable "image_name" {
