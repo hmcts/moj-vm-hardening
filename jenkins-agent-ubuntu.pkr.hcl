@@ -128,8 +128,6 @@ source "azure-arm" "master-build-and-publish" {
   image_offer                       = var.image_offer
   image_sku                         = var.image_sku
   location                          = var.azure_location
-  managed_image_name                = "${var.image_name}-${formatdate("YYYYMMDDhhmmss",timestamp())}"
-  managed_image_resource_group_name = var.resource_group_name
   os_type                           = var.os_type
   ssh_pty                           = "true"
   ssh_username                      = var.ssh_user
@@ -137,14 +135,14 @@ source "azure-arm" "master-build-and-publish" {
   tenant_id                         = var.tenant_id
   vm_size                           = var.vm_size
 
-   shared_image_gallery_destination {
-     subscription        = var.subscription_id
-     resource_group      = var.resource_group_name
-     gallery_name        = "hmcts"
-     image_name          = var.image_name
-     image_version       = var.azure_image_version
-     replication_regions = ["UK South"]
-   }
+  shared_image_gallery_destination {
+    subscription        = var.subscription_id
+    resource_group      = var.resource_group_name
+    gallery_name        = "hmcts"
+    image_name          = var.image_name
+    image_version       = var.azure_image_version
+    replication_regions = ["UK South"]
+  }
 }
 
 build {
