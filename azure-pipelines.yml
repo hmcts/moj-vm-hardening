@@ -99,7 +99,7 @@ jobs:
               vm_size=$(vm_size)
           command: build
           azureSubscription: dts-management-prod-intsvc
-          options: --only=azure-arm.no-publish
+          options: --only=azure-arm.pr-build-and-publish
 
       - task: AzureCLI@2.208.0
         displayName: Cleanup resources on fail
@@ -112,8 +112,19 @@ jobs:
             resource_group_name=$(echo $(prbuild.DeploymentName) | sed 's/pkrdp//')
             az group delete --name "pkr-Resource-Group-${resource_group_name}" --yes
 
+      - task: AzureCLI@2.208.0
+        displayName: Delete published PR build image version
+        condition: succeededOrFailed()
+        name: delete_pr_azure_image_version
+        inputs:
+          azureSubscription: dts-management-prod-intsvc
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az sig image-version delete --gallery-image-version $(get_azure_image_version.azure_image_version) --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
+
       - task: riezebosch.Packer.Packer.Packer@1
-        displayName: 'Build and publish'
+        displayName: 'Master Build'
         condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
         inputs:
           templatePath: $(templatePath)
@@ -125,7 +136,7 @@ jobs:
               vm_size=$(vm_size)
           command: build
           azureSubscription: dts-management-prod-intsvc
-          options: --only=azure-arm.build-and-publish
+          options: --only=azure-arm.master-build-and-publish
 
       - task: GitHubRelease@1
         displayName: Create GitHubRelease
