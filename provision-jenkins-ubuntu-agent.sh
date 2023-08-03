@@ -30,6 +30,8 @@ echo '-----BEGIN RSA PRIVATE KEY-----' | tee /opt/jenkinsssh_id_rsa
 echo $JENKINS_SSH_KEY | sed -e 's/[[:blank:]]\\+/\\n/g' | tee -a /opt/jenkinsssh_id_rsa
 echo '-----END RSA PRIVATE KEY-----' | tee -a /opt/jenkinsssh_id_rsa
 
+ARCHITECTURE=$(dpkg --print-architecture)
+
 remove_packages=( docker docker-engine docker.io runc )
 
 for i in "${remove_packages[@]}"
@@ -148,14 +150,14 @@ apt install -y \
   gettext \
   libncurses-dev
 
-wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz -O - | tar xz
+wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_${ARCHITECTURE}.tar.gz -O - | tar xz
 mv flux /usr/local/bin/flux
 
-wget https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
+wget https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/${ARCHITECTURE}/kubectl -O /usr/local/bin/kubectl
 
-wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz -O - | tar xz
-mv linux-amd64/helm /usr/local/bin/helm
-rm -rf linux-amd64
+wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-${ARCHITECTURE}.tar.gz -O - | tar xz
+mv linux-${ARCHITECTURE}/helm /usr/local/bin/helm
+rm -rf linux-${ARCHITECTURE}
 chmod +x /usr/local/bin/kubectl
 
 pip3 install --upgrade docker-compose pip pip-check pyopenssl setuptools virtualenv
@@ -170,7 +172,7 @@ npm install --global \
   eslint \
   yarn
 
-update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+update-alternatives --set java /usr/lib/jvm/java-17-openjdk-${ARCHITECTURE}/bin/java
 
 #### RVM
 
@@ -185,18 +187,25 @@ rvm install ${RUBY_VERSION}
 
 ####
 
-curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome-stable_current_amd64.deb
-apt install -y ./google-chrome-stable_current_amd64.deb
-rm -f google-chrome-stable_current_amd64.deb
+if [ ${ARCHITECTURE} = "amd64" ]; then
+  curl https://dl.google.com/linux/direct/google-chrome-stable_current_${ARCHITECTURE}.deb -o google-chrome-stable_current_${ARCHITECTURE}.deb
+  apt install -y ./google-chrome-stable_current_${ARCHITECTURE}.deb
+  rm -f google-chrome-stable_current_${ARCHITECTURE}.deb
+else
+  apt install -y chromium-browser chromium-chromedriver
+fi
 
-curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/v${TFCMT_VERSION}/tfcmt_linux_amd64.tar.gz
+
+curl -fL -o tfcmt.tar.gz https://github.com/suzuki-shunsuke/tfcmt/releases/download/v${TFCMT_VERSION}/tfcmt_linux_${ARCHITECTURE}.tar.gz
 tar -C /usr/bin -xzf ./tfcmt.tar.gz tfcmt
 
-[ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
-LIBOSMESA=$(find /usr -name 'libOSMesa*' -type f)
-ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
-echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
-# grubby --args=namespace.unpriv_enable=1 --update-kernel=$(grubby --default-kernel)
+if [ ${ARCHITECTURE} = "amd64" ]; then
+  [ -e /opt/google/chrome/libosmesa.so ] && rm /opt/google/chrome/libosmesa.so
+  LIBOSMESA=$(find /usr -name 'libOSMesa*' -type f)M
+  ln -s $LIBOSMESA /opt/google/chrome/libosmesa.so
+  echo 'user.max_user_namespaces=10000' > /etc/sysctl.d/90-userspace.conf
+  # grubby --args=namespace.unpriv_enable=1 --update-kernel=$(grubby --default-kernel)
+fi
 
 mkdir /etc/docker && chown -R root:root /etc/docker && chmod 0755 /etc/docker
 echo -e '{\n  \live-restore\: true,\n  \group\: \docker\\n}' > /etc/docker/daemon.conf && chown root:root /etc/docker/daemon.conf && chmod 0644 /etc/docker/daemon.conf
@@ -210,13 +219,17 @@ if test -f "$FILE"; then
 fi
 
 #Download AzCopy
-wget https://aka.ms/downloadazcopy-v10-linux
+if [ ${ARCHITECTURE} = "amd64" ]; then
+  wget https://aka.ms/downloadazcopy-v10-linux
+else
+  wget -O downloadazcopy-v10-linux https://aka.ms/downloadazcopy-v10-linux-${ARCHITECTURE}
+fi
 
 #Expand Archive
 tar -xvf downloadazcopy-v10-linux
 
 #Move AzCopy to the destination you want to store it
-cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
+cp ./azcopy_linux_${ARCHITECTURE}_*/azcopy /usr/bin/
 
 # see https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
 wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
@@ -244,7 +257,13 @@ curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
 chown -R 1001:1001 /opt/.pyenv
 
-packages=( az azcopy docker docker-compose eslint gcc git google-chrome gulp java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
+packages=( az azcopy docker docker-compose eslint gcc git gulp java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
+
+if [ ${ARCHITECTURE} = "amd64" ]; then
+  packages+=('google-chrome')
+else
+  packages+=('chromium')
+fi
 
 for i in "${packages[@]}"
 

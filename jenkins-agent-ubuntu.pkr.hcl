@@ -89,7 +89,7 @@ variable "vm_size" {
   default = "Standard_D4ds_v5"
 }
 
-source "azure-arm" "no-publish" {
+source "azure-arm" "pr-build-and-publish" {
   azure_tags = {
     imagetype = var.image_name
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
@@ -100,17 +100,24 @@ source "azure-arm" "no-publish" {
   image_offer                       = var.image_offer
   image_sku                         = var.image_sku
   location                          = var.azure_location
-  managed_image_name                = "${var.image_name}-${formatdate("YYYYMMDDhhmmss",timestamp())}"
-  managed_image_resource_group_name = var.resource_group_name
   os_type                           = var.os_type
   ssh_pty                           = "true"
   ssh_username                      = var.ssh_user
   subscription_id                   = var.subscription_id
   tenant_id                         = var.tenant_id
   vm_size                           = var.vm_size
+
+  shared_image_gallery_destination {
+     subscription        = var.subscription_id
+     resource_group      = var.resource_group_name
+     gallery_name        = "hmcts"
+     image_name          = var.image_name
+     image_version       = var.azure_image_version
+     replication_regions = ["UK South"]
+   }
 }
 
-source "azure-arm" "build-and-publish" {
+source "azure-arm" "master-build-and-publish" {
   azure_tags = {
     imagetype = var.image_name
     timestamp = formatdate("YYYYMMDDhhmmss",timestamp())
@@ -134,14 +141,14 @@ source "azure-arm" "build-and-publish" {
      subscription        = var.subscription_id
      resource_group      = var.resource_group_name
      gallery_name        = "hmcts"
-     image_name          = "jenkins-ubuntu"
+     image_name          = var.image_name
      image_version       = var.azure_image_version
      replication_regions = ["UK South"]
    }
 }
 
 build {
-  sources = ["source.azure-arm.no-publish","source.azure-arm.build-and-publish"]
+  sources = ["source.azure-arm.pr-build-and-publish","source.azure-arm.master-build-and-publish"]
 
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -S -E bash '{{ .Path }}'"
