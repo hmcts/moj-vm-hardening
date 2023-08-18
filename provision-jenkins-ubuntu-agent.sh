@@ -244,7 +244,7 @@ rm -f /opt/sonar-scanner-cli.zip
 wget https://github.com/zaproxy/zaproxy/releases/download/v${ZAP_VERSION}/ZAP_${ZAP_VERSION}_Crossplatform.zip \
   -O /opt/zap.zip
 unzip -o /opt/zap.zip -d /opt
-sudo mv /opt/ZAP_${ZAP_VERSION}/ /opt/zap
+mv /opt/ZAP_${ZAP_VERSION}/ /opt/zap
 
 rm -f /opt/zap.zip
 
