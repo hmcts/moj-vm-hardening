@@ -23,6 +23,8 @@ export TF_VERSION=$(echo v0.15.5 | tr -d 'v')
 export TFCMT_VERSION=$(echo v3.4.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=tfutils/tfenv
 export TFENV_VERSION=$(echo v2.2.3 | tr -d 'v')
+#renovate: datasource=github-tags depName=zaproxy/zaproxy
+export ZAP_VERSION=$(echo 2.13.0 | tr -d 'v')
 
 set -xe
 
