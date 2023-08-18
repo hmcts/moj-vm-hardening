@@ -23,6 +23,8 @@ export TF_VERSION=$(echo v0.15.5 | tr -d 'v')
 export TFCMT_VERSION=$(echo v3.4.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=tfutils/tfenv
 export TFENV_VERSION=$(echo v2.2.3 | tr -d 'v')
+#renovate: datasource=github-tags depName=zaproxy/zaproxy
+export ZAP_VERSION=$(echo 2.13.0 | tr -d 'v')
 
 set -xe
 
@@ -239,7 +241,14 @@ unzip -o /opt/sonar-scanner-cli.zip -d /opt
 rm -rf /bin/sonar-scanner
 ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-scanner
 
-rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
+rm -f /opt/sonar-scanner-cli.zip
+
+wget https://github.com/zaproxy/zaproxy/releases/download/v${ZAP_VERSION}/ZAP_${ZAP_VERSION}_Crossplatform.zip \
+  -O /opt/zap.zip
+unzip -o /opt/zap.zip -d /opt
+mv /opt/ZAP_${ZAP_VERSION}/ /opt/zap
+
+rm -f /opt/zap.zip
 
 mkdir /opt/nvm && chown 1001:1001 /opt/nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
