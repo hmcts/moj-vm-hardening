@@ -239,7 +239,14 @@ unzip -o /opt/sonar-scanner-cli.zip -d /opt
 rm -rf /bin/sonar-scanner
 ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /bin/sonar-scanner
 
-rm -f /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
+rm -f /opt/sonar-scanner-cli.zip
+
+wget https://github.com/zaproxy/zaproxy/releases/download/v${ZAP_VERSION}/ZAP_${ZAP_VERSION}_Crossplatform.zip \
+  -O /opt/zap.zip
+unzip -o /opt/zap.zip -d /opt
+sudo mv /opt/ZAP_${ZAP_VERSION}/ /opt/zap
+
+rm -f /opt/zap.zip
 
 mkdir /opt/nvm && chown 1001:1001 /opt/nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | NVM_DIR=/opt/nvm bash
