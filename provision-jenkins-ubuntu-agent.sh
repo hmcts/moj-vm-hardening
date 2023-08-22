@@ -12,7 +12,7 @@ export KUBECTL_VERSION=$(echo v1.26.0 | tr -d 'v')
 #renovate: datasource=node-version depName=node versioning=node
 export NODE_VERSION=$(echo 14 | tr -d 'v')
 #renovate: datasource=github-tags depName=nvm-sh/nvm
-export NVM_VERSION=$(echo v0.39.4 | tr -d 'v')
+export NVM_VERSION=$(echo v0.39.5 | tr -d 'v')
 #renovate: datasource=ruby-version depName=ruby
 export RUBY_VERSION=$(echo 2.7.8 | tr -d 'v')
 #renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=regex
