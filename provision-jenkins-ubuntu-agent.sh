@@ -233,6 +233,9 @@ tar -xvf downloadazcopy-v10-linux
 #Move AzCopy to the destination you want to store it
 cp ./azcopy_linux_${ARCHITECTURE}_*/azcopy /usr/bin/
 
+# Ensure AzCopy is executable
+chmod +x /usr/bin/azcopy
+
 # see https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
 wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
   -O /opt/sonar-scanner-cli.zip
