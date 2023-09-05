@@ -10,7 +10,7 @@ export HELM_VERSION=$(echo v3.12.3 | tr -d 'v')
 #renovate: datasource=github-tags depName=kubernetes/kubectl
 export KUBECTL_VERSION=$(echo v1.26.0 | tr -d 'v')
 #renovate: datasource=node-version depName=node versioning=node
-export NODE_VERSION=$(echo 14 | tr -d 'v')
+export NODE_VERSION=$(echo 18 | tr -d 'v')
 #renovate: datasource=github-tags depName=nvm-sh/nvm
 export NVM_VERSION=$(echo v0.39.5 | tr -d 'v')
 #renovate: datasource=ruby-version depName=ruby
