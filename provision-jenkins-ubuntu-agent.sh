@@ -184,7 +184,7 @@ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A170311
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
 
 source /usr/local/rvm/scripts/rvm
-rvm install RUBY_VERSION
+rvm install ${RUBY_VERSION}
 
 ####
 
