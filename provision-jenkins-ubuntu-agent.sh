@@ -185,6 +185,7 @@ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A170311
 
 source /usr/local/rvm/scripts/rvm
 rvm install ${RUBY_VERSION}
+rvm install 3.2.2
 
 ####
 
