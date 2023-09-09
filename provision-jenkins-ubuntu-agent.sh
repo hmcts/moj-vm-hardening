@@ -150,7 +150,9 @@ apt install -y \
   libffi-dev \
   liblzma-dev \
   gettext \
-  libncurses-dev
+  libncurses-dev \
+  pdftk-java \
+  libreoffice-core-nogui
 
 wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_${ARCHITECTURE}.tar.gz -O - | tar xz
 mv flux /usr/local/bin/flux
