@@ -152,7 +152,7 @@ apt install -y \
   gettext \
   libncurses-dev \
   pdftk-java \
-  libreoffice-core-nogui \
+  libreoffice-core \
   libreoffice-writer 
 
 wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_${ARCHITECTURE}.tar.gz -O - | tar xz
