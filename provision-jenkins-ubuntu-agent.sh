@@ -14,7 +14,7 @@ export NODE_VERSION=$(echo 18 | tr -d 'v')
 #renovate: datasource=github-tags depName=nvm-sh/nvm
 export NVM_VERSION=$(echo v0.39.5 | tr -d 'v')
 #renovate: datasource=ruby-version depName=ruby
-export RUBY_VERSION=$(echo 3.1.4 | tr -d 'v')
+export RUBY_VERSION=$(echo 3.2.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=regex
 export SONAR_SCANNER_VERSION=$(echo 5.0.1.3006 | tr -d 'v')
 #renovate: datasource=github-tags depName=hashicorp/terraform
