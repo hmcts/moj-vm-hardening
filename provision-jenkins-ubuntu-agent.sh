@@ -13,8 +13,6 @@ export KUBECTL_VERSION=$(echo v1.26.0 | tr -d 'v')
 export NODE_VERSION=$(echo 18 | tr -d 'v')
 #renovate: datasource=github-tags depName=nvm-sh/nvm
 export NVM_VERSION=$(echo v0.39.5 | tr -d 'v')
-#renovate: datasource=ruby-version depName=ruby
-export RUBY_VERSION=$(echo 3.1.4 | tr -d 'v')
 #renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=regex
 export SONAR_SCANNER_VERSION=$(echo 5.0.1.3006 | tr -d 'v')
 #renovate: datasource=github-tags depName=hashicorp/terraform
@@ -184,10 +182,11 @@ update-alternatives --set java /usr/lib/jvm/java-17-openjdk-${ARCHITECTURE}/bin/
 # uses non default server due to firewall blocking the default
 # https://serverfault.com/a/1088077/385948
 gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-\curl -sSL https://get.rvm.io | bash -s stable --ruby
+\curl -sSL https://get.rvm.io | bash -s stable
 
 source /usr/local/rvm/scripts/rvm
-rvm install ${RUBY_VERSION}
+
+rvm install 3.1.4
 rvm install 3.2.2
 
 ####
