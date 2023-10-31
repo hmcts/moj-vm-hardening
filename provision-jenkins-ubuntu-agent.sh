@@ -59,6 +59,8 @@ cat /etc/apt/sources.list
 apt-cache policy python3-pip
 ## end debug
 
+install -m 0755 -d /etc/apt/keyrings
+
 echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
@@ -68,7 +70,6 @@ echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/nodes
 apt update
 apt install -y nodejs
 
-install -m 0755 -d /etc/apt/keyrings
 rm -rf /etc/apt/keyrings/docker.gpg
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 chmod a+r /etc/apt/keyrings/docker.gpg
