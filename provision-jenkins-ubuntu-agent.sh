@@ -59,18 +59,17 @@ cat /etc/apt/sources.list
 apt-cache policy python3-pip
 ## end debug
 
+install -m 0755 -d /etc/apt/keyrings
+
 echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
-apt purge nodejs -y
-rm -rf /etc/apt/sources.list.d/nodesource.list
-
-curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_VERSION.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 
 apt update
 apt install -y nodejs
 
-install -m 0755 -d /etc/apt/keyrings
 rm -rf /etc/apt/keyrings/docker.gpg
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 chmod a+r /etc/apt/keyrings/docker.gpg
@@ -152,6 +151,12 @@ apt install -y \
   pdftk-java \
   libreoffice-core \
   libreoffice-writer 
+
+wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
+echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+
+apt update
+apt install -y temurin-21-jdk
 
 wget https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_${ARCHITECTURE}.tar.gz -O - | tar xz
 mv flux /usr/local/bin/flux
