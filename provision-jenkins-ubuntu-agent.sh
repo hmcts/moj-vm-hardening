@@ -182,6 +182,20 @@ npm install --global \
 
 update-alternatives --set java /usr/lib/jvm/java-17-openjdk-${ARCHITECTURE}/bin/java
 
+#### DTSPO-15526 Testing .yarn folder move
+if [ ${ARCHITECTURE} = "arm64" ]; then
+  {
+    mkdir /opt/.yarn
+    chown $USER:$USER /opt/.yarn
+
+    yarn config set prefix /opt/.yarn
+    yarn config set global-dir /opt/.yarn
+    yarn config set global-folder /opt/.yarn
+  } || {
+    echo "yarn config failure"
+  }
+fi
+
 #### RVM
 
 # uses non default server due to firewall blocking the default
