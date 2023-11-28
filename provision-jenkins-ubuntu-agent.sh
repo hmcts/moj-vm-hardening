@@ -44,7 +44,7 @@ do
 done
 
 apt autoremove -y
-
+add-apt-repository ppa:deadsnakes/ppa
 apt update
 
 apt install -y \
@@ -101,6 +101,9 @@ sleep 10
 apt update
 
 apt install -y \
+  python3.10 \
+  python3.10-venv \
+  python3.10-dev \
   python3-pip \
   python3-testresources \
   python2 \
@@ -289,6 +292,8 @@ rm -rf /bin/pyenv
 export PYENV_ROOT=/opt/.pyenv
 curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
+pyenv install 3.10.11
+pyenv global 3.10.11
 chown -R 1001:1001 /opt/.pyenv
 
 packages=( az azcopy docker docker-compose eslint gcc git gulp java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
