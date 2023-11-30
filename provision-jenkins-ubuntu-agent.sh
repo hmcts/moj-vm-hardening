@@ -44,7 +44,7 @@ do
 done
 
 apt autoremove -y
-
+add-apt-repository ppa:deadsnakes/ppa
 apt update
 
 apt install -y \
@@ -101,6 +101,9 @@ sleep 10
 apt update
 
 apt install -y \
+  python3.10 \
+  python3.10-venv \
+  python3.10-dev \
   python3-pip \
   python3-testresources \
   python2 \
