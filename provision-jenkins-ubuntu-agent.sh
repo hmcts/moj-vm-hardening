@@ -292,8 +292,8 @@ rm -rf /bin/pyenv
 export PYENV_ROOT=/opt/.pyenv
 curl https://pyenv.run | bash
 ln -s /opt/.pyenv/bin/* /bin
-pyenv install 3.10.11
-pyenv global 3.10.11
+pyenv install 3.10.13
+pyenv global 3.10.13
 chown -R 1001:1001 /opt/.pyenv
 
 packages=( az azcopy docker docker-compose eslint gcc git gulp java jq make node npm psql pyenv ruby rsync sonar-scanner terraform tfcmt tfenv virtualenv yarn wget zip )
