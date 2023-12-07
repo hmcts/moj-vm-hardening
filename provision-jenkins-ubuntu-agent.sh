@@ -20,7 +20,7 @@ export TF_VERSION=$(echo v1.6.5 | tr -d 'v')
 #renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt
 export TFCMT_VERSION=$(echo v3.4.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=tfutils/tfenv
-export TFENV_VERSION=$(echo v2.2.3 | tr -d 'v')
+export TFENV_VERSION=$(echo v3.0.0 | tr -d 'v')
 #renovate: datasource=github-tags depName=zaproxy/zaproxy
 export ZAP_VERSION=$(echo v2.14.0 | tr -d 'v')
 
