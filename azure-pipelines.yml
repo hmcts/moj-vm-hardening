@@ -92,7 +92,7 @@ jobs:
         inputs:
           templatePath: $(templatePath)
           variables: |
-              azure_image_version=$(System.PullRequest.PullRequestId)
+              azure_image_version="$(System.PullRequest.PullRequestId).0.0"
               image_name=$(image_name)
               jenkins_ssh_key=$(JENKINS_SSH_KEY)
               image_sku=$(image_sku)
@@ -121,7 +121,7 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestId) --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
+            az sig image-version delete --gallery-image-version "$(System.PullRequest.PullRequestId).0.0" --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
 
       - task: riezebosch.Packer.Packer.Packer@1
         displayName: 'Master Build'
