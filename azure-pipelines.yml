@@ -121,7 +121,7 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            az sig image-version delete --gallery-image-version $(azure_image_version) --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
+            az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
 
       - task: riezebosch.Packer.Packer.Packer@1
         displayName: 'Master Build'
