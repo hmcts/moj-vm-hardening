@@ -139,12 +139,13 @@ jobs:
           options: --only=azure-arm.master-build-and-publish
 
   - job: Publish_release
+    dependsOn: build_image
     pool:
       vmImage: 'ubuntu-latest'
     timeoutInMinutes: "120"
     steps:
       - checkout: self
-      
+
       - task: GitHubRelease@1
         displayName: Create GitHubRelease
         condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
