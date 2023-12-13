@@ -74,7 +74,7 @@ jobs:
             done
 
       - task: AzureCLI@2.208.0
-        displayName: Delete published PR build image version
+        displayName: Delete published image from previous failure
         condition: and(succeededOrFailed(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
         name: delete_pr_azure_image_version
         inputs:
