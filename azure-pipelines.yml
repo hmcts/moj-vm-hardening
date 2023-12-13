@@ -76,7 +76,7 @@ jobs:
       - task: AzureCLI@2.208.0
         displayName: Delete published image from previous failure
         condition: and(succeededOrFailed(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-        name: delete_pr_azure_image_version
+        name: delete_failed_pr_image
         inputs:
           azureSubscription: dts-management-prod-intsvc
           scriptType: bash
