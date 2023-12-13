@@ -138,9 +138,16 @@ jobs:
           azureSubscription: dts-management-prod-intsvc
           options: --only=azure-arm.master-build-and-publish
 
+  - job: Publish_release
+    pool:
+      vmImage: 'ubuntu-latest'
+    timeoutInMinutes: "120"
+    steps:
+      - checkout: self
+      
       - task: GitHubRelease@1
         displayName: Create GitHubRelease
-        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables.image_name, 'jenkins-ubuntu'))
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
         inputs:
           gitHubConnection: 'GitHub Management - Full Repo Access'
           repositoryName: '$(Build.Repository.Name)'
