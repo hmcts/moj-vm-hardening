@@ -73,6 +73,17 @@ jobs:
             az group delete --name $group --yes
             done
 
+      - task: AzureCLI@2.208.0
+        displayName: Delete published PR build image version
+        condition: and(succeededOrFailed(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+        name: delete_pr_azure_image_version
+        inputs:
+          azureSubscription: dts-management-prod-intsvc
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
+
       - task: riezebosch.Packer.PackerTool.PackerTool@0
         displayName: 'Install Packer'
         inputs:
