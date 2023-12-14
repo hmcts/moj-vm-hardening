@@ -157,9 +157,9 @@ stages:
               options: --only=azure-arm.master-build-and-publish
   
   - stage: release
+    dependsOn: build
     jobs:
     - job: Publish_release
-      dependsOn: build
       pool:
         vmImage: 'ubuntu-latest'
       timeoutInMinutes: "120"
