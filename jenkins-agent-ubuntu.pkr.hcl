@@ -115,6 +115,8 @@ source "azure-arm" "pr-build-and-publish" {
      image_version       = var.azure_image_version
      replication_regions = ["UK South"]
    }
+  
+  shared_gallery_image_version_exclude_from_latest = true
 }
 
 source "azure-arm" "master-build-and-publish" {

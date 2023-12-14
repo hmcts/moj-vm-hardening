@@ -73,6 +73,17 @@ jobs:
             az group delete --name $group --yes
             done
 
+      - task: AzureCLI@2.208.0
+        displayName: Delete published image from previous failure
+        condition: and(succeededOrFailed(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+        name: delete_failed_pr_image
+        inputs:
+          azureSubscription: dts-management-prod-intsvc
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
+
       - task: riezebosch.Packer.PackerTool.PackerTool@0
         displayName: 'Install Packer'
         inputs:
@@ -92,7 +103,7 @@ jobs:
         inputs:
           templatePath: $(templatePath)
           variables: |
-              azure_image_version=$(get_azure_image_version.azure_image_version)
+              azure_image_version=$(System.PullRequest.PullRequestNumber).0.0
               image_name=$(image_name)
               jenkins_ssh_key=$(JENKINS_SSH_KEY)
               image_sku=$(image_sku)
@@ -121,7 +132,7 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            az sig image-version delete --gallery-image-version $(get_azure_image_version.azure_image_version) --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
+            az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
 
       - task: riezebosch.Packer.Packer.Packer@1
         displayName: 'Master Build'
@@ -138,9 +149,17 @@ jobs:
           azureSubscription: dts-management-prod-intsvc
           options: --only=azure-arm.master-build-and-publish
 
+  - job: Publish_release
+    dependsOn: build_image
+    pool:
+      vmImage: 'ubuntu-latest'
+    timeoutInMinutes: "120"
+    steps:
+      - checkout: self
+
       - task: GitHubRelease@1
         displayName: Create GitHubRelease
-        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables.image_name, 'jenkins-ubuntu'))
+        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
         inputs:
           gitHubConnection: 'GitHub Management - Full Repo Access'
           repositoryName: '$(Build.Repository.Name)'
