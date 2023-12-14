@@ -24,153 +24,162 @@ pr:
     include:
       - master
 
-jobs:
-  - job: build_image
-    pool:
-      vmImage: 'ubuntu-latest'
-    strategy:
-      matrix:
-        Ubuntu-amd64:
-          image_name: "jenkins-ubuntu"
-          image_sku: 20_04-lts
-          templatePath: jenkins-agent-ubuntu.pkr.hcl
-          vm_size: "Standard_D4ds_v5"
-        Ubuntu-arm64:
-          image_name: "jenkins-ubuntu-arm"
-          image_sku: 20_04-lts-arm64
-          templatePath: jenkins-agent-ubuntu.pkr.hcl
-          vm_size: "Standard_D4pds_v5"
-    timeoutInMinutes: "120"
-    steps:
-      - checkout: self
+stages:
+  - stage: build
+    jobs:
+      - job: get_azure_image_version
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: AzureCLI@2.208.0
+            displayName: Get latest azure image version
+            name: get_azure_image_version
+            inputs:
+              azureSubscription: dts-management-prod-intsvc
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition jenkins-ubuntu --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -V | tail -n1)
+                IFS=. read -r major minor patch <<<"$AZURE_IMAGE_VERSION"
+                ((patch++))
+                printf -v AZURE_IMAGE_VERSION '%d.%d.%d' "$major" "$minor" "$((patch))"
+                echo $AZURE_IMAGE_VERSION
+                echo "##vso[task.setvariable variable=azure_image_version;isoutput=true]$AZURE_IMAGE_VERSION"
 
-      - task: AzureCLI@2.208.0
-        displayName: Get latest azure image version
-        name: get_azure_image_version
-        inputs:
-          azureSubscription: dts-management-prod-intsvc
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            AZURE_IMAGE_VERSION=$(az sig image-version list --gallery-image-definition jenkins-ubuntu --gallery-name hmcts --resource-group hmcts-image-gallery-rg --query '[].{name:name}' -o tsv | sort -V | tail -n1)
-            IFS=. read -r major minor patch <<<"$AZURE_IMAGE_VERSION"
-            ((patch++))
-            printf -v AZURE_IMAGE_VERSION '%d.%d.%d' "$major" "$minor" "$((patch))"
-            echo $AZURE_IMAGE_VERSION
-            echo "##vso[task.setvariable variable=azure_image_version;isoutput=true]$AZURE_IMAGE_VERSION"
+      - job: build_image
+        pool:
+          vmImage: 'ubuntu-latest'
+        dependsOn: get_azure_image_version
+        strategy:
+          matrix:
+            Ubuntu-amd64:
+              image_name: "jenkins-ubuntu"
+              image_sku: 20_04-lts
+              templatePath: jenkins-agent-ubuntu.pkr.hcl
+              vm_size: "Standard_D4ds_v5"
+            Ubuntu-arm64:
+              image_name: "jenkins-ubuntu-arm"
+              image_sku: 20_04-lts-arm64
+              templatePath: jenkins-agent-ubuntu.pkr.hcl
+              vm_size: "Standard_D4pds_v5"
+        timeoutInMinutes: "120"
+        steps:
+          - checkout: self
 
-      - task: AzureCLI@2.208.0
-        displayName: Delete any lingering packer resource groups
-        name: delete_packer_resource_groups
-        inputs:
-          azureSubscription: dts-management-prod-intsvc
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            groups=$(az group list --tag 'imagetype=$(image_name)' | jq -r '.[].name')
-            for group in ${groups[@]}; do
-            echo "deleting resource group $group"
-            az group delete --name $group --yes
-            done
+          - task: AzureCLI@2.208.0
+            displayName: Delete any lingering packer resource groups
+            name: delete_packer_resource_groups
+            inputs:
+              azureSubscription: dts-management-prod-intsvc
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                groups=$(az group list --tag 'imagetype=$(image_name)' | jq -r '.[].name')
+                for group in ${groups[@]}; do
+                echo "deleting resource group $group"
+                az group delete --name $group --yes
+                done
 
-      - task: AzureCLI@2.208.0
-        displayName: Delete published image from previous failure
-        condition: and(succeededOrFailed(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-        name: delete_failed_pr_image
-        inputs:
-          azureSubscription: dts-management-prod-intsvc
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
+          - task: AzureCLI@2.208.0
+            displayName: Delete published image from previous failure
+            condition: and(succeededOrFailed(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+            name: delete_failed_pr_image
+            inputs:
+              azureSubscription: dts-management-prod-intsvc
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
 
-      - task: riezebosch.Packer.PackerTool.PackerTool@0
-        displayName: 'Install Packer'
-        inputs:
-          version: 1.9.1
+          - task: riezebosch.Packer.PackerTool.PackerTool@0
+            displayName: 'Install Packer'
+            inputs:
+              version: 1.9.1
 
-      - task: riezebosch.Packer.Packer.Packer@1
-        displayName: 'Validate'
-        inputs:
-          templatePath: $(templatePath)
-          command: validate
-          azureSubscription: dts-management-prod-intsvc
+          - task: riezebosch.Packer.Packer.Packer@1
+            displayName: 'Validate'
+            inputs:
+              templatePath: $(templatePath)
+              command: validate
+              azureSubscription: dts-management-prod-intsvc
 
-      - task: riezebosch.Packer.Packer.Packer@1
-        displayName: 'PR Build'
-        name: prbuild
-        condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-        inputs:
-          templatePath: $(templatePath)
-          variables: |
-              azure_image_version=$(System.PullRequest.PullRequestNumber).0.0
-              image_name=$(image_name)
-              jenkins_ssh_key=$(JENKINS_SSH_KEY)
-              image_sku=$(image_sku)
-              vm_size=$(vm_size)
-          command: build
-          azureSubscription: dts-management-prod-intsvc
-          options: --only=azure-arm.pr-build-and-publish
+          - task: riezebosch.Packer.Packer.Packer@1
+            displayName: 'PR Build'
+            name: prbuild
+            condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+            inputs:
+              templatePath: $(templatePath)
+              variables: |
+                  azure_image_version=$(System.PullRequest.PullRequestNumber).0.0
+                  image_name=$(image_name)
+                  jenkins_ssh_key=$(JENKINS_SSH_KEY)
+                  image_sku=$(image_sku)
+                  vm_size=$(vm_size)
+              command: build
+              azureSubscription: dts-management-prod-intsvc
+              options: --only=azure-arm.pr-build-and-publish
 
-      - task: AzureCLI@2.208.0
-        displayName: Cleanup resources on fail
-        condition: failed()
-        inputs:
-          azureSubscription: dts-management-prod-intsvc
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            resource_group_name=$(echo $(prbuild.DeploymentName) | sed 's/pkrdp//')
-            az group delete --name "pkr-Resource-Group-${resource_group_name}" --yes
+          - task: AzureCLI@2.208.0
+            displayName: Cleanup resources on fail
+            condition: failed()
+            inputs:
+              azureSubscription: dts-management-prod-intsvc
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                resource_group_name=$(echo $(prbuild.DeploymentName) | sed 's/pkrdp//')
+                az group delete --name "pkr-Resource-Group-${resource_group_name}" --yes
 
-      - task: AzureCLI@2.208.0
-        displayName: Delete published PR build image version
-        condition: and(succeededOrFailed(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-        name: delete_pr_azure_image_version
-        inputs:
-          azureSubscription: dts-management-prod-intsvc
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
+          - task: AzureCLI@2.208.0
+            displayName: Delete published PR build image version
+            condition: and(succeededOrFailed(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+            name: delete_pr_azure_image_version
+            inputs:
+              azureSubscription: dts-management-prod-intsvc
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
 
-      - task: riezebosch.Packer.Packer.Packer@1
-        displayName: 'Master Build'
-        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
-        inputs:
-          templatePath: $(templatePath)
-          variables: |
-              azure_image_version=$(get_azure_image_version.azure_image_version)
-              image_name=$(image_name)
-              jenkins_ssh_key=$(JENKINS_SSH_KEY)
-              image_sku=$(image_sku)
-              vm_size=$(vm_size)
-          command: build
-          azureSubscription: dts-management-prod-intsvc
-          options: --only=azure-arm.master-build-and-publish
+          - task: riezebosch.Packer.Packer.Packer@1
+            displayName: 'Master Build'
+            condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
+            inputs:
+              templatePath: $(templatePath)
+              variables: |
+                  azure_image_version=$[ dependencies.get_azure_image_version.outputs[get_azure_image_version.azure_image_version] ]
+                  image_name=$(image_name)
+                  jenkins_ssh_key=$(JENKINS_SSH_KEY)
+                  image_sku=$(image_sku)
+                  vm_size=$(vm_size)
+              command: build
+              azureSubscription: dts-management-prod-intsvc
+              options: --only=azure-arm.master-build-and-publish
+  
+  - stage: release
+    jobs:
+    - job: Publish_release
+      dependsOn: build
+      pool:
+        vmImage: 'ubuntu-latest'
+      timeoutInMinutes: "120"
+      variables: 
+        azure_image_version: $[ stageDependencies.build.get_azure_image_version.outputs['get_azure_image_version.azure_image_version'] ]
+      steps:
+        - checkout: self
 
-  - job: Publish_release
-    dependsOn: build_image
-    pool:
-      vmImage: 'ubuntu-latest'
-    timeoutInMinutes: "120"
-    variables: 
-      azure_image_version: $[ dependencies.build_image.outputs['setVariable.azure_image_version'] ]
-    steps:
-      - checkout: self
-
-      - task: GitHubRelease@1
-        displayName: Create GitHubRelease
-        condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
-        inputs:
-          gitHubConnection: 'GitHub Management - Full Repo Access'
-          repositoryName: '$(Build.Repository.Name)'
-          action: 'create'
-          target: '$(Build.SourceVersion)'
-          tagSource: 'userSpecifiedTag'
-          tag: '$(azure_image_version)'
-          title: '$(azure_image_version)'
-          releaseNotesSource: inline
-          releaseNotesInline: 'Regular maintenance updates for non-pinned packages'
-          addChangeLog: true
-          compareWith: 'lastFullRelease'
+        - task: GitHubRelease@1
+          displayName: Create GitHubRelease
+          condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
+          inputs:
+            gitHubConnection: 'GitHub Management - Full Repo Access'
+            repositoryName: '$(Build.Repository.Name)'
+            action: 'create'
+            target: '$(Build.SourceVersion)'
+            tagSource: 'userSpecifiedTag'
+            tag: '$(azure_image_version)'
+            title: '$(azure_image_version)'
+            releaseNotesSource: inline
+            releaseNotesInline: 'Regular maintenance updates for non-pinned packages'
+            addChangeLog: true
+            compareWith: 'lastFullRelease'
