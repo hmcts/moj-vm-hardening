@@ -64,7 +64,7 @@ stages:
               vm_size: "Standard_D4pds_v5"
         timeoutInMinutes: "120"
         variables:
-          azure_image_version: $[ stageDependencies.build.get_azure_image_version.outputs['get_azure_image_version.azure_image_version'] ]
+          azure_image_version: $[ dependencies.get_azure_image_version.outputs['get_azure_image_version.azure_image_version'] ]
         steps:
           - checkout: self
 
