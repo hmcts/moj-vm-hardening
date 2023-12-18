@@ -63,6 +63,8 @@ stages:
               templatePath: jenkins-agent-ubuntu.pkr.hcl
               vm_size: "Standard_D4pds_v5"
         timeoutInMinutes: "120"
+        variables:
+          azure_image_version: $[ dependencies.get_azure_image_version.outputs['get_azure_image_version.azure_image_version'] ]
         steps:
           - checkout: self
 
@@ -147,7 +149,7 @@ stages:
             inputs:
               templatePath: $(templatePath)
               variables: |
-                  azure_image_version=$[ dependencies.get_azure_image_version.outputs[get_azure_image_version.azure_image_version] ]
+                  azure_image_version=$(azure_image_version)
                   image_name=$(image_name)
                   jenkins_ssh_key=$(JENKINS_SSH_KEY)
                   image_sku=$(image_sku)
