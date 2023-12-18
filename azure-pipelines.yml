@@ -172,7 +172,6 @@ stages:
 
         - task: GitHubRelease@1
           displayName: Create GitHubRelease
-          condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/fix-variable-2'))
           inputs:
             gitHubConnection: 'GitHub Management - Full Repo Access'
             repositoryName: '$(Build.Repository.Name)'
