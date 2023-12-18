@@ -110,7 +110,7 @@ stages:
             inputs:
               templatePath: $(templatePath)
               variables: |
-                  azure_image_version=$[ stageDependencies.build.get_azure_image_version.outputs[get_azure_image_version.azure_image_version] ]
+                  azure_image_version=$[ stageDependencies.build.get_azure_image_version.outputs['get_azure_image_version.azure_image_version'] ]
                   image_name=$(image_name)
                   jenkins_ssh_key=$(JENKINS_SSH_KEY)
                   image_sku=$(image_sku)
