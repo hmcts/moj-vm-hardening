@@ -187,6 +187,8 @@ update-alternatives --set java /usr/lib/jvm/java-17-openjdk-${ARCHITECTURE}/bin/
 
 mkdir /opt/.yarn
 chown -R 1001:1001 /opt/.yarn
+mkdir -p /opt/app/.yarn
+chown -R 1001:1001 /opt/app
 
 #### RVM
 
