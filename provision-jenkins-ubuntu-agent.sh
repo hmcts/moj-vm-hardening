@@ -16,7 +16,7 @@ export NVM_VERSION=$(echo v0.39.7 | tr -d 'v')
 #renovate: datasource=github-tags depName=SonarSource/sonar-scanner-cli versioning=regex
 export SONAR_SCANNER_VERSION=$(echo 5.0.1.3006 | tr -d 'v')
 #renovate: datasource=github-tags depName=hashicorp/terraform
-export TF_VERSION=$(echo v1.7.4 | tr -d 'v')
+export TF_VERSION=$(echo v1.7.5 | tr -d 'v')
 #renovate: datasource=github-tags depName=suzuki-shunsuke/tfcmt
 export TFCMT_VERSION=$(echo v3.4.2 | tr -d 'v')
 #renovate: datasource=github-tags depName=tfutils/tfenv
