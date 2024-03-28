@@ -171,7 +171,7 @@ mv linux-${ARCHITECTURE}/helm /usr/local/bin/helm
 rm -rf linux-${ARCHITECTURE}
 chmod +x /usr/local/bin/kubectl
 
-pip3 install --upgrade docker-compose pip pip-check pyopenssl setuptools virtualenv urllib3 requests
+pip3 install --upgrade docker-compose pip pip-check pyopenssl setuptools virtualenv
 
 USER=$(whoami)
 
