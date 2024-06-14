@@ -1,13 +1,13 @@
 name: Jenkins Agent Packer
 
 schedules:
-# Run once a week
-- cron: '0 2 * * 1'  # Every monday at 2am UTC
-  displayName: Weekly scheduled build # friendly name given to a specific schedule
-  branches:
-    include:
-    - master
-  always: true
+  # Run once a week
+  - cron: "0 2 * * 1" # Every monday at 2am UTC
+    displayName: Weekly scheduled build # friendly name given to a specific schedule
+    branches:
+      include:
+        - master
+    always: true
 
 trigger:
   branches:
@@ -15,9 +15,9 @@ trigger:
       - master
   paths:
     include:
-    - azure-pipelines.yml
-    - jenkins-agent-ubuntu.pkr.hcl
-    - provision-jenkins-ubuntu-agent.sh
+      - azure-pipelines.yml
+      - jenkins-agent-ubuntu.pkr.hcl
+      - provision-jenkins-ubuntu-agent.sh
 
 pr:
   branches:
@@ -29,7 +29,7 @@ stages:
     jobs:
       - job: get_azure_image_version
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: "ubuntu-latest"
         steps:
           - task: AzureCLI@2.208.0
             displayName: Get latest azure image version
@@ -48,7 +48,7 @@ stages:
 
       - job: build_image
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: "ubuntu-latest"
         dependsOn: get_azure_image_version
         strategy:
           matrix:
@@ -57,11 +57,6 @@ stages:
               image_sku: 20_04-lts
               templatePath: jenkins-agent-ubuntu.pkr.hcl
               vm_size: "Standard_D4ds_v5"
-            Ubuntu-arm64:
-              image_name: "jenkins-ubuntu-arm"
-              image_sku: 20_04-lts-arm64
-              templatePath: jenkins-agent-ubuntu.pkr.hcl
-              vm_size: "Standard_D4pds_v5"
         timeoutInMinutes: "120"
         variables:
           azure_image_version: $[ dependencies.get_azure_image_version.outputs['get_azure_image_version.azure_image_version'] ]
@@ -94,29 +89,29 @@ stages:
                 az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
 
           - task: riezebosch.Packer.PackerTool.PackerTool@0
-            displayName: 'Install Packer'
+            displayName: "Install Packer"
             inputs:
               version: 1.9.1
 
           - task: riezebosch.Packer.Packer.Packer@1
-            displayName: 'Validate'
+            displayName: "Validate"
             inputs:
               templatePath: $(templatePath)
               command: validate
               azureSubscription: dts-management-prod-intsvc
 
           - task: riezebosch.Packer.Packer.Packer@1
-            displayName: 'PR Build'
+            displayName: "PR Build"
             name: prbuild
             condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
             inputs:
               templatePath: $(templatePath)
               variables: |
-                  azure_image_version=$(System.PullRequest.PullRequestNumber).0.0
-                  image_name=$(image_name)
-                  jenkins_ssh_key=$(JENKINS_SSH_KEY)
-                  image_sku=$(image_sku)
-                  vm_size=$(vm_size)
+                azure_image_version=$(System.PullRequest.PullRequestNumber).0.0
+                image_name=$(image_name)
+                jenkins_ssh_key=$(JENKINS_SSH_KEY)
+                image_sku=$(image_sku)
+                vm_size=$(vm_size)
               command: build
               azureSubscription: dts-management-prod-intsvc
               options: --only=azure-arm.pr-build-and-publish
@@ -144,44 +139,44 @@ stages:
                 az sig image-version delete --gallery-image-version $(System.PullRequest.PullRequestNumber).0.0 --gallery-image-definition $(image_name) --gallery-name hmcts --resource-group hmcts-image-gallery-rg
 
           - task: riezebosch.Packer.Packer.Packer@1
-            displayName: 'Master Build'
+            displayName: "Master Build"
             condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
             inputs:
               templatePath: $(templatePath)
               variables: |
-                  azure_image_version=$(azure_image_version)
-                  image_name=$(image_name)
-                  jenkins_ssh_key=$(JENKINS_SSH_KEY)
-                  image_sku=$(image_sku)
-                  vm_size=$(vm_size)
+                azure_image_version=$(azure_image_version)
+                image_name=$(image_name)
+                jenkins_ssh_key=$(JENKINS_SSH_KEY)
+                image_sku=$(image_sku)
+                vm_size=$(vm_size)
               command: build
               azureSubscription: dts-management-prod-intsvc
               options: --only=azure-arm.master-build-and-publish
-  
+
   - stage: release
     dependsOn: build
     jobs:
-    - job: Publish_release
-      pool:
-        vmImage: 'ubuntu-latest'
-      timeoutInMinutes: "120"
-      variables: 
-        azure_image_version: $[ stageDependencies.build.get_azure_image_version.outputs['get_azure_image_version.azure_image_version'] ]
-      steps:
-        - checkout: self
+      - job: Publish_release
+        pool:
+          vmImage: "ubuntu-latest"
+        timeoutInMinutes: "120"
+        variables:
+          azure_image_version: $[ stageDependencies.build.get_azure_image_version.outputs['get_azure_image_version.azure_image_version'] ]
+        steps:
+          - checkout: self
 
-        - task: GitHubRelease@1
-          displayName: Create GitHubRelease
-          condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
-          inputs:
-            gitHubConnection: 'GitHub Management - Full Repo Access'
-            repositoryName: '$(Build.Repository.Name)'
-            action: 'create'
-            target: '$(Build.SourceVersion)'
-            tagSource: 'userSpecifiedTag'
-            tag: '$(azure_image_version)'
-            title: '$(azure_image_version)'
-            releaseNotesSource: inline
-            releaseNotesInline: 'Regular maintenance updates for non-pinned packages'
-            addChangeLog: true
-            compareWith: 'lastFullRelease'
+          - task: GitHubRelease@1
+            displayName: Create GitHubRelease
+            condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
+            inputs:
+              gitHubConnection: "GitHub Management - Full Repo Access"
+              repositoryName: "$(Build.Repository.Name)"
+              action: "create"
+              target: "$(Build.SourceVersion)"
+              tagSource: "userSpecifiedTag"
+              tag: "$(azure_image_version)"
+              title: "$(azure_image_version)"
+              releaseNotesSource: inline
+              releaseNotesInline: "Regular maintenance updates for non-pinned packages"
+              addChangeLog: true
+              compareWith: "lastFullRelease"
