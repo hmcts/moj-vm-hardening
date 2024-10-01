@@ -4,7 +4,7 @@
 ## the renovate comments enable renovatebot to update these dynamically via GitHub pull requests
 
 #renovate: datasource=github-tags depName=fluxcd/flux2
-export FLUX_VERSION=$(echo v2.3.0 | tr -d 'v')
+export FLUX_VERSION=$(echo v2.4.0 | tr -d 'v')
 #renovate: datasource=github-tags depName=helm/helm
 export HELM_VERSION=$(echo v3.16.1 | tr -d 'v')
 #renovate: datasource=github-tags depName=kubernetes/kubectl
