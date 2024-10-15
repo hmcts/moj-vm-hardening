@@ -155,7 +155,7 @@ apt install -y \
   libreoffice-core \
   libreoffice-writer \
   ffmpeg \
-  mssql-tools \
+  mssql-tools18 \
   unixodbc-dev
 
 wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
