@@ -157,9 +157,10 @@ apt install -y \
   pdftk-java \
   libreoffice-core \
   libreoffice-writer \
-  ffmpeg \
-  msodbcsql17 \
-  mssql-tools \
+  ffmpeg
+  
+ACCEPT_EULA=Y apt install -y \
+  mssql-tools18 \
   unixodbc-dev
 
 wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
