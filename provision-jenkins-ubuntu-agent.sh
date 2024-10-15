@@ -158,6 +158,7 @@ apt install -y \
   libreoffice-core \
   libreoffice-writer \
   ffmpeg \
+  msodbcsql17 \
   mssql-tools \
   unixodbc-dev
 
